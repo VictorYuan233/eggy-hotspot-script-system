@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>蛋仔热点工作台 V1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
+<style>
+/* VOICE work tool for a game's ops team, playful brand but dense and exact
+   IDEA a party race track: every hotspot is an egg rolling through the stations of the pipeline
+   PICTURE the track board up top, eggs at their current station, knocked-out eggs in the pit below
+   COLOUR white ground, sunny yellow band, sky blue track, candy pink for human gates; night: deep ink
+   TYPE ZCOOL KuaiLe for titles and station names + system Chinese sans for text
+   LAYOUT header band, full-width track, then list | detail; phone: track scrolls sideways, list above detail */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#13151d);--ink:light-dark(#1b1d2a,#eef0f7);--mute:light-dark(#5d6275,#a3a9bd);--line:light-dark(#e4e6ee,#2a2e3c);--panel:light-dark(#f6f7fb,#1b1e29);--sun:light-dark(#ffd23f,#3b3216);--sunInk:light-dark(#1b1d2a,#ffe08a);--sky:light-dark(#49b6ff,#2e86c8);--skyPale:light-dark(#e3f4ff,#162838);--pink:light-dark(#ff4f9a,#ff6fae);--pinkPale:light-dark(#ffe6f1,#3a1c2b);--green:light-dark(#1f9d55,#4fd18b);--red:light-dark(#d93030,#ff7a7a);--egg:light-dark(#ffe58a,#f3cf5a);--meme:light-dark(#ffb3d3,#f08cba)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;overflow-x:clip}
+h1,h2,h3,.disp{font-family:"ZCOOL KuaiLe","PingFang SC",sans-serif;font-weight:400;letter-spacing:.01em}
+h1{font-size:clamp(32px,4.5vw,46px);line-height:1.05;margin:0}
+h2{font-size:28px;line-height:1.15;margin:0 0 6px}
+h3{font-size:20px;margin:22px 0 8px}
+a{color:var(--sky)}
+.band{padding:clamp(20px,3vw,40px) max(4vw,16px)}
+.top{background:var(--sun);color:var(--sunInk);display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+.top p{margin:6px 0 0;font-size:15px}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button,select,input,textarea{font:inherit;font-size:16px}
+button{min-height:44px;padding:0 16px;border-radius:22px;border:2px solid var(--ink);background:var(--bg);color:var(--ink);cursor:pointer}
+button:hover{background:var(--panel)}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,.card:focus-visible,.egg:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+button.go{background:var(--ink);color:var(--bg)}
+button.gate{background:var(--pink);border-color:var(--pink);color:#fff}
+button:disabled{opacity:.45;cursor:not-allowed}
+select,input,textarea{border:1.5px solid var(--line);border-radius:10px;padding:9px 10px;background:var(--bg);color:var(--ink);min-height:44px}
+.trackwrap{background:var(--skyPale);padding:18px max(4vw,16px) 8px}
+.scroll{overflow-x:auto}
+.fig{position:relative;height:270px;min-width:760px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--mute);padding:6px 0 4px}
+.legend i{display:inline-block;width:12px;height:14px;border-radius:50%/55% 55% 45% 45%;vertical-align:-2px;margin-right:6px;border:1.5px solid var(--ink)}
+svg text{font-size:13px;fill:var(--ink)}
+.work{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:28px;align-items:start}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.filters button{min-height:36px;padding:0 12px;font-size:14px;border-width:1.5px}
+.filters button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.grp{font-size:14px;color:var(--mute);margin:14px 0 6px}
+.card{display:block;width:100%;text-align:left;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:var(--bg);cursor:pointer;min-height:auto}
+.card[aria-current=true]{border-color:var(--ink);box-shadow:inset 4px 0 0 var(--sky)}
+.card b{display:block;font-weight:600;line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.chip{font-size:13px;padding:1px 8px;border-radius:10px;background:var(--panel);color:var(--mute);white-space:nowrap}
+.chip.hot{background:var(--pinkPale);color:var(--pink)}
+.chip.ok{color:var(--green)}
+.chip.bad{color:var(--red)}
+.detail{border-left:1.5px solid var(--line);padding-left:28px}
+.reason{color:var(--mute);margin:4px 0 0}
+.gatebar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--pinkPale);border-radius:14px;padding:12px 14px;margin:14px 0}
+.gatebar .lbl{font-family:"ZCOOL KuaiLe",sans-serif;color:var(--pink);font-size:18px;margin-right:6px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--mute);font-size:14px}
+td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.facts li{margin:4px 0}
+.facts s{color:var(--mute)}
+.bars div{display:grid;grid-template-columns:6.5em minmax(0,1fr) 3em;gap:8px;align-items:center;font-size:14px;margin:4px 0}
+.bars span.b{height:12px;border-radius:6px;background:var(--panel);position:relative;overflow:hidden}
+.bars span.b i{position:absolute;inset:0 auto 0 0;background:var(--sky);border-radius:6px}
+.bars .tot i{background:var(--pink)}
+.bars .thr{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink)}
+.script{border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:12px 0}
+.script header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.vtabs{display:flex;gap:6px;flex-wrap:wrap}
+.vtabs button{min-height:34px;font-size:14px;padding:0 12px;border-width:1.5px}
+.vtabs button[aria-pressed=true]{background:var(--sky);border-color:var(--sky);color:#fff}
+.kv{display:grid;grid-template-columns:5em minmax(0,1fr);gap:4px 10px;font-size:15px;margin:10px 0}
+.kv dt{color:var(--mute)}.kv dd{margin:0}
+.issues{margin:6px 0;padding-left:20px;font-size:15px}
+.issues .block{color:var(--red)}.issues .legal{color:var(--pink)}
+.scores{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--mute)}
+.scores b{color:var(--ink);font-variant-numeric:tabular-nums}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.row input{flex:1 1 180px}
+.note{font-size:14px;color:var(--mute)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:22px;font-size:15px;max-width:90vw;z-index:9;display:none}
+.modal{position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 45%,transparent);display:none;align-items:center;justify-content:center;padding:16px;z-index:8}
+.modal form{background:var(--bg);border-radius:18px;padding:22px;width:min(560px,100%);display:grid;gap:10px}
+.modal label{display:grid;gap:4px;font-size:14px;color:var(--mute)}
+.log td:first-child{white-space:nowrap}
+footer{font-size:14px;color:var(--mute);border-top:1.5px solid var(--line)}
+footer p{max-width:70em;margin:6px 0}
+#swipe{display:none}@media(max-width:800px){#swipe{display:inline}}
+@media(max-width:860px){.work{grid-template-columns:minmax(0,1fr)}.detail{border-left:0;padding-left:0;border-top:1.5px solid var(--line);padding-top:18px}}
+@media(max-width:600px){table{font-size:13px}th,td{padding:6px 4px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:2px 0}.stack td::before{content:attr(data-l);color:var(--mute);flex:none}.kv{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.egg{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="band top">
+  <div>
+    <h1>蛋仔热点工作台</h1>
+    <p id="meta">加载中…</p>
+  </div>
+  <div class="btns">
+    <button id="btnSubmit" class="go">提交热点链接</button>
+    <button id="btnReset">重置演示</button>
+  </div>
+</header>
+
+<section class="trackwrap" aria-label="热点赛道">
+  <div class="scroll"><div class="fig" id="trackFig"><svg id="track" role="img" aria-label="各热点当前所在的流程环节"></svg></div></div>
+  <div class="legend"><span class="note" id="swipe">窄屏可左右滑动查看完整赛道</span><span><i style="background:var(--egg)"></i>新闻事件类</span><span><i style="background:var(--meme)"></i>梗与话题类</span><span><i style="background:var(--panel)"></i>停在原地（待核实、不推荐）</span><span>粉色站点：运营人工确认</span><span>旗子：快速通道（已预生成草稿）</span></div>
+</section>
+
+<main class="band work">
+  <aside>
+    <div class="filters" id="filters"></div>
+    <div id="list"></div>
+  </aside>
+  <section class="detail" id="detail" aria-live="polite"></section>
+</main>
+
+<section class="band" style="padding-top:0">
+  <details open><summary class="disp" style="font-size:20px;cursor:pointer">审计日志</summary>
+    <div class="scroll"><table class="log stack"><thead><tr><th>时间</th><th>操作者</th><th>动作</th><th>对象</th><th>详情</th></tr></thead><tbody id="log"></tbody></table></div>
+  </details>
+</section>
+
+<footer class="band">
+  <p><b>数据说明。</b>18 条热点的标题、链接、发布者和发布时间都是真实的，于 2026-11-22 通过网页检索、以“运营手动提交”方式录入；摘要是我们自己写的概括。热度数值是<b>演示模拟值</b>，不是平台真实数据。E11 是为演示辟谣库比对而模拟的一条无出处线索。</p>
+  <p><b>模型输出。</b>回放模式下，分类、事实抽取、打分、脚本和评审都是 Claude 按同一套提示词预先生成的结果；在 claude.ai 登录状态下打开本页会切到实时模式，“重新生成”“退回改稿”“提交链接”会实时调用 Claude。规则检查（红线、广告法、防沉迷、事实与数字溯源、时长）在两种模式下都由页面代码实时执行。</p>
+  <p><b>设定库。</b>根据公开资料整理，每条附出处，状态为草稿，尚未经过游戏策划确认。演示时钟从 2026-11-22 21:45（数据采集完成时）开始走。</p>
+</footer>
+
+<div class="modal" id="modal">
+  <form id="submitForm">
+    <h2>提交热点链接</h2>
+    <p class="note" style="margin:0">没有合规接口的平台，由运营提交公开链接；系统存档后走同样的红线、辟谣和核验流程。</p>
+    <label>标题<input id="fTitle" required maxlength="80" placeholder="例如：某地官宣冬季冰雪节开幕"></label>
+    <label>链接<input id="fUrl" type="url" placeholder="https://"></label>
+    <label>摘要（用自己的话概括）<textarea id="fSummary" rows="3" required maxlength="200"></textarea></label>
+    <label>提交人<input id="fBy" value="运营·小王" required></label>
+    <div class="row"><button class="go" type="submit">提交并处理</button><button type="button" id="fCancel">取消</button></div>
+  </form>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+{
+const D = {"generatedAt": "2026-11-22T21:45:00+08:00", "seedNote": "种子热点：2026-11-22 由演示运营通过网页检索、以“运营手动提交链接”方式录入。标题、链接、发布者、发布时间都是真实的，摘要是我们自己写的概括。heat 和 heat_series 是演示模拟值，不是平台真实热度。", "rules": {"version": "rules-v1-2026-11-22", "note": "红线、广告法、平台规范等规则配置。平台时长和字数是团队内部发布规范的示例值，不是平台官方限制，可在配置中心修改。", "redline_topics": {"灾难事故": ["地震", "洪涝", "泥石流", "台风", "火灾", "坠机", "爆炸", "遇难", "罹难", "身亡", "去世", "死亡", "猝死"], "暴力犯罪": ["杀害", "烧死", "命案", "遇害", "刑事", "凶手", "持刀", "绑架", "性侵"], "政治外交": ["外交部", "制裁", "领土", "选举", "政变", "战争"], "宗教": ["宗教", "教派", "佛教", "基督教", "伊斯兰"], "负面社会事件": ["绝笔信", "举报信", "维权", "跳楼", "欠薪", "降级或转聘"], "未成年人负面": ["校园霸凌", "虐童", "未成年人受害"]}, "competitors": ["元梦之星", "糖豆人", "Stumble Guys"], "third_party_ip": {"authorized_now": [], "past_collab_need_legal": ["奥特曼", "叶罗丽", "小马宝莉", "葫芦娃"], "never_authorized": ["GTA", "侠盗猎车", "圣安地列斯", "CJ", "漫威", "迪士尼", "宝可梦"]}, "real_person_names": ["厉娜", "许飞", "C罗", "罗纳尔多", "热苏斯", "克莱·汤普森", "刘念"], "ad_law_words": ["最好", "最强", "最佳", "最高级", "最低价", "第一", "国家级", "世界级", "顶级", "唯一", "绝对", "100%", "万能", "史无前例"], "anti_addiction_words": ["通宵", "熬夜玩", "熬夜打", "逃课", "不写作业", "别睡了", "玩一整天", "玩到天亮"], "pay_inducement_words": ["必出", "充值返利", "氪金", "抽到为止", "保底必得"], "source_tiers": {"A": ["news.cn", "xinhuanet.com", "people.com.cn", "peopleapp.com", "cctv.com", "gmw.cn", "chinanews.com", "gov.cn"], "B": ["sina.cn", "sina.com.cn", "163.com", "ifeng.com", "bjnews.com.cn", "mrjjxw.com", "scol.com.cn", "nownews.com", "17173.com", "ithome.com"], "official_game": ["game.xiaomi.com/viewpoint/1160758920", "dzpd.163.com", "apps.apple.com/cn/app/1544884479"]}, "verification": {"news_min_independent_sources": 2, "official_source_counts_alone": true, "meme_min_platforms": 2}, "urgency": {"news_window_hours": 168, "meme_window_hours": 504, "date_bound_keywords": ["节气", "小雪", "大雪", "冬至", "立冬", "节日", "当天"], "high_window_hours": 12, "fast_lane_top_n": 3, "end_to_end_sla_minutes_high": 120, "end_to_end_sla_minutes_normal": 1440}, "scoring_weights": {"relevance": 0.35, "meme_potential": 0.2, "tone_fit": 0.2, "timeliness": 0.15, "heat_momentum": 0.1}, "recommend_threshold": 60, "review": {"max_auto_revise_rounds": 2, "judge_pass_score": 7}, "platforms": {"douyin": {"name": "抖音", "duration_sec": [15, 60], "aspect": "9:16 竖屏", "max_title_chars": 30, "max_tags": 5, "hook_within_sec": 3, "speech_chars_per_sec": 4.5}, "bilibili": {"name": "B站", "duration_sec": [60, 180], "aspect": "16:9 横屏", "max_title_chars": 40, "max_tags": 10, "hook_within_sec": 5, "speech_chars_per_sec": 4.5}, "xiaohongshu": {"name": "小红书", "duration_sec": [15, 60], "aspect": "3:4 或 9:16 竖屏", "max_title_chars": 20, "max_tags": 8, "hook_within_sec": 3, "speech_chars_per_sec": 4.5}}, "own_ops_event_keywords": ["停运", "停服", "下架", "渠道服", "封号", "退款", "故障补偿"], "debunk_db": [{"claim_keywords": ["秋假", "河南", "安徽"], "claim": "河南、安徽等地中小学今年放秋假", "debunk": "当地教育部门辟谣，系不实信息", "source": "中国新闻网《网络谣言伪造公文、虚构政策、抹黑企业 网信公安工信部门坚决整治》（2025-12-10）", "source_url": "https://www.chinanews.com/gn/2025/12-10/10530388.shtml"}], "clustering": {"similarity_threshold": 0.18}}, "setting": {"game": "蛋仔派对", "version": "setting-v1-2026-11-22", "status": "draft", "note": "根据公开资料整理的精简设定库，每条都标了出处。status=draft 表示尚未经过游戏策划确认；正式使用前必须由策划逐条确认（confirmed=true）。", "entries": [{"id": "S01", "category": "世界观", "title": "蛋仔岛与盲盒机", "content": "蛋仔们生活在盲盒机背后的神秘世界——蛋仔岛。它们的梦想是在一场场派对中胜出、争夺象征胜利的金币，胜出的蛋仔会被传送到人类世界。", "keywords": ["蛋仔岛", "盲盒", "金币", "派对", "世界观", "人类世界"], "source": "App Store《蛋仔派对》官方介绍", "source_url": "https://apps.apple.com/cn/app/1544884479", "confirmed": false}, {"id": "S02", "category": "世界观", "title": "时空裂隙与闯关派对", "content": "人类向盲盒贩卖机投入金币时会引发时空裂隙，蛋仔勇士们便集结出动，开启闯关派对抢夺金币。", "keywords": ["时空裂隙", "闯关", "金币", "盲盒贩卖机"], "source": "买购网《蛋仔派对》词条", "source_url": "https://www.maigoo.com/citiao/973542.html", "confirmed": false}, {"id": "S03", "category": "角色", "title": "玩家化身蛋仔", "content": "玩家化身Q萌、圆滚滚的蛋仔，基础动作包括滚动、跳跃、扑倒；外观通过盲盒等途径获得，每个赛季有主题系列外观。", "keywords": ["蛋仔", "Q萌", "滚动", "外观", "赛季"], "source": "买购网《蛋仔派对》词条；App Store 官方介绍", "source_url": "https://www.maigoo.com/citiao/973542.html", "confirmed": false}, {"id": "S04", "category": "称呼与口吻", "title": "官方对玩家的称呼", "content": "官方公告称呼玩家为“蛋仔们”“家蛋们”，一起玩的朋友叫“蛋搭子”“好碰友”。口吻轻松、可爱、爱用语气词和波浪号，自带一点调侃但不刻薄。", "keywords": ["蛋仔们", "家蛋们", "蛋搭子", "好碰友", "口吻"], "source": "《蛋仔派对》2026年1月15日、4月29日官方更新公告", "source_url": "https://game.xiaomi.com/viewpoint/1160758920_1768478322347_16", "confirmed": false}, {"id": "S05", "category": "玩法", "title": "派对道具", "content": "派对中可拾取道具干扰对手或帮助自己，例如云雾弹（遮挡视野）、炸弹（炸飞对手）、弹球、地雷、垫脚石、加速、弹簧绳、缩小化、弹板、咸鱼（近身击飞对手）。", "keywords": ["道具", "云雾弹", "炸弹", "咸鱼", "弹簧绳", "加速"], "source": "买购网《蛋仔派对》词条", "source_url": "https://www.maigoo.com/citiao/973542.html", "confirmed": false}, {"id": "S06", "category": "玩法", "title": "蛋仔乐园（玩家原创地图）", "content": "游戏内有自由度很高的乐园编辑器，玩家可以自己设计地图；蛋仔乐园集结了海量玩家原创地图，优秀的玩家自制地图会被选入官方派对季关卡。", "keywords": ["乐园", "编辑器", "原创地图", "UGC", "自制地图"], "source": "App Store 官方介绍；2025年11月13日更新公告", "source_url": "https://www.9game.cn/dzpd/11522598.html", "confirmed": false}, {"id": "S07", "category": "玩法", "title": "揪出捣蛋鬼（阵营推理）", "content": "推理玩法，分好蛋、坏蛋、中立蛋阵营。2026年3月上线导演蛋（好蛋，可随时开启紧急讨论）、替身蛋（中立，击倒他人后获得对方阵营与技能），并重做了魔盗蛋（坏蛋）的技能。", "keywords": ["揪出捣蛋鬼", "好蛋", "坏蛋", "中立蛋", "导演蛋", "替身蛋", "魔盗蛋", "推理"], "source": "《蛋仔派对》2026年3月19日更新公告", "source_url": "https://game.xiaomi.com/viewpoint/1160758920_1773915970510_10001", "confirmed": false}, {"id": "S08", "category": "玩法", "title": "惊魂系列与其他子玩法", "content": "除派对闯关外，还有逃出惊魂夜、惊魂寻宝队、超燃竞技场、蛋仔碰碰棋、蛋仔飞车、蛋仔农场等玩法。惊魂系列是官方的衍生子IP。", "keywords": ["逃出惊魂夜", "惊魂", "超燃竞技场", "碰碰棋", "飞车", "农场"], "source": "网易新闻《惊魂节》报道；2026年4月29日更新公告", "source_url": "https://c.m.163.com/news/a/L2SLOU7205466ZM9.html", "confirmed": false}, {"id": "S09", "category": "角色", "title": "蛋仔岛上的NPC与剧情角色", "content": "蛋仔岛上有打工蛋（负责抢修设施，曾修好胡桃夹子机器人的基础行动模块）、魔鬼蛋（2026年五一版本中出了BUG变不回去，需要蛋仔们用能量药水解救）等角色。", "keywords": ["打工蛋", "魔鬼蛋", "胡桃夹子", "NPC"], "source": "《蛋仔派对》2026年1月15日、4月29日更新公告", "source_url": "https://game.xiaomi.com/viewpoint/1160758920_1777476842311_16", "confirmed": false}, {"id": "S10", "category": "游戏信息", "title": "研发与规模", "content": "《蛋仔派对》由网易研发，2022年5月27日公测。据2026全球数字经济大会披露，全球注册用户超过7亿，月活稳定在1亿以上。", "keywords": ["网易", "公测", "注册用户", "月活"], "source": "IT之家（凤凰网科技转载）；网易新闻", "source_url": "https://tech.ifeng.com/c/8xuB1b9Q3Ie", "confirmed": false}, {"id": "S11", "category": "游戏信息", "title": "货币", "content": "蛋币可充值获得，用于购买外观等；潮流纤维可兑换盲盒；彩虹币用于抽取赛季盲盒。营销内容不得渲染抽取概率或诱导充值。", "keywords": ["蛋币", "潮流纤维", "彩虹币", "盲盒", "充值"], "source": "买购网《蛋仔派对》词条", "source_url": "https://www.maigoo.com/citiao/973542.html", "confirmed": false}, {"id": "B01", "category": "禁区", "title": "不编造未公布内容", "content": "不得编造或暗示未经官方公布的版本内容、联动、福利、上线时间；只能引用设定库和已核验事实里有的信息。", "keywords": ["禁区", "未公布", "爆料", "联动", "福利"], "source": "品牌规范（待策划、法务确认）", "source_url": "", "confirmed": false}, {"id": "B02", "category": "禁区", "title": "防沉迷与未成年人", "content": "玩家中未成年人比例高。不得鼓励熬夜、通宵、逃课、不写作业或长时间游戏；涉及学生假期的内容要同时鼓励线下活动。", "keywords": ["防沉迷", "未成年人", "学生", "假期", "熬夜"], "source": "品牌规范（待策划、法务确认）", "source_url": "", "confirmed": false}, {"id": "B03", "category": "禁区", "title": "第三方IP与真人", "content": "联动IP只能在授权期内、按授权范围使用；未授权的第三方IP一律不用。涉及真人姓名、肖像、真人台词的内容必须经法务会签。", "keywords": ["IP", "联动", "授权", "真人", "肖像"], "source": "品牌规范（待策划、法务确认）", "source_url": "", "confirmed": false}, {"id": "B04", "category": "禁区", "title": "竞品", "content": "不提及、不对比、不贬低竞品游戏。", "keywords": ["竞品"], "source": "品牌规范（待策划、法务确认）", "source_url": "", "confirmed": false}]}, "sources": {"version": "sources-v1-2026-11-22", "note": "数据源授权清单。采集器只调用 status=active 且未过期的数据源；其余一律跳过并记审计日志。下面的平台接口和第三方数据服务都是占位配置：项目尚未签约，所以是 inactive。", "sources": [{"id": "manual_submit", "name": "运营手动提交链接", "kind": "manual", "auth": "无需授权：运营提交公开链接，系统只做存档", "status": "active", "valid_until": null}, {"id": "public_rss", "name": "新闻网站公开 RSS", "kind": "rss", "auth": "公开 RSS，按网站条款使用（上线前由法务逐站确认）", "status": "active", "valid_until": "2027-06-30", "feeds": []}, {"id": "weibo_open_api", "name": "微博开放平台接口", "kind": "platform_api", "auth": "需申请开放平台权限（未申请）", "status": "inactive", "valid_until": null}, {"id": "douyin_open_api", "name": "抖音开放平台接口", "kind": "platform_api", "auth": "需申请开放平台权限（未申请）", "status": "inactive", "valid_until": null}, {"id": "licensed_data_service", "name": "第三方授权数据服务（热榜数据）", "kind": "data_service", "auth": "需签约（未签约）", "status": "inactive", "valid_until": null}]}, "prompts": {"classify_event": "你是热点分类器。判断下面这个热点事件属于哪一类，只输出 JSON。\n\n类型定义：\n- news：新闻事件类，有可以核实的具体事实（时间、地点、数字、谁做了什么）。\n- meme：梗与话题类，网络梗、句式、挑战、表情包，重点是一种说法或玩法，而不是一条事实。\n\n事件条目：\n{items}\n\n输出格式：\n{\"type\": \"news\" 或 \"meme\", \"reason\": \"一句话理由\"}\n", "extract_facts": "你是事实抽取器。从下面每条来源的内容中，抽取可以被核实的关键事实。\n\n规则：\n1. 只抽取来源原文明确写出的内容，不推断、不补充。\n2. 每条事实必须标出支持它的来源 ID（可以有多个）。\n3. 数字、日期、地名必须和来源一致。\n\n来源：\n{sources}\n\n只输出 JSON：\n{\"facts\": [{\"text\": \"事实陈述\", \"source_ids\": [\"R04\", \"R06\"]}]}\n", "generate_script": "你是{game}的短视频编导。为下面的热点写一条{platform_name}短视频脚本。\n\n【硬性要求】\n1. 只能使用下方“事实卡”里的事实，每用一条都要在 fact_ids 里写上它的 ID；事实卡里没有的事实一律不写。\n2. 涉及游戏的内容只能来自下方“游戏设定”，每用一条都要在 setting_ids 里写上它的 ID；不得编造未公布的版本、联动、福利。\n3. 平台规范：时长 {duration_min}-{duration_max} 秒，画幅 {aspect}，标题不超过 {max_title} 字，话题标签不超过 {max_tags} 个，前 {hook_sec} 秒必须有钩子。\n4. 口吻符合设定库里的称呼与口吻；不用广告法极限词（最好、第一、顶级等）；不鼓励熬夜、逃课、长时间游戏；不诱导充值。\n5. 不出现真人姓名或肖像，不出现未授权的第三方 IP，不提竞品。\n\n【切入角度】\n{angle}\n\n【事实卡】\n{fact_card}\n\n【游戏设定】\n{settings}\n\n只输出 JSON：\n{\"title\": \"标题\", \"hook\": \"前几秒的钩子画面和台词\", \"shots\": [{\"t\": \"0-3s\", \"visual\": \"画面\", \"line\": \"台词或字幕\"}], \"bgm\": \"BGM 风格建议（不指定具体版权歌曲）\", \"tags\": [\"#话题\"], \"cta\": \"结尾引导\", \"fact_ids\": [\"F1\"], \"setting_ids\": [\"S01\"]}\n", "judge_script": "你是独立的脚本评审员，和写脚本的不是同一个人。请严格评审下面这条{game}短视频脚本，不要客气。\n\n【脚本】\n{script}\n\n【它声称引用的事实】\n{facts}\n\n【它声称引用的设定】\n{settings}\n\n评审维度（每项 0-10 分）：\n1. setting_consistency：角色、口吻、玩法、世界观是否和设定一致，有没有编造设定外的内容\n2. fact_faithfulness：涉及热点的内容是否和事实一致，有没有夸大或添加事实卡外的信息\n3. hook：前几秒能不能抓住人\n4. platform_fit：节奏、长度、画幅是否适合目标平台\n\n列出具体问题，每个问题指明出处（哪一镜、哪句话）和修改建议。\n\n只输出 JSON：\n{\"scores\": {\"setting_consistency\": 0-10, \"fact_faithfulness\": 0-10, \"hook\": 0-10, \"platform_fit\": 0-10}, \"issues\": [{\"where\": \"镜头或字段\", \"problem\": \"问题\", \"suggestion\": \"修改建议\"}]}\n", "meme_check": "你是梗内容的安全审核员。判断这个梗能否被一款以青少年玩家为主的休闲游戏（{game}）用于营销短视频。\n\n梗的出处和用法：\n{items}\n\n请检查：\n1. 引申义是否有负面、低俗、歧视、性暗示或政治敏感含义。\n2. 是否依赖真人（明星、网红、素人）的姓名、肖像或原话。\n3. 是否来自未授权的第三方作品（影视、游戏、动漫）。\n\n只输出 JSON：\n{\"harmless\": true/false, \"involves_real_person\": true/false, \"real_persons\": [\"...\"], \"third_party_work\": \"作品名或空字符串\", \"explanation\": \"一句话\"}\n", "merge_events": "你是热点归并器。下面是按字面相似度初步分好的热点簇，每簇用方括号里的键标识。\n请判断哪些簇说的其实是同一件事或同一个热点（例如同一事件的不同报道、同一个梗的出处和它带火的现象），需要合并。\n\n判断标准：只有讨论的是同一个具体事件或同一个梗才合并；仅仅主题相近（比如都是体育新闻）不合并。\n\n热点簇：\n{clusters}\n\n只输出 JSON，merges 里每一项是要合并的簇的键，第一个键作为合并后的主簇：\n{\"merges\": [[\"R04\", \"R06\"]], \"reason\": \"一句话说明\"}\n", "revise_script": "你是{game}的短视频编导。下面的脚本没有通过检查，请根据问题清单修改，只改有问题的地方，其他保持不变。\n\n修改时仍然要遵守：只用事实卡里的事实、只用设定库里的设定，并更新 fact_ids 和 setting_ids。\n\n【原脚本】\n{script}\n\n【问题清单】\n{issues}\n\n【事实卡】\n{fact_card}\n\n【游戏设定】\n{settings}\n\n输出修改后的完整脚本 JSON，格式与原脚本相同。\n", "score_topic": "你是{game}的热点营销选题顾问。根据游戏设定和热点内容，评估这个热点是否适合游戏跟进。\n\n游戏设定（节选）：\n{settings}\n\n热点（类型：{event_type}）：\n{event}\n\n已核验的事实或出处：\n{facts}\n\n请给出 0-100 的分数：\n- relevance：热点和游戏的玩法、世界观、玩家群体的关联度\n- meme_potential：能不能用蛋仔的方式玩梗、二创空间大不大\n- tone_fit：调性是否契合（轻松、可爱、适合青少年）\n\n再给出推荐的切入角度和适合的平台（douyin / bilibili / xiaohongshu 中选 1-2 个）。\n如果你认为这个热点不应该跟进，直接说明原因。\n\n只输出 JSON：\n{\"relevance\": 0-100, \"meme_potential\": 0-100, \"tone_fit\": 0-100, \"angle\": \"切入角度，一两句\", \"platforms\": [\"douyin\"], \"reason\": \"推荐或不推荐的理由，两三句\", \"risks\": [\"需要注意的风险\"]}\n"}, "state0": {"snapshots": [{"id": "R01", "source_id": "manual_submit", "title": "2026年小雪节气交节时间：11月22日15时23分", "url": "https://jieqi.bmcx.com/2026_xiaoxue__jieqi/", "publisher": "便民查询网·二十四节气", "platform": "web", "published_at": "2026-11-22T00:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "节气查询页列出2026年小雪开始时间为11月22日15:23:03，农历十月十四。", "heat": 62, "heat_series": [20, 35, 52, 62], "heat_simulated": true}, {"id": "R02", "source_id": "manual_submit", "title": "11月22日下午15时23分，小雪", "url": "https://c.m.163.com/news/a/LBV2BDDI05239VSD.html", "publisher": "网易号", "platform": "163", "published_at": "2026-11-22T09:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "文章介绍今年小雪交节在下午15时23分，且落在周日，并讲了“小雪腌菜”等习俗。", "heat": 58, "heat_series": [18, 30, 49, 58], "heat_simulated": true}, {"id": "R03", "source_id": "manual_submit", "title": "2026年小雪节气11月22日（周日）到来", "url": "https://www.nownews.com/news/6893157", "publisher": "NOWNEWS今日新闻", "platform": "web", "published_at": "2026-11-21T12:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "报道称2026年小雪于11月22日（星期日）下午15时23分03秒交节，是冬季第二个节气。", "heat": 40, "heat_series": [15, 25, 33, 40], "heat_simulated": true}, {"id": "R04", "source_id": "manual_submit", "title": "连休5天、免费滑雪！多地公布“雪假”时间", "url": "https://news.sina.cn/2026-11-15/detail-iniyvesc3155923.d.html", "publisher": "新浪新闻（央视）", "platform": "sina", "published_at": "2026-11-15T10:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "吉林省雪假安排在12月1日至20日期间，3个工作日与周末连休形成5天小长假；学生可免费体验滑雪滑冰。", "heat": 81, "heat_series": [40, 66, 80, 81], "heat_simulated": true}, {"id": "R05", "source_id": "manual_submit", "title": "北方多地官宣“雪假”：连休5天、免费滑雪", "url": "https://m.gmw.cn/2026-11/15/content_1304586445.htm", "publisher": "光明网（上游新闻）", "platform": "gmw", "published_at": "2026-11-15T21:10:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "吉林、内蒙古呼伦贝尔、新疆阿勒泰、河北张家口等地公布雪假安排。", "heat": 70, "heat_series": [35, 58, 69, 70], "heat_simulated": true}, {"id": "R06", "source_id": "manual_submit", "title": "追光丨赴一场冬日之约 这份季节限定假期请查收", "url": "https://www.news.cn/local/20261119/4784b466242b496f916417063555908d/c.html", "publisher": "新华网", "platform": "xinhua", "published_at": "2026-11-19T09:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "吉林雪假学生免费滑雪滑冰次数由1次增至3次、每次3小时；长春将于2027年1月举办第33届世界大学生冬季运动会。", "heat": 66, "heat_series": [30, 50, 62, 66], "heat_simulated": true}, {"id": "R07", "source_id": "manual_submit", "title": "“厉娜”，是一个句号也是一种情绪", "url": "https://m.bjnews.com.cn/detail/1794046029169034.html", "publisher": "新京报", "platform": "bjnews", "published_at": "2026-11-07T18:07:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "综艺《后会友期》带火“厉娜体”：网友在日常感慨后加一句“厉娜”当句号，例如“我下班了，厉娜”。", "heat": 77, "heat_series": [60, 85, 80, 77], "heat_simulated": true}, {"id": "R08", "source_id": "manual_submit", "title": "后会友期带火悬崖小屋咨询量增9倍", "url": "https://sina.cn/media/2028810631", "publisher": "新浪新闻（微博）", "platform": "weibo", "published_at": "2026-11-05T21:39:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "芒果TV《后会友期》新一期上线后话题登上微博热搜，带火节目拍摄地的悬崖小屋。", "heat": 64, "heat_series": [70, 75, 68, 64], "heat_simulated": true}, {"id": "R09", "source_id": "manual_submit", "title": "网易《蛋仔派对》B站渠道服即将停运", "url": "https://www.mrjjxw.com/articles/2026-11-09/4642846.html", "publisher": "每日经济新闻", "platform": "mrjjxw", "published_at": "2026-11-10T08:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "《蛋仔派对》B站渠道服将于2027年1月9日14时停服，官方开放角色资产迁移通道。", "heat": 55, "heat_series": [50, 60, 57, 55], "heat_simulated": true}, {"id": "R10", "source_id": "manual_submit", "title": "《蛋仔派对》B站渠道版手游2027年1月9日停运", "url": "https://tech.ifeng.com/c/8xuB1b9Q3Ie", "publisher": "凤凰网科技（IT之家）", "platform": "ifeng", "published_at": "2026-11-09T12:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "网易公告因与B站渠道合作策略调整，B站渠道版本将于2027年1月9日14时终止运营，角色资产找回服务已开启。", "heat": 48, "heat_series": [45, 52, 50, 48], "heat_simulated": true}, {"id": "R11", "source_id": "manual_submit", "title": "10月热词大盘点：CJ的日常belike", "url": "https://www.digitaling.com/articles/1609089.html", "publisher": "数英网", "platform": "digitaling", "published_at": "2026-10-29T10:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "网友用游戏《侠盗猎车：圣地安列斯》主角CJ的截图演绎自己身心俱疲的日常，品牌纷纷跟进。", "heat": 30, "heat_series": [70, 55, 40, 30], "heat_simulated": true}, {"id": "R12", "source_id": "manual_submit", "title": "请3休13大长假，你可能错过的网络热词：不烧心", "url": "https://www.digitaling.com/articles/1596069.html", "publisher": "数英网", "platform": "digitaling", "published_at": "2026-10-09T10:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "“贵是贵了点，但下午干活不烧心”出自AI短剧台词，国庆期间走红。", "heat": 12, "heat_series": [80, 40, 20, 12], "heat_simulated": true}, {"id": "R13", "source_id": "manual_submit", "title": "葡萄牙主帅回应C罗从国家队退役", "url": "https://sina.cn/media/2028810631", "publisher": "新浪新闻（直播吧）", "platform": "weibo", "published_at": "2026-11-05T22:02:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "葡萄牙主帅热苏斯表示C罗从国家队退役是其个人决定。", "heat": 45, "heat_series": [80, 60, 50, 45], "heat_simulated": true}, {"id": "R14", "source_id": "manual_submit", "title": "微博发布2026第三季度热搜报告", "url": "https://finance.sina.cn/2026-11-18/detail-inizcvvf6915992.d.html?vt=4", "publisher": "新浪财经（封面新闻）", "platform": "sina", "published_at": "2026-11-18T12:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "7至9月微博共形成热搜词条5.82万个，垂直热点占比升至35%。", "heat": 35, "heat_series": [30, 38, 36, 35], "heat_simulated": true}, {"id": "R15", "source_id": "manual_submit", "title": "微博第三季度热搜报告：垂直热点占比升至35%", "url": "https://cbgc.scol.com.cn/news/8153473", "publisher": "封面新闻", "platform": "scol", "published_at": "2026-11-18T11:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "报告显示三季度主榜诞生110个爆词，当事人声明与官方辟谣相关热搜达1965条。", "heat": 30, "heat_series": [25, 33, 31, 30], "heat_simulated": true}, {"id": "R16", "source_id": "manual_submit", "title": "印度男子疑妻子出轨将其活活烧死", "url": "https://sina.cn/media/2028810631", "publisher": "新浪新闻", "platform": "weibo", "published_at": "2026-11-05T21:24:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "印度北方邦发生一起命案。", "heat": 52, "heat_series": [60, 58, 54, 52], "heat_simulated": true}, {"id": "R17", "source_id": "manual_submit", "title": "美国24岁女子跑马拉松身亡", "url": "https://www.sina.cn/media/7752729208", "publisher": "新浪AI", "platform": "weibo", "published_at": "2026-11-04T12:43:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "纽约马拉松期间一名参赛者倒地后不幸去世。", "heat": 40, "heat_series": [55, 48, 43, 40], "heat_simulated": true}, {"id": "R18", "source_id": "manual_submit", "title": "【演示用例·模拟线索】网传：河南、安徽等地中小学今年放秋假", "url": "", "publisher": "演示用例：模拟运营收到的一条无出处转发", "platform": "chat", "published_at": "2026-11-21T20:00:00+08:00", "fetched_at": "2026-11-22T21:40:00+08:00", "summary": "这条是为演示“辟谣库比对”而模拟的运营提交，没有原始出处；对应的辟谣信息是真实的（见规则库 debunk_db）。", "heat": 25, "heat_series": [5, 12, 20, 25], "heat_simulated": true}], "events": [{"id": "E01", "key": "R01", "title": "2026年小雪节气交节时间：11月22日15时23分", "snapshot_ids": ["R01", "R02", "R03"], "type": "news", "type_reason": "小雪交节时间和日期是可以核实的具体事实。", "status": "to_select", "status_reason": "总分 68.4，进入候选看板", "expire_at": "2026-11-22T23:59:00+08:00", "urgency": "high", "facts": [{"id": "F1", "text": "2026年小雪节气于11月22日15时23分交节", "source_ids": ["R01", "R02", "R03"]}, {"id": "F2", "text": "2026年的小雪落在星期日", "source_ids": ["R02", "R03"]}, {"id": "F3", "text": "民间有“小雪腌菜”的习俗", "source_ids": ["R02"]}], "verification": {"kind": "news", "tiers": {"R01": "C", "R02": "B", "R03": "B"}, "independent_domains": ["163.com", "bmcx.com", "nownews.com"], "has_official": false, "dropped_facts": ["小雪节气持续到12月7日结束…（数字在来源里找不到：['12', '7']）"]}, "flags": [], "score": {"parts": {"relevance": 72.0, "meme_potential": 78.0, "tone_fit": 88.0, "timeliness": 6.2, "heat_momentum": 90.3}, "total": 68.4, "angle": "蛋仔岛迎来小雪：蛋仔们在雪地里滚雪球、用道具打雪仗，结尾落到“小雪腌菜”的冬日仪式感。", "platforms": ["douyin", "xiaohongshu"], "reason": "节气是全民话题，和蛋仔岛的冬日氛围、道具玩法容易结合；调性轻松，适合全年龄。今天交节，只有当天有效，要快。", "risks": ["不要夸大天气（例如编造降温幅度或“全国下雪”）"], "heat_simulated": true}, "fast_lane": true}, {"id": "E02", "key": "R04", "title": "连休5天、免费滑雪！多地公布“雪假”时间", "snapshot_ids": ["R04", "R05", "R06"], "type": "news", "type_reason": "各地雪假的时间和福利是官方公布、可以核实的政策信息。", "status": "to_select", "status_reason": "总分 63.6，进入候选看板", "expire_at": "2026-11-26T09:00:00+08:00", "urgency": "normal", "facts": [{"id": "F1", "text": "吉林省雪假安排在12月1日至20日期间，3个工作日与周末连休，形成5天小长假", "source_ids": ["R04"]}, {"id": "F2", "text": "吉林雪假期间，学生免费滑雪滑冰的次数由1次增至3次，每次3小时", "source_ids": ["R06"]}, {"id": "F3", "text": "吉林、内蒙古呼伦贝尔、新疆阿勒泰、河北张家口等地公布了雪假安排", "source_ids": ["R05"]}, {"id": "F4", "text": "长春将于2027年1月举办第33届世界大学生冬季运动会", "source_ids": ["R06"]}], "verification": {"kind": "news", "tiers": {"R04": "B", "R05": "A", "R06": "A"}, "independent_domains": ["gmw.cn", "news.cn", "sina.cn"], "has_official": true, "dropped_facts": []}, "flags": [], "score": {"parts": {"relevance": 70.0, "meme_potential": 65.0, "tone_fit": 80.0, "timeliness": 31.7, "heat_momentum": 53.1}, "total": 63.6, "angle": "北方多地放雪假：蛋仔羡慕“下雪还能放假”，重点放在去真雪场滑雪，游戏只作为假期的轻松调剂。", "platforms": ["douyin"], "reason": "雪假是学生群体的热门话题，和玩家群体重合度高；但面向学生必须遵守防沉迷要求，不能把假期引向长时间游戏。", "risks": ["面向未成年人，不能鼓励假期长时间玩游戏", "只能引用已核验的吉林安排，不要泛化成“全国放假”"], "heat_simulated": true}, "fast_lane": false}, {"id": "E03", "key": "R07", "title": "“厉娜”，是一个句号也是一种情绪", "snapshot_ids": ["R07", "R08"], "type": "meme", "type_reason": "“厉娜体”是一种网友造句的句式，传播的是用法而不是某条事实。", "status": "to_select", "status_reason": "总分 60.7，进入候选看板", "expire_at": "2026-11-28T18:07:00+08:00", "urgency": "normal", "facts": [], "verification": {"kind": "meme", "origin": {"snapshot_id": "R08", "url": "https://sina.cn/media/2028810631", "publisher": "新浪新闻（微博）"}, "platforms": ["bjnews", "weibo"], "harmless": true, "involves_real_person": true, "real_persons": ["厉娜", "许飞"], "third_party_work": "《后会友期》（梗本身是网友造句；脚本不使用节目画面和原声）", "explanation": "句式本身轻松无害，适合玩梗；但“厉娜”是真人姓名，商业使用需要法务确认。"}, "flags": ["legal_required"], "score": {"parts": {"relevance": 62.0, "meme_potential": 85.0, "tone_fit": 70.0, "timeliness": 25.6, "heat_momentum": 41.2}, "total": 60.7, "angle": "用“厉娜体”讲蛋仔的日常小崩溃：被咸鱼拍飞、踩到地雷，每句结尾接一句“厉娜”。", "platforms": ["douyin"], "reason": "句式简单、可套用性强，和蛋仔被道具“整蛊”的日常天然契合，二创空间大。", "risks": ["“厉娜”是真人姓名，需要法务确认能否商用", "不使用节目画面和原声"], "heat_simulated": true}, "fast_lane": false}, {"id": "E04", "key": "R09", "title": "网易《蛋仔派对》B站渠道服即将停运", "snapshot_ids": ["R09", "R10"], "type": "unknown", "type_reason": "", "status": "not_recommended", "status_reason": "自家运营事件（停运/停服等），应走官方公告，不做热点营销", "expire_at": "", "urgency": "normal", "facts": [], "verification": {}, "flags": ["own_ops"], "score": {}, "fast_lane": false}, {"id": "E05", "key": "R11", "title": "10月热词大盘点：CJ的日常belike", "snapshot_ids": ["R11"], "type": "unknown", "type_reason": "", "status": "rejected", "status_reason": "红线预过滤：未授权第三方IP:侠盗猎车、未授权第三方IP:CJ", "expire_at": "", "urgency": "normal", "facts": [], "verification": {}, "flags": [], "score": {}, "fast_lane": false}, {"id": "E06", "key": "R12", "title": "请3休13大长假，你可能错过的网络热词：不烧心", "snapshot_ids": ["R12"], "type": "meme", "type_reason": "“不烧心”是短剧台词衍生出的网络热词。", "status": "expired", "status_reason": "已于 10-30 10:00 过期", "expire_at": "2026-10-30T10:00:00+08:00", "urgency": "normal", "facts": [], "verification": {}, "flags": [], "score": {}, "fast_lane": false}, {"id": "E07", "key": "R13", "title": "葡萄牙主帅回应C罗从国家队退役", "snapshot_ids": ["R13"], "type": "news", "type_reason": "球员退役是可以核实的体育新闻。", "status": "expired", "status_reason": "已于 11-12 22:02 过期", "expire_at": "2026-11-12T22:02:00+08:00", "urgency": "normal", "facts": [], "verification": {}, "flags": [], "score": {}, "fast_lane": false}, {"id": "E08", "key": "R14", "title": "微博发布2026第三季度热搜报告", "snapshot_ids": ["R14", "R15"], "type": "news", "type_reason": "热搜报告里的统计数字是可以核实的事实。", "status": "not_recommended", "status_reason": "总分 25.1，低于推荐线 60", "expire_at": "2026-11-25T12:00:00+08:00", "urgency": "normal", "facts": [{"id": "F1", "text": "2026年7至9月，微博共形成热搜词条5.82万个", "source_ids": ["R14"]}, {"id": "F2", "text": "三季度垂直热点占比升至35%", "source_ids": ["R14"]}, {"id": "F3", "text": "三季度主榜诞生110个爆词", "source_ids": ["R15"]}], "verification": {"kind": "news", "tiers": {"R14": "B", "R15": "B"}, "independent_domains": ["com.cn", "sina.cn"], "has_official": false, "dropped_facts": []}, "flags": [], "score": {"parts": {"relevance": 15.0, "meme_potential": 10.0, "tone_fit": 40.0, "timeliness": 36.8, "heat_momentum": 43.4}, "total": 25.1, "angle": "", "platforms": [], "reason": "行业报告类新闻，和游戏玩法、玩家日常关联很弱，玩梗空间小。", "risks": [], "heat_simulated": true}, "fast_lane": false}, {"id": "E09", "key": "R16", "title": "印度男子疑妻子出轨将其活活烧死", "snapshot_ids": ["R16"], "type": "unknown", "type_reason": "", "status": "rejected", "status_reason": "红线预过滤：暴力犯罪:烧死、暴力犯罪:命案", "expire_at": "", "urgency": "normal", "facts": [], "verification": {}, "flags": [], "score": {}, "fast_lane": false}, {"id": "E10", "key": "R17", "title": "美国24岁女子跑马拉松身亡", "snapshot_ids": ["R17"], "type": "unknown", "type_reason": "", "status": "rejected", "status_reason": "红线预过滤：灾难事故:身亡、灾难事故:去世", "expire_at": "", "urgency": "normal", "facts": [], "verification": {}, "flags": [], "score": {}, "fast_lane": false}, {"id": "E11", "key": "R18", "title": "【演示用例·模拟线索】网传：河南、安徽等地中小学今年放秋假", "snapshot_ids": ["R18"], "type": "news", "type_reason": "内容是关于学校放假的政策性说法，属于需要核实的事实类信息。", "status": "rejected", "status_reason": "命中辟谣库：当地教育部门辟谣，系不实信息（中国新闻网《网络谣言伪造公文、虚构政策、抹黑企业 网信公安工信部门坚决整治》（2025-12-10））", "expire_at": "2026-11-28T20:00:00+08:00", "urgency": "normal", "facts": [], "verification": {"kind": "news", "debunk": {"claim_keywords": ["秋假", "河南", "安徽"], "claim": "河南、安徽等地中小学今年放秋假", "debunk": "当地教育部门辟谣，系不实信息", "source": "中国新闻网《网络谣言伪造公文、虚构政策、抹黑企业 网信公安工信部门坚决整治》（2025-12-10）", "source_url": "https://www.chinanews.com/gn/2025/12-10/10530388.shtml"}}, "flags": [], "score": {}, "fast_lane": false}], "scripts": [{"id": "E01-douyin-v1", "event_id": "E01", "platform": "douyin", "version": 1, "content": {"title": "小雪到！蛋仔岛今年最好看的雪景来了", "hook": "蛋仔从雪堆里猛地滚出来：今天15点23分，小雪到啦！", "shots": [{"t": "0-3s", "visual": "蛋仔从雪堆里猛地滚出来，雪花糊了一脸", "line": "今天15点23分，小雪到啦！"}, {"t": "3-9s", "visual": "蛋仔们扔出炸弹，雪花被炸得漫天飞", "line": "家蛋们，蛋仔岛也下雪啦，气温直降10度！"}, {"t": "9-16s", "visual": "两个蛋搭子拿咸鱼互拍雪球，一个被拍飞滚远", "line": "约上蛋搭子，用咸鱼来一场雪仗"}, {"t": "16-22s", "visual": "蛋仔在自家庄园门口摆了一排腌菜坛子", "line": "老话说小雪腌菜，蛋仔岛也要有冬日仪式感"}, {"t": "22-26s", "visual": "定格：蛋仔们挤成一团取暖", "line": "今年小雪在周日，周末一起上岛玩雪吧"}], "bgm": "轻快的冬日钢琴加铃铛音效（不指定具体版权歌曲）", "tags": ["#小雪", "#蛋仔派对", "#二十四节气", "#冬日派对"], "cta": "评论区说说：你那里下雪了吗？", "fact_ids": ["F1", "F2", "F3"], "setting_ids": ["S01", "S04", "S05"]}, "status": "revising", "pregenerated": true, "setting_version": "setting-v1-2026-11-22", "prompt_version": "rules-v1-2026-11-22", "reviews": [{"round": 0, "rule_issues": [{"severity": "block", "rule": "数字溯源", "where": "", "problem": "这些数字在事实卡和设定里都找不到：['10']"}, {"severity": "block", "rule": "广告法极限词", "where": "", "problem": "命中：最好"}], "judge": {"scores": {"setting_consistency": 6, "fact_faithfulness": 5, "hook": 8, "platform_fit": 8}, "issues": [{"where": "第2镜台词", "problem": "“气温直降10度”在事实卡里没有依据，属于编造的天气信息", "suggestion": "删掉降温描述，只说蛋仔岛也飘雪"}, {"where": "第4镜画面", "problem": "“自家庄园”不在本次提供的设定里，不能确认可用", "suggestion": "改成不依赖庄园的画面，比如蛋仔们排成一排摆小坛子"}, {"where": "标题", "problem": "“最好看”是极限用语", "suggestion": "改成不带比较级的标题"}], "passed": false}, "human_issues": []}], "flags": []}, {"id": "E01-douyin-v2", "event_id": "E01", "platform": "douyin", "version": 2, "content": {"title": "小雪到！蛋仔岛下雪啦", "hook": "蛋仔从雪堆里猛地滚出来：今天15点23分，小雪到啦！", "shots": [{"t": "0-3s", "visual": "蛋仔从雪堆里猛地滚出来，雪花糊了一脸", "line": "今天15点23分，小雪到啦！"}, {"t": "3-9s", "visual": "蛋仔岛飘起小雪，蛋仔们扔出炸弹，雪花被炸得漫天飞", "line": "家蛋们，蛋仔岛也飘雪啦！"}, {"t": "9-16s", "visual": "两个蛋搭子拿咸鱼互拍雪球，一个被拍飞滚远", "line": "约上蛋搭子，用咸鱼来一场雪仗"}, {"t": "16-22s", "visual": "蛋仔们排成一排，面前摆着小坛子，头顶冒出“小雪腌菜”的字幕", "line": "老话说小雪腌菜，冬天的仪式感安排上"}, {"t": "22-26s", "visual": "定格：蛋仔们挤成一团，屏幕弹出“今年小雪在周日”", "line": "今年小雪在周日，叫上蛋搭子来岛上玩雪吧"}], "bgm": "轻快的冬日钢琴加铃铛音效（不指定具体版权歌曲）", "tags": ["#小雪", "#蛋仔派对", "#二十四节气", "#冬日派对"], "cta": "评论区说说：你那里下雪了吗？", "fact_ids": ["F1", "F2", "F3"], "setting_ids": ["S01", "S04", "S05"]}, "status": "awaiting_final", "pregenerated": true, "setting_version": "setting-v1-2026-11-22", "prompt_version": "rules-v1-2026-11-22", "reviews": [{"round": 1, "rule_issues": [], "judge": {"scores": {"setting_consistency": 8, "fact_faithfulness": 9, "hook": 8, "platform_fit": 8}, "issues": [], "passed": true}, "human_issues": []}], "flags": []}, {"id": "E01-xiaohongshu-v1", "event_id": "E01", "platform": "xiaohongshu", "version": 1, "content": {"title": "小雪仪式感｜蛋仔岛冬日打卡", "hook": "蛋仔捧着小坛子看向镜头：小雪啦！", "shots": [{"t": "0-3s", "visual": "蛋仔捧着小坛子看向镜头，背景飘着小雪", "line": "小雪啦！"}, {"t": "3-10s", "visual": "蛋仔岛雪景三连拍：滚雪球、蛋搭子贴贴取暖、雪地里的派对舞台", "line": "今天15点23分正式交节，今年刚好赶上周日"}, {"t": "10-18s", "visual": "蛋仔把小坛子摆成一排，字幕“小雪腌菜”", "line": "老话说小雪腌菜，蛋仔也来凑个热闹"}, {"t": "18-24s", "visual": "蛋仔们在雪地里排出一个大大的笑脸", "line": "冬天的仪式感，和好碰友一起收下吧"}], "bgm": "温柔的冬日氛围音乐（不指定具体版权歌曲）", "tags": ["#小雪", "#蛋仔派对", "#节气仪式感", "#冬日打卡"], "cta": "你今年的小雪仪式感是什么？评论区告诉蛋仔～", "fact_ids": ["F1", "F2", "F3"], "setting_ids": ["S01", "S04"]}, "status": "awaiting_final", "pregenerated": true, "setting_version": "setting-v1-2026-11-22", "prompt_version": "rules-v1-2026-11-22", "reviews": [{"round": 0, "rule_issues": [], "judge": {"scores": {"setting_consistency": 8, "fact_faithfulness": 9, "hook": 7, "platform_fit": 8}, "issues": [], "passed": true}, "human_issues": []}], "flags": []}], "audit": [{"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R01", "detail": "manual_submit | https://jieqi.bmcx.com/2026_xiaoxue__jieqi/"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R02", "detail": "manual_submit | https://c.m.163.com/news/a/LBV2BDDI05239VSD.html"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R03", "detail": "manual_submit | https://www.nownews.com/news/6893157"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R04", "detail": "manual_submit | https://news.sina.cn/2026-11-15/detail-iniyvesc3155923.d.html"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R05", "detail": "manual_submit | https://m.gmw.cn/2026-11/15/content_1304586445.htm"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R06", "detail": "manual_submit | https://www.news.cn/local/20261119/4784b466242b496f916417063555908d/c.html"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R07", "detail": "manual_submit | https://m.bjnews.com.cn/detail/1794046029169034.html"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R08", "detail": "manual_submit | https://sina.cn/media/2028810631"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R09", "detail": "manual_submit | https://www.mrjjxw.com/articles/2026-11-09/4642846.html"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R10", "detail": "manual_submit | https://tech.ifeng.com/c/8xuB1b9Q3Ie"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R11", "detail": "manual_submit | https://www.digitaling.com/articles/1609089.html"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R12", "detail": "manual_submit | https://www.digitaling.com/articles/1596069.html"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R13", "detail": "manual_submit | https://sina.cn/media/2028810631"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R14", "detail": "manual_submit | https://finance.sina.cn/2026-11-18/detail-inizcvvf6915992.d.html?vt=4"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R15", "detail": "manual_submit | https://cbgc.scol.com.cn/news/8153473"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R16", "detail": "manual_submit | https://sina.cn/media/2028810631"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R17", "detail": "manual_submit | https://www.sina.cn/media/7752729208"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "snapshot_saved", "target": "R18", "detail": "manual_submit | 无链接"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "merge_events", "target": "all", "detail": "R06 和 R04 都在报道北方多地的雪假安排；R08 是《后会友期》登上热搜，R07 是这档节目带火的“厉娜体”，属于同一个热点。"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "classify", "target": "E01", "detail": "news：小雪交节时间和日期是可以核实的具体事实。"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "classify", "target": "E02", "detail": "news：各地雪假的时间和福利是官方公布、可以核实的政策信息。"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "classify", "target": "E03", "detail": "meme：“厉娜体”是一种网友造句的句式，传播的是用法而不是某条事实。"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "own_ops", "target": "E04", "detail": "自家运营事件（停运/停服等），应走官方公告，不做热点营销"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "redline_reject", "target": "E05", "detail": "红线预过滤：未授权第三方IP:侠盗猎车、未授权第三方IP:CJ"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "classify", "target": "E06", "detail": "meme：“不烧心”是短剧台词衍生出的网络热词。"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "expired", "target": "E06", "detail": "已于 10-30 10:00 过期"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "classify", "target": "E07", "detail": "news：球员退役是可以核实的体育新闻。"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "expired", "target": "E07", "detail": "已于 11-12 22:02 过期"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "classify", "target": "E08", "detail": "news：热搜报告里的统计数字是可以核实的事实。"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "redline_reject", "target": "E09", "detail": "红线预过滤：暴力犯罪:烧死、暴力犯罪:命案"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "redline_reject", "target": "E10", "detail": "红线预过滤：灾难事故:身亡、灾难事故:去世"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "classify", "target": "E11", "detail": "news：内容是关于学校放假的政策性说法，属于需要核实的事实类信息。"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "extract_facts", "target": "E01", "detail": "抽出 4 条，规则保留 3 条"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "drop_fact", "target": "E01", "detail": "小雪节气持续到12月7日结束…（数字在来源里找不到：['12', '7']）"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "score", "target": "E01", "detail": "相关度72 玩梗78 调性88"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "rank", "target": "E01", "detail": "总分 68.4，进入候选看板"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "extract_facts", "target": "E02", "detail": "抽出 4 条，规则保留 4 条"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "score", "target": "E02", "detail": "相关度70 玩梗65 调性80"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "rank", "target": "E02", "detail": "总分 63.6，进入候选看板"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "meme_check", "target": "E03", "detail": "句式本身轻松无害，适合玩梗；但“厉娜”是真人姓名，商业使用需要法务确认。"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "flag_legal", "target": "E03", "detail": "涉及真人：厉娜、许飞"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "score", "target": "E03", "detail": "相关度62 玩梗85 调性70"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "rank", "target": "E03", "detail": "总分 60.7，进入候选看板"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "extract_facts", "target": "E08", "detail": "抽出 3 条，规则保留 3 条"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "score", "target": "E08", "detail": "相关度15 玩梗10 调性40"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "rank", "target": "E08", "detail": "总分 25.1，低于推荐线 60"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "debunk_reject", "target": "E11", "detail": "命中辟谣库：当地教育部门辟谣，系不实信息（中国新闻网《网络谣言伪造公文、虚构政策、抹黑企业 网信公安工信部门坚决整治》（2025-12-10））"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "fast_lane", "target": "E01", "detail": "高时效（23:59 过期），选题前预生成草稿"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "generate", "target": "E01-douyin-v1", "detail": "预生成"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "review", "target": "E01-douyin-v1", "detail": "规则问题 2 个；模型评审未通过；结果：revising"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "review", "target": "E01-douyin-v2", "detail": "规则问题 0 个；模型评审通过；结果：awaiting_final"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "llm", "action": "generate", "target": "E01-xiaohongshu-v1", "detail": "预生成"}, {"at": "2026-11-22T21:45:00+08:00", "actor": "system", "action": "review", "target": "E01-xiaohongshu-v1", "detail": "规则问题 0 个；模型评审通过；结果：awaiting_final"}], "contexts": {"E01": {"fact_card": [{"id": "F1", "text": "2026年小雪节气于11月22日15时23分交节", "source_ids": ["R01", "R02", "R03"]}, {"id": "F2", "text": "2026年的小雪落在星期日", "source_ids": ["R02", "R03"]}, {"id": "F3", "text": "民间有“小雪腌菜”的习俗", "source_ids": ["R02"]}], "setting_ids": ["S01", "S03", "S05", "S04", "B01", "B02", "B03", "B04"]}, "E02": {"fact_card": [{"id": "F1", "text": "吉林省雪假安排在12月1日至20日期间，3个工作日与周末连休，形成5天小长假", "source_ids": ["R04"]}, {"id": "F2", "text": "吉林雪假期间，学生免费滑雪滑冰的次数由1次增至3次，每次3小时", "source_ids": ["R06"]}, {"id": "F3", "text": "吉林、内蒙古呼伦贝尔、新疆阿勒泰、河北张家口等地公布了雪假安排", "source_ids": ["R05"]}, {"id": "F4", "text": "长春将于2027年1月举办第33届世界大学生冬季运动会", "source_ids": ["R06"]}], "setting_ids": ["S03", "S04", "B01", "B02", "B03", "B04"]}, "E03": {"fact_card": [{"id": "F1", "text": "新京报：综艺《后会友期》带火“厉娜体”：网友在日常感慨后加一句“厉娜”当句号，例如“我下班了，厉娜”。", "source_ids": ["R07"]}, {"id": "F2", "text": "新浪新闻（微博）：芒果TV《后会友期》新一期上线后话题登上微博热搜，带火节目拍摄地的悬崖小屋。", "source_ids": ["R08"]}], "setting_ids": ["S03", "S05", "S04", "B01", "B02", "B03", "B04"]}}}, "onApprove": {"E02": [{"id": "E02-douyin-v1", "event_id": "E02", "platform": "douyin", "version": 1, "content": {"title": "连休5天的雪假，蛋仔也想放！", "hook": "蛋仔看完新闻，下巴掉到地上：下雪还能放假？", "shots": [{"t": "0-3s", "visual": "蛋仔看着手机新闻，眼睛瞪圆，下巴掉到地上", "line": "下雪还能放假？"}, {"t": "3-10s", "visual": "字幕卡：吉林雪假｜12月1日至20日期间｜3天加周末，连休5天", "line": "吉林的雪假安排在12月1日到20日期间，连休5天！"}, {"t": "10-17s", "visual": "蛋仔穿上雪具从雪坡滚下去，越滚越大，变成一个大雪球", "line": "学生还能免费滑雪滑冰3次，每次3小时"}, {"t": "17-24s", "visual": "蛋搭子们在真雪场门口挥手，镜头一转是蛋仔岛的雪地派对", "line": "真雪场先滑个过瘾，回家再和蛋搭子开一局"}, {"t": "24-28s", "visual": "定格：蛋仔举着“雪假快乐”的牌子", "line": "北方的家蛋们，雪假快乐！"}], "bgm": "欢快的冰雪主题音乐（不指定具体版权歌曲）", "tags": ["#雪假", "#蛋仔派对", "#冬日派对"], "cta": "你们那里放雪假吗？评论区报个地名～", "fact_ids": ["F1", "F2"], "setting_ids": ["S03", "S04", "B02"]}, "status": "awaiting_final", "pregenerated": false, "setting_version": "setting-v1-2026-11-22", "prompt_version": "rules-v1-2026-11-22", "reviews": [{"round": 0, "rule_issues": [], "judge": {"scores": {"setting_consistency": 8, "fact_faithfulness": 9, "hook": 8, "platform_fit": 8}, "issues": [], "passed": true}, "human_issues": []}], "flags": []}], "E03": [{"id": "E03-douyin-v1", "event_id": "E03", "platform": "douyin", "version": 1, "content": {"title": "蛋仔的一天，厉娜", "hook": "蛋仔刚落地就被一条咸鱼拍飞：我被咸鱼拍飞了，厉娜。", "shots": [{"t": "0-3s", "visual": "蛋仔刚落地，一条咸鱼从画面外拍过来，蛋仔飞出画面", "line": "我被咸鱼拍飞了，厉娜。"}, {"t": "3-8s", "visual": "蛋仔爬起来往前滚，一脚踩中地雷，又飞了", "line": "我踩到地雷了，厉娜。"}, {"t": "8-13s", "visual": "蛋仔钻进云雾弹的烟雾里，结果迎面撞上蛋搭子", "line": "我躲进云雾里，撞到了蛋搭子，厉娜。"}, {"t": "13-18s", "visual": "终点前一秒，蛋仔被弹簧绳拉了回去", "line": "我差一点就到终点了，厉娜。"}, {"t": "18-22s", "visual": "蛋仔和蛋搭子一起瘫在地上大笑", "line": "但和蛋搭子一起输，也挺开心的，厉娜。"}], "bgm": "节奏感强的搞笑音效串烧（不使用节目原声）", "tags": ["#蛋仔派对", "#蛋仔的一天", "#厉娜体"], "cta": "你今天的“厉娜”时刻是什么？", "fact_ids": ["F1"], "setting_ids": ["S04", "S05"]}, "status": "awaiting_final", "pregenerated": false, "setting_version": "setting-v1-2026-11-22", "prompt_version": "rules-v1-2026-11-22", "reviews": [{"round": 0, "rule_issues": [{"severity": "legal", "rule": "真人姓名", "where": "", "problem": "需法务会签：厉娜"}], "judge": {"scores": {"setting_consistency": 8, "fact_faithfulness": 8, "hook": 9, "platform_fit": 8}, "issues": [], "passed": true}, "human_issues": []}], "flags": ["legal_required"]}]}};
+const R = D.rules, SET = D.setting, P = D.prompts;
+const KEY = 'eggy-hotspot-demo-v1';
+const T0 = Date.now(), CLOCK0 = new Date(D.generatedAt).getTime();
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const pad = n => String(n).padStart(2, '0');
+const nowMs = () => CLOCK0 + (Date.now() - T0);
+const iso = ms => { const d = new Date(ms + 8 * 3600e3); return d.toISOString().slice(0, 19) + '+08:00'; };
+const hm = s => s ? s.slice(5, 10) + ' ' + s.slice(11, 16) : '';
+const ST = {new:'新发现',verifying:'核验中',verified:'已核验',pending:'待核实',doubtful:'存疑',rejected:'驳回',to_select:'待选题',not_recommended:'不推荐',selected:'已选题',declined:'已拒绝',expired:'已过期'};
+const SS = {pregenerated:'预生成草稿',draft:'草稿',reviewing:'评审中',revising:'已修改为新版本',needs_human:'待人工处理',awaiting_final:'待终审',returned:'已退回',approved:'已通过',published:'已发布'};
+const PL = Object.fromEntries(Object.entries(R.platforms).map(([k, v]) => [k, v.name]));
+const DECLINE = ['与游戏关联弱', '调性不合', '风险太高', '时效已过', '已有同类内容', '其他'];
+
+let S, sel, filter = 'all', vsel = {}, SAMPLE = null, busy = false;
+function load() { try { const t = localStorage.getItem(KEY); if (t) { const o = JSON.parse(t); if (o.v === D.generatedAt) return o; } } catch (e) {} return null; }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+function reset() { S = clone(D.state0); S.v = D.generatedAt; S.submitted = 0; sel = S.events.find(e => e.fast_lane)?.id || S.events[0].id; save(); }
+S = load(); if (!S) reset(); else sel = S.events[0].id;
+
+const snap = id => S.snapshots.find(s => s.id === id);
+const evById = id => S.events.find(e => e.id === id);
+const scriptsOf = eid => S.scripts.filter(s => s.event_id === eid);
+function log(actor, action, target, detail) { S.audit.push({at: iso(nowMs()), actor, action, target, detail: detail || ''}); }
+function toast(t) { const el = $('#toast'); el.textContent = t; el.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(() => el.style.display = 'none', 3200); }
+
+/* ---------- 规则（与后端 app/rules.py、app/reviewer.py 一致） ---------- */
+const hits = (t, ws) => ws.filter(w => w && t.includes(w));
+function redline(t) {
+  const out = [];
+  for (const [c, ws] of Object.entries(R.redline_topics)) hits(t, ws).forEach(w => out.push(c + ':' + w));
+  hits(t, R.competitors).forEach(w => out.push('竞品:' + w));
+  hits(t, R.third_party_ip.never_authorized).forEach(w => out.push('未授权第三方IP:' + w));
+  return out;
+}
+const numbers = t => new Set(t.match(/\d+(?:\.\d+)?/g) || []);
+const T_RE = /(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*s/;
+function tier(url) {
+  if (!url) return 'N';
+  if (R.source_tiers.official_game.some(p => url.includes(p))) return 'G';
+  let host = ''; try { host = new URL(url).hostname.toLowerCase(); } catch (e) { return 'C'; }
+  for (const t of ['A', 'B']) if (R.source_tiers[t].some(d => host === d || host.endsWith('.' + d))) return t;
+  return 'C';
+}
+const TIER = {A:'官方媒体', B:'主流媒体', G:'游戏官方', C:'其他', N:'无链接'};
+const settingsBlock = es => es.map(e => `[${e.id}] ${e.category}·${e.title}：${e.content}`).join('\n');
+const cardBlock = c => c.map(f => `[${f.id}] ${f.text}（来源：${f.source_ids.join(',')}）`).join('\n');
+function scriptText(c) {
+  const p = [c.title, c.hook, c.cta, (c.tags || []).join(' ')];
+  (c.shots || []).forEach(s => p.push(s.visual || '', s.line || ''));
+  return p.join('\n');
+}
+function ruleCheck(c, platform, card, settings) {
+  const p = R.platforms[platform], out = [];
+  const add = (severity, rule, problem, where = '') => out.push({severity, rule, problem, where});
+  const text = scriptText(c), shots = c.shots || [];
+  const spans = shots.map(s => T_RE.exec(s.t || ''));
+  if (!shots.length || spans.some(m => !m)) add('block', '时长', '分镜缺少形如 0-3s 的时间标注');
+  else {
+    const end = Math.max(...spans.map(m => +m[2])), [lo, hi] = p.duration_sec;
+    if (end < lo || end > hi) add('block', '时长', `总时长 ${end} 秒，不在${p.name}规范 ${lo}-${hi} 秒内`);
+    const speech = shots.reduce((n, s) => n + (s.line || '').replace(/[^\p{L}\p{N}_]/gu, '').length, 0);
+    const need = speech / p.speech_chars_per_sec;
+    if (need > end * 1.1) add('block', '时长', `台词约需 ${need.toFixed(0)} 秒，超过视频时长 ${end} 秒`);
+    if (+spans[0][1] !== 0 || +spans[0][2] > p.hook_within_sec || !c.hook) add('block', '钩子', `前 ${p.hook_within_sec} 秒内必须有钩子`, '第1镜');
+  }
+  if ((c.title || '').length > p.max_title_chars) add('block', '标题', `标题 ${c.title.length} 字，超过 ${p.max_title_chars} 字`);
+  if ((c.tags || []).length > p.max_tags) add('block', '标签', `话题标签 ${c.tags.length} 个，超过 ${p.max_tags} 个`);
+  const cids = new Set(card.map(f => f.id)), sids = new Set(settings.map(e => e.id));
+  if (!(c.fact_ids || []).length) add('block', '事实溯源', '脚本没有标注引用了哪条事实');
+  (c.fact_ids || []).forEach(f => cids.has(f) || add('block', '事实溯源', `引用的事实 ${f} 不在事实卡里`));
+  (c.setting_ids || []).forEach(s => sids.has(s) || add('block', '设定溯源', `引用的设定 ${s} 不在本次检索到的设定里`));
+  const allowed = numbers(cardBlock(card) + settingsBlock(settings));
+  const stray = [...numbers(text.replace(new RegExp(T_RE.source, 'g'), ''))].filter(n => !allowed.has(n)).sort();
+  if (stray.length) add('block', '数字溯源', `这些数字在事实卡和设定里都找不到：${stray.join('、')}`);
+  [['广告法极限词', hits(text, R.ad_law_words)], ['防沉迷', hits(text, R.anti_addiction_words)], ['诱导充值', hits(text, R.pay_inducement_words)], ['红线', redline(text)]]
+    .forEach(([n, h]) => h.length && add('block', n, '命中：' + h.join('、')));
+  [['真人姓名', hits(text, R.real_person_names)], ['过往联动IP', hits(text, R.third_party_ip.past_collab_need_legal)]]
+    .forEach(([n, h]) => h.length && add('legal', n, '需法务会签：' + h.join('、')));
+  return out;
+}
+function selectSettings(text, limit = 6) {
+  const es = SET.entries, always = es.filter(e => e.id === 'S04' || e.category === '禁区');
+  const sc = e => e.keywords.filter(k => text.includes(k)).length;
+  const rest = es.filter(e => !always.includes(e)).sort((a, b) => sc(b) - sc(a));
+  let picked = rest.filter(e => sc(e) > 0).slice(0, limit); if (!picked.length) picked = rest.slice(0, 2);
+  return picked.concat(always);
+}
+const ctxOf = eid => { const c = S.contexts[eid]; return c ? {card: c.fact_card, settings: SET.entries.filter(e => c.setting_ids.includes(e.id))} : null; };
+
+/* ---------- 实时模式：调用 Claude ---------- */
+const render_ = (name, vals) => Object.entries(vals).reduce((t, [k, v]) => t.split('{' + k + '}').join(String(v)), P[name]);
+function parseJSON(t) { t = t.trim().replace(/^```(?:json)?\s*|\s*```$/g, ''); try { return JSON.parse(t); } catch (e) { const m = t.match(/\{[\s\S]*\}/); if (m) return JSON.parse(m[0]); throw new Error('模型输出不是 JSON'); } }
+async function ask(prompt, tier) { const r = await SAMPLE(prompt, {modelTier: tier}); return parseJSON(r.text); }
+async function judgeLive(sc, card, settings) {
+  const out = await ask(render_('judge_script', {game: SET.game, script: JSON.stringify(sc.content, null, 1), facts: cardBlock(card), settings: settingsBlock(settings)}), 'quick');
+  out.passed = Object.values(out.scores).every(v => v >= R.review.judge_pass_score); return out;
+}
+async function reviewLive(sc, ev, card, settings, extra) {
+  let cur = sc, pending = extra || [];
+  for (let rnd = 0; rnd <= R.review.max_auto_revise_rounds; rnd++) {
+    const issues = ruleCheck(cur.content, cur.platform, card, settings);
+    const verdict = await judgeLive(cur, card, settings);
+    cur.reviews.push({round: rnd, rule_issues: issues, judge: verdict, human_issues: pending});
+    if (issues.some(i => i.severity === 'legal') && !cur.flags.includes('legal_required')) cur.flags.push('legal_required');
+    let blocking = issues.filter(i => i.severity === 'block').concat(pending);
+    if (!verdict.passed) blocking = blocking.concat((verdict.issues || []).map(i => ({severity: 'block', rule: '模型评审', where: i.where, problem: i.problem, suggestion: i.suggestion})));
+    log('system', 'review', cur.id, `规则问题 ${issues.filter(i => i.severity === 'block').length} 个；模型评审${verdict.passed ? '通过' : '未通过'}`);
+    if (!blocking.length) { cur.status = 'awaiting_final'; break; }
+    if (rnd === R.review.max_auto_revise_rounds) { cur.status = 'needs_human'; break; }
+    cur.status = 'revising';
+    const content = await ask(render_('revise_script', {game: SET.game, script: JSON.stringify(cur.content, null, 1), issues: JSON.stringify(blocking, null, 1), fact_card: cardBlock(card), settings: settingsBlock(settings)}), 'default');
+    const v = cur.version + 1;
+    cur = {...clone(cur), id: `${cur.event_id}-${cur.platform}-v${v}`, version: v, content, status: 'reviewing', reviews: []};
+    S.scripts.push(cur); log('llm', 'revise', cur.id, '按问题清单自动改稿'); pending = [];
+    save(); render();
+  }
+  save(); render();
+}
+async function generateLive(ev, platform) {
+  const snaps = ev.snapshot_ids.map(snap), p = R.platforms[platform];
+  const card = ev.facts.length ? ev.facts.map(f => ({id: f.id, text: f.text, source_ids: f.source_ids})) : snaps.map((s, i) => ({id: 'F' + (i + 1), text: s.publisher + '：' + s.summary, source_ids: [s.id]}));
+  const settings = ctxOf(ev.id)?.settings || selectSettings(snaps.map(s => s.title + s.summary).join('') + (ev.score.angle || ''));
+  const content = await ask(render_('generate_script', {game: SET.game, platform_name: p.name, duration_min: p.duration_sec[0], duration_max: p.duration_sec[1], aspect: p.aspect, max_title: p.max_title_chars, max_tags: p.max_tags, hook_sec: p.hook_within_sec, angle: ev.score.angle || '', fact_card: cardBlock(card), settings: settingsBlock(settings)}), 'default');
+  const prev = S.scripts.filter(s => s.event_id === ev.id && s.platform === platform).length;
+  const sc = {id: `${ev.id}-${platform}-v${prev + 1}`, event_id: ev.id, platform, version: prev + 1, content, status: 'reviewing', pregenerated: false, reviews: [], flags: [], live: true};
+  S.contexts[ev.id] = {fact_card: card, setting_ids: settings.map(e => e.id)};
+  S.scripts.push(sc); log('llm', 'generate', sc.id, '实时生成'); save(); render();
+  await reviewLive(sc, ev, card, settings);
+}
+async function run(fn) { if (busy) return; busy = true; render(); try { await fn(); } catch (e) { toast('出错了：' + (e.message || e.code || e)); } busy = false; render(); }
+
+/* ---------- 人工节点 ---------- */
+function approveTopic(eid) {
+  const ev = evById(eid);
+  ev.status = 'selected'; ev.status_reason = '运营·小王 确认选题'; log('运营·小王', 'approve_topic', eid);
+  if (!scriptsOf(eid).length) {
+    if (D.onApprove[eid]) { D.onApprove[eid].forEach(s => S.scripts.push(clone(s))); log('llm', 'generate', eid, '生成脚本并完成自动评审（回放）'); }
+    else if (SAMPLE) { save(); return run(async () => { for (const p of ev.score.platforms?.length ? ev.score.platforms : ['douyin']) await generateLive(ev, p); }); }
+    else toast('这个热点没有预生成脚本；在 claude.ai 登录状态下打开本页可实时生成');
+  }
+  save(); render();
+}
+function declineTopic(eid, reason) { const ev = evById(eid); ev.status = 'declined'; ev.status_reason = '运营·小王 拒绝：' + reason; log('运营·小王', 'decline_topic', eid, reason); save(); render(); }
+function finalApprove(sid, legal) {
+  const sc = S.scripts.find(s => s.id === sid), ev = evById(sc.event_id);
+  const needLegal = sc.flags.includes('legal_required') || ev.flags.includes('legal_required');
+  if (ev.status !== 'selected') return toast('选题还没有被运营确认，不能终审');
+  if (needLegal && !legal) return toast('该脚本涉及真人或联动 IP，需要填写法务会签人');
+  sc.status = 'approved';
+  const first = Math.min(...ev.snapshot_ids.map(i => new Date(snap(i).fetched_at).getTime()));
+  const mins = Math.round((nowMs() - first) / 60e3), sla = R.urgency[ev.urgency === 'high' ? 'end_to_end_sla_minutes_high' : 'end_to_end_sla_minutes_normal'];
+  log('运营·小王', 'final_approve', sid, `从入库到终稿 ${mins} 分钟（时限 ${sla}）` + (needLegal ? `；法务会签：${legal}` : ''));
+  if (mins > sla) log('system', 'sla_breach', sid, '超过端到端时限');
+  save(); render(); toast('已通过终审，可导出排期');
+}
+function returnScript(sid, comment) {
+  const sc = S.scripts.find(s => s.id === sid), ev = evById(sc.event_id);
+  sc.status = 'returned'; log('运营·小王', 'return_script', sid, comment); save();
+  const ctx = ctxOf(ev.id);
+  if (SAMPLE && ctx) run(() => reviewLive(sc, ev, ctx.card, ctx.settings, [{severity: 'block', rule: '运营退回', problem: comment}]));
+  else { render(); toast('已退回。自动改稿需要实时模式（在 claude.ai 登录状态下打开本页）'); }
+}
+
+/* ---------- 运营提交链接：走同样的规则和核验 ---------- */
+async function submitLink(f) {
+  S.submitted++; const id = 'M' + pad(S.submitted), at = iso(nowMs());
+  S.snapshots.push({id, source_id: 'manual_submit', title: f.title, url: f.url, publisher: '运营提交：' + f.by, platform: 'manual', published_at: at, fetched_at: at, summary: f.summary, heat: 0, heat_series: [], heat_simulated: true});
+  log('system', 'snapshot_saved', id, 'manual_submit | ' + (f.url || '无链接'));
+  const ev = {id: 'E' + pad(S.events.length + 1), key: id, title: f.title, snapshot_ids: [id], type: 'unknown', type_reason: '', status: 'new', status_reason: '', expire_at: '', urgency: 'normal', facts: [], verification: {}, flags: [], score: {}, fast_lane: false};
+  S.events.push(ev); sel = ev.id;
+  const text = f.title + f.summary, rl = redline(text);
+  const deb = R.debunk_db.find(d => d.claim_keywords.every(k => text.includes(k)));
+  if (rl.length) { ev.status = 'rejected'; ev.status_reason = '红线预过滤：' + rl.join('、'); }
+  else if (deb) { ev.status = 'rejected'; ev.status_reason = `命中辟谣库：${deb.debunk}（${deb.source}）`; ev.verification = {debunk: deb}; }
+  else {
+    if (SAMPLE) { const o = await ask(render_('classify_event', {items: `- [${id}] ${f.title}：${f.summary}`}), 'quick'); ev.type = o.type; ev.type_reason = o.reason; log('llm', 'classify', ev.id, o.type + '：' + o.reason); }
+    else { ev.type = /梗|热词|体”|句式|belike|口头禅|二创/.test(text) ? 'meme' : 'news'; ev.type_reason = '规则分类（回放模式没有实时模型）'; }
+    ev.expire_at = iso(nowMs() + (ev.type === 'meme' ? R.urgency.meme_window_hours : R.urgency.news_window_hours) * 3600e3);
+    const t = tier(f.url);
+    ev.verification = {kind: ev.type, tiers: {[id]: t}, independent_domains: f.url ? [new URL(f.url).hostname] : [], has_official: ['A', 'G'].includes(t)};
+    if (ev.type === 'news' && ev.verification.has_official) { ev.status = 'doubtful'; ev.status_reason = '有官方来源，但事实抽取需要在后端运行完整核验'; }
+    else { ev.status = 'pending'; ev.status_reason = ev.type === 'meme' ? '只在 1 个平台出现，热度真实性待确认；需要更多出处' : `来源不足：只有 1 个来源（${TIER[t]}），需要第二个独立来源或官方来源`; }
+  }
+  log(ev.status === 'rejected' ? 'system' : 'system', 'verify', ev.id, ev.status_reason);
+  save(); render();
+}
+
+/* ---------- 位置与时间 ---------- */
+const STATIONS = ['入库归并', '分类核验', '选题评估', '运营选题', '生成与评审', '运营终审', '已通过'];
+function stationOf(ev) {
+  const ss = scriptsOf(ev.id).filter(s => s.status !== 'revising');
+  if (['rejected', 'expired', 'declined'].includes(ev.status)) return {out: true};
+  if (['pending', 'doubtful', 'new', 'verifying'].includes(ev.status)) return {i: 1, stuck: true};
+  if (ev.status === 'not_recommended') return {i: 2, stuck: true};
+  if (ev.status === 'to_select') return {i: 3};
+  if (ss.length && ss.every(s => s.status === 'approved')) return {i: 6};
+  if (ss.some(s => s.status === 'awaiting_final')) return {i: 5};
+  return {i: 4};
+}
+function left(ev) {
+  if (!ev.expire_at) return '';
+  const m = Math.round((new Date(ev.expire_at).getTime() - nowMs()) / 60e3);
+  if (m <= 0) return '已过期';
+  return m >= 1440 ? `剩 ${Math.floor(m / 1440)} 天` : `剩 ${Math.floor(m / 60)} 小时 ${m % 60} 分`;
+}
+
+/* ---------- 渲染 ---------- */
+function renderMeta() {
+  const n = S.events.length, cand = S.events.filter(e => e.status === 'to_select').length;
+  $('#meta').innerHTML = `演示时钟 ${esc(hm(iso(nowMs())))} · ${n} 个热点事件，${cand} 个待运营选题 · ${SAMPLE ? '<b>实时模式</b>：生成和评审调用 Claude' : '回放模式：模型输出为预生成结果'}${busy ? ' · <b>Claude 处理中…</b>' : ''}`;
+}
+let drawTrack;
+{
+  const svg = $('#track');
+  drawTrack = () => {
+    const W = svg.clientWidth, H = svg.clientHeight; if (!W) return;
+    const padX = 34, roadY = H - 128, step = (W - padX * 2) / (STATIONS.length - 1);
+    let h = `<defs><radialGradient id="shine" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
+    h += `<path d="M${padX - 20},${roadY} H${W - padX + 20}" stroke="var(--sky)" stroke-width="26" stroke-linecap="round"/>`;
+    h += `<path d="M${padX},${roadY} H${W - padX}" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-dasharray="10 12"/>`;
+    STATIONS.forEach((name, i) => {
+      const x = padX + i * step, gate = i === 3 || i === 5;
+      h += `<circle cx="${x}" cy="${roadY}" r="16" fill="${gate ? 'var(--pink)' : 'var(--bg)'}" stroke="var(--ink)" stroke-width="2"/>`;
+      h += `<text x="${x}" y="${roadY + 38}" text-anchor="middle" class="disp" style="font-size:15px;font-family:'ZCOOL KuaiLe',sans-serif">${name}</text>`;
+    });
+    h += `<rect x="${padX - 20}" y="${H - 52}" width="${W - padX * 2 + 40}" height="44" rx="22" fill="var(--panel)"/>`;
+    h += `<text x="${padX}" y="${H - 25}" style="font-size:14px;fill:var(--mute)">出局：红线、辟谣、过期、拒绝</text>`;
+    const cols = {}; let outX = padX + 220, hidden = 0;
+    S.events.forEach(ev => {
+      const st = stationOf(ev); let x, y;
+      if (st.out) { if (outX > W - padX - 30) { hidden++; return; } x = outX; y = H - 30; outX += 40; }
+      else { const k = cols[st.i] = (cols[st.i] || 0) + 1, row = Math.floor((k - 1) / 3), pos = (k - 1) % 3; x = padX + st.i * step + [0, -38, 38][pos]; y = roadY - 40 - row * 68; }
+      const fill = st.stuck || st.out ? 'var(--panel)' : ev.type === 'meme' ? 'var(--meme)' : 'var(--egg)';
+      const s = st.out ? .72 : 1, cur = ev.id === sel;
+      h += `<g class="egg" tabindex="0" role="button" aria-label="${esc(ev.id + ' ' + ev.title)}" data-id="${ev.id}" transform="translate(${x},${y}) scale(${s})" style="cursor:pointer;transition:transform .5s">`;
+      h += `<ellipse cx="0" cy="17" rx="13" ry="3.5" fill="var(--ink)" opacity=".15"/>`;
+      h += `<path d="M0,-21 C12,-21 17,-4 17,4 C17,14 9,19 0,19 C-9,19 -17,14 -17,4 C-17,-4 -12,-21 0,-21Z" fill="${fill}" stroke="var(--ink)" stroke-width="${cur ? 3.5 : 1.8}"/>`;
+      h += `<path d="M0,-21 C12,-21 17,-4 17,4 C17,14 9,19 0,19 C-9,19 -17,14 -17,4 C-17,-4 -12,-21 0,-21Z" fill="url(#shine)"/>`;
+      h += st.out ? `<path d="M-8,-4 l5,4 M-3,-4 l-5,4 M3,-4 l5,4 M8,-4 l-5,4" stroke="var(--ink)" stroke-width="1.6"/>` : `<circle cx="-5" cy="-1" r="2" fill="var(--ink)"/><circle cx="5" cy="-1" r="2" fill="var(--ink)"/><path d="M-4,6 q4,4 8,0" stroke="var(--ink)" stroke-width="1.6" fill="none"/>`;
+      if (ev.fast_lane && !st.out) h += `<path d="M12,-18 v-16 l12,5 -12,5" fill="var(--pink)" stroke="var(--ink)" stroke-width="1.4"/>`;
+      h += `<text y="${st.out ? 34 : -27}" text-anchor="middle" style="font-size:12px;font-weight:600">${ev.id}</text></g>`;
+    });
+    if (hidden) h += `<text x="${W - padX}" y="${H - 25}" text-anchor="end" style="font-size:14px;fill:var(--mute)">还有 ${hidden} 个</text>`;
+    svg.innerHTML = h;
+  };
+  const ro = new ResizeObserver(drawTrack); ro.observe(svg);
+  svg.addEventListener('click', e => { const g = e.target.closest('.egg'); if (g) { sel = g.dataset.id; render(); $('#detail').scrollIntoView({behavior: 'smooth', block: 'nearest'}); } });
+  svg.addEventListener('keydown', e => { const g = e.target.closest('.egg'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); sel = g.dataset.id; render(); } });
+}
+const GROUPS = [['候选看板', e => e.status === 'to_select'], ['已选题', e => e.status === 'selected'], ['待核实', e => ['pending', 'doubtful', 'new'].includes(e.status)], ['不推荐', e => e.status === 'not_recommended'], ['出局', e => ['rejected', 'expired', 'declined'].includes(e.status)]];
+function renderList() {
+  $('#filters').innerHTML = [['all', '全部'], ...GROUPS.map(g => [g[0], g[0]])].map(([k, n]) => `<button data-f="${k}" aria-pressed="${filter === k}">${n}</button>`).join('');
+  $('#list').innerHTML = GROUPS.filter(g => filter === 'all' || filter === g[0]).map(([name, fn]) => {
+    const es = S.events.filter(fn); if (!es.length) return '';
+    return `<div class="grp">${name} · ${es.length}</div>` + es.map(ev => {
+      const chips = [ev.type === 'meme' ? '梗' : ev.type === 'news' ? '新闻' : '', ev.fast_lane ? '<span class="chip hot">快速通道</span>' : '', ev.flags.includes('legal_required') ? '<span class="chip hot">需法务</span>' : '', ev.score?.total ? `总分 ${ev.score.total}` : '', ['to_select', 'selected', 'pending'].includes(ev.status) ? left(ev) : ST[ev.status]].filter(Boolean).map(c => c.startsWith('<') ? c : `<span class="chip">${esc(c)}</span>`).join('');
+      return `<button class="card" data-id="${ev.id}" aria-current="${ev.id === sel}"><b>${ev.id}　${esc(ev.title)}</b><div class="chips">${chips}</div></button>`;
+    }).join('');
+  }).join('') || '<p class="note">这一组暂时没有热点。</p>';
+}
+function sourcesTable(ev) {
+  return `<div class="scroll"><table class="stack"><thead><tr><th>来源</th><th>等级</th><th>发布时间</th><th>热度（模拟）</th><th>链接</th></tr></thead><tbody>` + ev.snapshot_ids.map(snap).map(s => `<tr><td data-l="来源">${esc(s.publisher)}<br><span class="note">${esc(s.title)}</span></td><td data-l="等级">${TIER[tier(s.url)]}</td><td data-l="发布时间" class="n">${esc(hm(s.published_at))}</td><td data-l="热度（模拟）" class="n">${s.heat || '—'}</td><td data-l="链接">${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">原文</a>` : '<span class="note">无</span>'}</td></tr>`).join('') + `</tbody></table></div>`;
+}
+function verifyBlock(ev) {
+  const v = ev.verification || {};
+  if (v.debunk) return `<p>命中辟谣库：<b>${esc(v.debunk.debunk)}</b>。辟谣来源：<a href="${esc(v.debunk.source_url)}" target="_blank" rel="noopener">${esc(v.debunk.source)}</a></p>`;
+  if (v.kind === 'meme') return `<ul class="facts"><li>出处存档：${v.origin ? `${esc(v.origin.publisher)}（${v.origin.snapshot_id}）` : '无'}</li><li>出现平台：${(v.platforms || []).length} 个（${esc((v.platforms || []).join('、'))}）</li><li>含义是否无害：${v.harmless ? '是' : '否'}。${esc(v.explanation || '')}</li>${v.involves_real_person ? `<li><b>涉及真人：${esc(v.real_persons.join('、'))}</b>，商用前需法务会签</li>` : ''}${v.third_party_work ? `<li>相关作品：${esc(v.third_party_work)}</li>` : ''}</ul>`;
+  if (v.kind === 'news') return `<p class="note">独立来源 ${v.independent_domains.length} 个${v.has_official ? '，含官方来源' : ''}；每条事实都绑定了来源 ID，数字必须能在来源里找到。</p><ul class="facts">${ev.facts.map(f => `<li><b>${f.id}</b> ${esc(f.text)} <span class="note">来源 ${f.source_ids.join('、')}</span></li>`).join('')}${(v.dropped_facts || []).map(d => `<li><s>${esc(d)}</s> <span class="note">规则丢弃</span></li>`).join('')}</ul>`;
+  return '<p class="note">在核验之前已被拦下，没有进入核验。</p>';
+}
+function scoreBlock(ev) {
+  const s = ev.score; if (!s || !s.parts) return '';
+  const names = {relevance: '游戏关联', meme_potential: '玩梗空间', tone_fit: '调性契合', timeliness: '时效', heat_momentum: '热度势头'};
+  const thr = R.recommend_threshold;
+  return `<h3>选题评估</h3><div class="bars">${Object.entries(s.parts).map(([k, v]) => `<div><span>${names[k]}</span><span class="b"><i style="width:${v}%"></i></span><span class="n">${Math.round(v)}</span></div>`).join('')}<div class="tot"><span><b>加权总分</b></span><span class="b"><i style="width:${s.total}%"></i><span class="thr" style="left:${thr}%"></span></span><span class="n"><b>${s.total}</b></span></div></div><p class="note">黑线为推荐线 ${thr} 分；时效和热度势头由规则计算（热度势头基于模拟热度），其余三项由模型打分。</p>${s.angle ? `<p><b>建议角度</b>　${esc(s.angle)}</p>` : ''}<p><b>理由</b>　${esc(s.reason)}</p>${(s.risks || []).length ? `<p><b>风险</b>　${esc(s.risks.join('；'))}</p>` : ''}`;
+}
+function scriptBlock(platform, list, ev) {
+  const cur = list.find(s => s.id === vsel[ev.id + platform]) || list[list.length - 1];
+  const c = cur.content, ctx = ctxOf(ev.id), needLegal = cur.flags.includes('legal_required') || ev.flags.includes('legal_required');
+  const factTxt = id => ctx?.card.find(f => f.id === id)?.text || '';
+  const tabs = list.length > 1 ? `<div class="vtabs">${list.map(s => `<button data-v="${s.id}" data-k="${ev.id + platform}" aria-pressed="${s.id === cur.id}">v${s.version}</button>`).join('')}</div>` : '';
+  const reviews = cur.reviews.map(r => `<div><b>第 ${r.round + 1} 轮评审</b>　<span class="chip ${r.judge?.passed ? 'ok' : 'bad'}">模型评审${r.judge?.passed ? '通过' : '未通过'}</span><div class="scores">${Object.entries(r.judge?.scores || {}).map(([k, v]) => `<span>${{setting_consistency: '设定一致', fact_faithfulness: '事实忠实', hook: '钩子', platform_fit: '平台适配'}[k] || k} <b>${v}</b></span>`).join('')}</div><ul class="issues">${r.rule_issues.map(i => `<li class="${i.severity}">规则·${esc(i.rule)}：${esc(i.problem)}</li>`).join('')}${(r.judge?.issues || []).map(i => `<li class="block">模型·${esc(i.where)}：${esc(i.problem)}${i.suggestion ? '（建议：' + esc(i.suggestion) + '）' : ''}</li>`).join('')}${(r.human_issues || []).map(i => `<li class="block">运营退回：${esc(i.problem)}</li>`).join('')}${!r.rule_issues.length && !(r.judge?.issues || []).length ? '<li>没有发现问题</li>' : ''}</ul></div>`).join('');
+  const canFinal = cur.status === 'awaiting_final' && ev.status === 'selected';
+  const actions = cur.status === 'approved' ? '<p class="chip ok" style="display:inline-block">已通过终审，等待人工发布</p>' : canFinal ? `<div class="gatebar"><span class="lbl">终审</span>${needLegal ? `<input id="legal-${cur.id}" placeholder="法务会签人（必填）" aria-label="法务会签人">` : ''}<button class="gate" data-act="final" data-id="${cur.id}" ${busy ? 'disabled' : ''}>终审通过</button><input id="ret-${cur.id}" placeholder="退回意见，例如：钩子不够抓人" aria-label="退回意见"><button data-act="return" data-id="${cur.id}" ${busy ? 'disabled' : ''}>退回修改</button></div>` : cur.status === 'awaiting_final' ? '<p class="note">草稿已通过自检。运营确认选题后才能终审。</p>' : cur.status === 'revising' ? `<p class="note">这一版没有通过检查，已自动修改为 v${cur.version + 1}。</p>` : '';
+  return `<div class="script"><header><div><b class="disp" style="font-size:19px">${PL[platform]}</b>　<span class="chip">${SS[cur.status] || cur.status}</span>${cur.pregenerated ? ' <span class="chip hot">快速通道预生成</span>' : ''}${cur.live ? ' <span class="chip">实时生成</span>' : ''}${needLegal ? ' <span class="chip hot">需法务会签</span>' : ''}</div>${tabs}</header>
+  <dl class="kv"><dt>标题</dt><dd><b>${esc(c.title)}</b></dd><dt>钩子</dt><dd>${esc(c.hook)}</dd><dt>标签</dt><dd>${esc((c.tags || []).join(' '))}</dd><dt>结尾</dt><dd>${esc(c.cta)}</dd><dt>BGM</dt><dd>${esc(c.bgm)}</dd><dt>引用</dt><dd>${(c.fact_ids || []).map(f => `<span class="chip" title="${esc(factTxt(f))}">${f}</span>`).join(' ')} ${(c.setting_ids || []).map(s => `<span class="chip" title="${esc(SET.entries.find(e => e.id === s)?.title || '')}">${s}</span>`).join(' ')}</dd></dl>
+  <div class="scroll"><table class="stack"><thead><tr><th>时间</th><th>画面</th><th>台词 / 字幕</th></tr></thead><tbody>${(c.shots || []).map(s => `<tr><td data-l="时间" class="n">${esc(s.t)}</td><td data-l="画面">${esc(s.visual)}</td><td data-l="台词">${esc(s.line)}</td></tr>`).join('')}</tbody></table></div>
+  <h3 style="font-size:17px">评审记录</h3>${reviews || '<p class="note">还没有评审。</p>'}
+  ${actions}<div class="row"><button data-act="copy" data-id="${cur.id}">复制脚本</button>${SAMPLE && ev.status === 'selected' && cur.status !== 'approved' ? `<button data-act="regen" data-id="${ev.id}" data-p="${platform}" ${busy ? 'disabled' : ''}>用 Claude 重新生成</button>` : ''}</div></div>`;
+}
+function renderDetail() {
+  const ev = evById(sel); if (!ev) { $('#detail').innerHTML = ''; return; }
+  const ss = scriptsOf(ev.id), byP = {};
+  ss.forEach(s => (byP[s.platform] = byP[s.platform] || []).push(s));
+  const typeName = {news: '新闻事件类', meme: '梗与话题类'}[ev.type] || '未分类';
+  const canPick = ['to_select', 'not_recommended'].includes(ev.status) && !ev.flags.includes('own_ops');
+  const gate = canPick ? `<div class="gatebar"><span class="lbl">选题确认</span><button class="gate" data-act="approve" data-id="${ev.id}" ${busy ? 'disabled' : ''}>确认跟进</button><select id="declineReason" aria-label="拒绝理由">${DECLINE.map(d => `<option>${d}</option>`).join('')}</select><button data-act="decline" data-id="${ev.id}">拒绝</button>${ev.status === 'not_recommended' ? '<span class="note">系统不推荐，但运营仍可选择跟进</span>' : ''}</div>` : '';
+  $('#detail').innerHTML = `<h2>${ev.id}　${esc(ev.title)}</h2><div class="chips"><span class="chip">${typeName}</span><span class="chip">${ST[ev.status]}</span>${ev.expire_at ? `<span class="chip ${ev.urgency === 'high' ? 'hot' : ''}">${left(ev)}（${esc(hm(ev.expire_at))} 过期）</span>` : ''}${ev.fast_lane ? '<span class="chip hot">快速通道：草稿已预生成</span>' : ''}${ev.flags.includes('own_ops') ? '<span class="chip">自家运营事件</span>' : ''}</div><p class="reason">${esc(ev.status_reason)}${ev.type_reason ? '。分类理由：' + esc(ev.type_reason) : ''}</p>${gate}
+  <h3>来源证据</h3>${sourcesTable(ev)}<h3>分类核验</h3>${verifyBlock(ev)}${scoreBlock(ev)}
+  ${ss.length ? '<h3>脚本</h3>' + Object.entries(byP).map(([p, l]) => scriptBlock(p, l, ev)).join('') : ev.status === 'selected' ? '<p class="note">正在生成脚本…</p>' : ''}`;
+}
+function renderLog() { $('#log').innerHTML = S.audit.slice().reverse().map(a => `<tr><td data-l="时间" class="n">${esc(hm(a.at))}</td><td data-l="操作者">${esc(a.actor)}</td><td data-l="动作">${esc(a.action)}</td><td data-l="对象">${esc(a.target)}</td><td data-l="详情">${esc(a.detail)}</td></tr>`).join(''); }
+function render() { renderMeta(); drawTrack(); renderList(); renderDetail(); renderLog(); }
+
+/* ---------- 事件 ---------- */
+$('#filters').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (b) { filter = b.dataset.f; renderList(); } });
+$('#list').addEventListener('click', e => { const b = e.target.closest('.card'); if (b) { sel = b.dataset.id; render(); if (innerWidth < 860) $('#detail').scrollIntoView({behavior: 'smooth'}); } });
+$('#detail').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.v) { vsel[b.dataset.k] = b.dataset.v; renderDetail(); return; }
+  const id = b.dataset.id;
+  if (b.dataset.act === 'approve') approveTopic(id);
+  if (b.dataset.act === 'decline') declineTopic(id, $('#declineReason').value);
+  if (b.dataset.act === 'final') finalApprove(id, $(`#legal-${CSS.escape(id)}`)?.value.trim());
+  if (b.dataset.act === 'return') { const c = $(`#ret-${CSS.escape(id)}`).value.trim(); if (!c) return toast('请先写退回意见'); returnScript(id, c); }
+  if (b.dataset.act === 'regen') run(() => generateLive(evById(id), b.dataset.p));
+  if (b.dataset.act === 'copy') { const sc = S.scripts.find(s => s.id === id), c = sc.content; const txt = `${c.title}\n钩子：${c.hook}\n` + c.shots.map(s => `${s.t}｜${s.visual}｜${s.line}`).join('\n') + `\n${(c.tags || []).join(' ')}\n${c.cta}`; navigator.clipboard?.writeText(txt).then(() => toast('已复制'), () => toast('浏览器不允许复制')); }
+});
+$('#btnReset').addEventListener('click', () => { reset(); vsel = {}; render(); toast('已恢复到流水线刚跑完、运营还没操作时的状态'); });
+$('#btnSubmit').addEventListener('click', () => { $('#modal').style.display = 'flex'; $('#fTitle').focus(); });
+$('#fCancel').addEventListener('click', () => $('#modal').style.display = 'none');
+$('#submitForm').addEventListener('submit', e => { e.preventDefault(); const f = {title: $('#fTitle').value.trim(), url: $('#fUrl').value.trim(), summary: $('#fSummary').value.trim(), by: $('#fBy').value.trim()}; $('#modal').style.display = 'none'; e.target.reset(); $('#fBy').value = '运营·小王'; run(() => submitLink(f)); });
+setInterval(() => { renderMeta(); if (!busy && !document.querySelector('#detail input:focus, #detail select:focus')) { renderList(); } }, 30000);
+
+render();
+(async () => { try { SAMPLE = await window.claude?.use?.('sample') || null; } catch (e) { SAMPLE = null; } if (SAMPLE) render(); })();
+}
+</script>
+</body>
+</html>

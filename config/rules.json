@@ -1,0 +1,251 @@
+{
+  "version": "rules-v1-2026-11-22",
+  "note": "红线、广告法、平台规范等规则配置。平台时长和字数是团队内部发布规范的示例值，不是平台官方限制，可在配置中心修改。",
+  "redline_topics": {
+    "灾难事故": [
+      "地震",
+      "洪涝",
+      "泥石流",
+      "台风",
+      "火灾",
+      "坠机",
+      "爆炸",
+      "遇难",
+      "罹难",
+      "身亡",
+      "去世",
+      "死亡",
+      "猝死"
+    ],
+    "暴力犯罪": [
+      "杀害",
+      "烧死",
+      "命案",
+      "遇害",
+      "刑事",
+      "凶手",
+      "持刀",
+      "绑架",
+      "性侵"
+    ],
+    "政治外交": [
+      "外交部",
+      "制裁",
+      "领土",
+      "选举",
+      "政变",
+      "战争"
+    ],
+    "宗教": [
+      "宗教",
+      "教派",
+      "佛教",
+      "基督教",
+      "伊斯兰"
+    ],
+    "负面社会事件": [
+      "绝笔信",
+      "举报信",
+      "维权",
+      "跳楼",
+      "欠薪",
+      "降级或转聘"
+    ],
+    "未成年人负面": [
+      "校园霸凌",
+      "虐童",
+      "未成年人受害"
+    ]
+  },
+  "competitors": [
+    "元梦之星",
+    "糖豆人",
+    "Stumble Guys"
+  ],
+  "third_party_ip": {
+    "authorized_now": [],
+    "past_collab_need_legal": [
+      "奥特曼",
+      "叶罗丽",
+      "小马宝莉",
+      "葫芦娃"
+    ],
+    "never_authorized": [
+      "GTA",
+      "侠盗猎车",
+      "圣安地列斯",
+      "CJ",
+      "漫威",
+      "迪士尼",
+      "宝可梦"
+    ]
+  },
+  "real_person_names": [
+    "厉娜",
+    "许飞",
+    "C罗",
+    "罗纳尔多",
+    "热苏斯",
+    "克莱·汤普森",
+    "刘念"
+  ],
+  "ad_law_words": [
+    "最好",
+    "最强",
+    "最佳",
+    "最高级",
+    "最低价",
+    "第一",
+    "国家级",
+    "世界级",
+    "顶级",
+    "唯一",
+    "绝对",
+    "100%",
+    "万能",
+    "史无前例"
+  ],
+  "anti_addiction_words": [
+    "通宵",
+    "熬夜玩",
+    "熬夜打",
+    "逃课",
+    "不写作业",
+    "别睡了",
+    "玩一整天",
+    "玩到天亮"
+  ],
+  "pay_inducement_words": [
+    "必出",
+    "充值返利",
+    "氪金",
+    "抽到为止",
+    "保底必得"
+  ],
+  "source_tiers": {
+    "A": [
+      "news.cn",
+      "xinhuanet.com",
+      "people.com.cn",
+      "peopleapp.com",
+      "cctv.com",
+      "gmw.cn",
+      "chinanews.com",
+      "gov.cn"
+    ],
+    "B": [
+      "sina.cn",
+      "sina.com.cn",
+      "163.com",
+      "ifeng.com",
+      "bjnews.com.cn",
+      "mrjjxw.com",
+      "scol.com.cn",
+      "nownews.com",
+      "17173.com",
+      "ithome.com"
+    ],
+    "official_game": [
+      "game.xiaomi.com/viewpoint/1160758920",
+      "dzpd.163.com",
+      "apps.apple.com/cn/app/1544884479"
+    ]
+  },
+  "verification": {
+    "news_min_independent_sources": 2,
+    "official_source_counts_alone": true,
+    "meme_min_platforms": 2
+  },
+  "urgency": {
+    "news_window_hours": 168,
+    "meme_window_hours": 504,
+    "date_bound_keywords": [
+      "节气",
+      "小雪",
+      "大雪",
+      "冬至",
+      "立冬",
+      "节日",
+      "当天"
+    ],
+    "high_window_hours": 12,
+    "fast_lane_top_n": 3,
+    "end_to_end_sla_minutes_high": 120,
+    "end_to_end_sla_minutes_normal": 1440
+  },
+  "scoring_weights": {
+    "relevance": 0.35,
+    "meme_potential": 0.2,
+    "tone_fit": 0.2,
+    "timeliness": 0.15,
+    "heat_momentum": 0.1
+  },
+  "recommend_threshold": 60,
+  "review": {
+    "max_auto_revise_rounds": 2,
+    "judge_pass_score": 7
+  },
+  "platforms": {
+    "douyin": {
+      "name": "抖音",
+      "duration_sec": [
+        15,
+        60
+      ],
+      "aspect": "9:16 竖屏",
+      "max_title_chars": 30,
+      "max_tags": 5,
+      "hook_within_sec": 3,
+      "speech_chars_per_sec": 4.5
+    },
+    "bilibili": {
+      "name": "B站",
+      "duration_sec": [
+        60,
+        180
+      ],
+      "aspect": "16:9 横屏",
+      "max_title_chars": 40,
+      "max_tags": 10,
+      "hook_within_sec": 5,
+      "speech_chars_per_sec": 4.5
+    },
+    "xiaohongshu": {
+      "name": "小红书",
+      "duration_sec": [
+        15,
+        60
+      ],
+      "aspect": "3:4 或 9:16 竖屏",
+      "max_title_chars": 20,
+      "max_tags": 8,
+      "hook_within_sec": 3,
+      "speech_chars_per_sec": 4.5
+    }
+  },
+  "own_ops_event_keywords": [
+    "停运",
+    "停服",
+    "下架",
+    "渠道服",
+    "封号",
+    "退款",
+    "故障补偿"
+  ],
+  "debunk_db": [
+    {
+      "claim_keywords": [
+        "秋假",
+        "河南",
+        "安徽"
+      ],
+      "claim": "河南、安徽等地中小学今年放秋假",
+      "debunk": "当地教育部门辟谣，系不实信息",
+      "source": "中国新闻网《网络谣言伪造公文、虚构政策、抹黑企业 网信公安工信部门坚决整治》（2025-12-10）",
+      "source_url": "https://www.chinanews.com/gn/2025/12-10/10530388.shtml"
+    }
+  ],
+  "clustering": {
+    "similarity_threshold": 0.18
+  }
+}

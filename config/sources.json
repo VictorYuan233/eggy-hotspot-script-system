@@ -1,0 +1,47 @@
+{
+  "version": "sources-v1-2026-11-22",
+  "note": "数据源授权清单。采集器只调用 status=active 且未过期的数据源；其余一律跳过并记审计日志。下面的平台接口和第三方数据服务都是占位配置：项目尚未签约，所以是 inactive。",
+  "sources": [
+    {
+      "id": "manual_submit",
+      "name": "运营手动提交链接",
+      "kind": "manual",
+      "auth": "无需授权：运营提交公开链接，系统只做存档",
+      "status": "active",
+      "valid_until": null
+    },
+    {
+      "id": "public_rss",
+      "name": "新闻网站公开 RSS",
+      "kind": "rss",
+      "auth": "公开 RSS，按网站条款使用（上线前由法务逐站确认）",
+      "status": "active",
+      "valid_until": "2027-06-30",
+      "feeds": []
+    },
+    {
+      "id": "weibo_open_api",
+      "name": "微博开放平台接口",
+      "kind": "platform_api",
+      "auth": "需申请开放平台权限（未申请）",
+      "status": "inactive",
+      "valid_until": null
+    },
+    {
+      "id": "douyin_open_api",
+      "name": "抖音开放平台接口",
+      "kind": "platform_api",
+      "auth": "需申请开放平台权限（未申请）",
+      "status": "inactive",
+      "valid_until": null
+    },
+    {
+      "id": "licensed_data_service",
+      "name": "第三方授权数据服务（热榜数据）",
+      "kind": "data_service",
+      "auth": "需签约（未签约）",
+      "status": "inactive",
+      "valid_until": null
+    }
+  ]
+}

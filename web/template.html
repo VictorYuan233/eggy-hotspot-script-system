@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>蛋仔热点工作台 V1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
+<style>
+/* VOICE work tool for a game's ops team, playful brand but dense and exact
+   IDEA a party race track: every hotspot is an egg rolling through the stations of the pipeline
+   PICTURE the track board up top, eggs at their current station, knocked-out eggs in the pit below
+   COLOUR white ground, sunny yellow band, sky blue track, candy pink for human gates; night: deep ink
+   TYPE ZCOOL KuaiLe for titles and station names + system Chinese sans for text
+   LAYOUT header band, full-width track, then list | detail; phone: track scrolls sideways, list above detail */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#13151d);--ink:light-dark(#1b1d2a,#eef0f7);--mute:light-dark(#5d6275,#a3a9bd);--line:light-dark(#e4e6ee,#2a2e3c);--panel:light-dark(#f6f7fb,#1b1e29);--sun:light-dark(#ffd23f,#3b3216);--sunInk:light-dark(#1b1d2a,#ffe08a);--sky:light-dark(#49b6ff,#2e86c8);--skyPale:light-dark(#e3f4ff,#162838);--pink:light-dark(#ff4f9a,#ff6fae);--pinkPale:light-dark(#ffe6f1,#3a1c2b);--green:light-dark(#1f9d55,#4fd18b);--red:light-dark(#d93030,#ff7a7a);--egg:light-dark(#ffe58a,#f3cf5a);--meme:light-dark(#ffb3d3,#f08cba)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;overflow-x:clip}
+h1,h2,h3,.disp{font-family:"ZCOOL KuaiLe","PingFang SC",sans-serif;font-weight:400;letter-spacing:.01em}
+h1{font-size:clamp(32px,4.5vw,46px);line-height:1.05;margin:0}
+h2{font-size:28px;line-height:1.15;margin:0 0 6px}
+h3{font-size:20px;margin:22px 0 8px}
+a{color:var(--sky)}
+.band{padding:clamp(20px,3vw,40px) max(4vw,16px)}
+.top{background:var(--sun);color:var(--sunInk);display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+.top p{margin:6px 0 0;font-size:15px}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button,select,input,textarea{font:inherit;font-size:16px}
+button{min-height:44px;padding:0 16px;border-radius:22px;border:2px solid var(--ink);background:var(--bg);color:var(--ink);cursor:pointer}
+button:hover{background:var(--panel)}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,.card:focus-visible,.egg:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+button.go{background:var(--ink);color:var(--bg)}
+button.gate{background:var(--pink);border-color:var(--pink);color:#fff}
+button:disabled{opacity:.45;cursor:not-allowed}
+select,input,textarea{border:1.5px solid var(--line);border-radius:10px;padding:9px 10px;background:var(--bg);color:var(--ink);min-height:44px}
+.trackwrap{background:var(--skyPale);padding:18px max(4vw,16px) 8px}
+.scroll{overflow-x:auto}
+.fig{position:relative;height:270px;min-width:760px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--mute);padding:6px 0 4px}
+.legend i{display:inline-block;width:12px;height:14px;border-radius:50%/55% 55% 45% 45%;vertical-align:-2px;margin-right:6px;border:1.5px solid var(--ink)}
+svg text{font-size:13px;fill:var(--ink)}
+.work{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:28px;align-items:start}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.filters button{min-height:36px;padding:0 12px;font-size:14px;border-width:1.5px}
+.filters button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.grp{font-size:14px;color:var(--mute);margin:14px 0 6px}
+.card{display:block;width:100%;text-align:left;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:var(--bg);cursor:pointer;min-height:auto}
+.card[aria-current=true]{border-color:var(--ink);box-shadow:inset 4px 0 0 var(--sky)}
+.card b{display:block;font-weight:600;line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.chip{font-size:13px;padding:1px 8px;border-radius:10px;background:var(--panel);color:var(--mute);white-space:nowrap}
+.chip.hot{background:var(--pinkPale);color:var(--pink)}
+.chip.ok{color:var(--green)}
+.chip.bad{color:var(--red)}
+.detail{border-left:1.5px solid var(--line);padding-left:28px}
+.reason{color:var(--mute);margin:4px 0 0}
+.gatebar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--pinkPale);border-radius:14px;padding:12px 14px;margin:14px 0}
+.gatebar .lbl{font-family:"ZCOOL KuaiLe",sans-serif;color:var(--pink);font-size:18px;margin-right:6px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--mute);font-size:14px}
+td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.facts li{margin:4px 0}
+.facts s{color:var(--mute)}
+.bars div{display:grid;grid-template-columns:6.5em minmax(0,1fr) 3em;gap:8px;align-items:center;font-size:14px;margin:4px 0}
+.bars span.b{height:12px;border-radius:6px;background:var(--panel);position:relative;overflow:hidden}
+.bars span.b i{position:absolute;inset:0 auto 0 0;background:var(--sky);border-radius:6px}
+.bars .tot i{background:var(--pink)}
+.bars .thr{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink)}
+.script{border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin:12px 0}
+.script header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.vtabs{display:flex;gap:6px;flex-wrap:wrap}
+.vtabs button{min-height:34px;font-size:14px;padding:0 12px;border-width:1.5px}
+.vtabs button[aria-pressed=true]{background:var(--sky);border-color:var(--sky);color:#fff}
+.kv{display:grid;grid-template-columns:5em minmax(0,1fr);gap:4px 10px;font-size:15px;margin:10px 0}
+.kv dt{color:var(--mute)}.kv dd{margin:0}
+.issues{margin:6px 0;padding-left:20px;font-size:15px}
+.issues .block{color:var(--red)}.issues .legal{color:var(--pink)}
+.scores{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--mute)}
+.scores b{color:var(--ink);font-variant-numeric:tabular-nums}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.row input{flex:1 1 180px}
+.note{font-size:14px;color:var(--mute)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:22px;font-size:15px;max-width:90vw;z-index:9;display:none}
+.modal{position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 45%,transparent);display:none;align-items:center;justify-content:center;padding:16px;z-index:8}
+.modal form{background:var(--bg);border-radius:18px;padding:22px;width:min(560px,100%);display:grid;gap:10px}
+.modal label{display:grid;gap:4px;font-size:14px;color:var(--mute)}
+.log td:first-child{white-space:nowrap}
+footer{font-size:14px;color:var(--mute);border-top:1.5px solid var(--line)}
+footer p{max-width:70em;margin:6px 0}
+#swipe{display:none}@media(max-width:800px){#swipe{display:inline}}
+@media(max-width:860px){.work{grid-template-columns:minmax(0,1fr)}.detail{border-left:0;padding-left:0;border-top:1.5px solid var(--line);padding-top:18px}}
+@media(max-width:600px){table{font-size:13px}th,td{padding:6px 4px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:2px 0}.stack td::before{content:attr(data-l);color:var(--mute);flex:none}.kv{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.egg{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="band top">
+  <div>
+    <h1>蛋仔热点工作台</h1>
+    <p id="meta">加载中…</p>
+  </div>
+  <div class="btns">
+    <button id="btnSubmit" class="go">提交热点链接</button>
+    <button id="btnReset">重置演示</button>
+  </div>
+</header>
+
+<section class="trackwrap" aria-label="热点赛道">
+  <div class="scroll"><div class="fig" id="trackFig"><svg id="track" role="img" aria-label="各热点当前所在的流程环节"></svg></div></div>
+  <div class="legend"><span class="note" id="swipe">窄屏可左右滑动查看完整赛道</span><span><i style="background:var(--egg)"></i>新闻事件类</span><span><i style="background:var(--meme)"></i>梗与话题类</span><span><i style="background:var(--panel)"></i>停在原地（待核实、不推荐）</span><span>粉色站点：运营人工确认</span><span>旗子：快速通道（已预生成草稿）</span></div>
+</section>
+
+<main class="band work">
+  <aside>
+    <div class="filters" id="filters"></div>
+    <div id="list"></div>
+  </aside>
+  <section class="detail" id="detail" aria-live="polite"></section>
+</main>
+
+<section class="band" style="padding-top:0">
+  <details open><summary class="disp" style="font-size:20px;cursor:pointer">审计日志</summary>
+    <div class="scroll"><table class="log stack"><thead><tr><th>时间</th><th>操作者</th><th>动作</th><th>对象</th><th>详情</th></tr></thead><tbody id="log"></tbody></table></div>
+  </details>
+</section>
+
+<footer class="band">
+  <p><b>数据说明。</b>18 条热点的标题、链接、发布者和发布时间都是真实的，于 2026-11-22 通过网页检索、以“运营手动提交”方式录入；摘要是我们自己写的概括。热度数值是<b>演示模拟值</b>，不是平台真实数据。E11 是为演示辟谣库比对而模拟的一条无出处线索。</p>
+  <p><b>模型输出。</b>回放模式下，分类、事实抽取、打分、脚本和评审都是 Claude 按同一套提示词预先生成的结果；在 claude.ai 登录状态下打开本页会切到实时模式，“重新生成”“退回改稿”“提交链接”会实时调用 Claude。规则检查（红线、广告法、防沉迷、事实与数字溯源、时长）在两种模式下都由页面代码实时执行。</p>
+  <p><b>设定库。</b>根据公开资料整理，每条附出处，状态为草稿，尚未经过游戏策划确认。演示时钟从 2026-11-22 21:45（数据采集完成时）开始走。</p>
+</footer>
+
+<div class="modal" id="modal">
+  <form id="submitForm">
+    <h2>提交热点链接</h2>
+    <p class="note" style="margin:0">没有合规接口的平台，由运营提交公开链接；系统存档后走同样的红线、辟谣和核验流程。</p>
+    <label>标题<input id="fTitle" required maxlength="80" placeholder="例如：某地官宣冬季冰雪节开幕"></label>
+    <label>链接<input id="fUrl" type="url" placeholder="https://"></label>
+    <label>摘要（用自己的话概括）<textarea id="fSummary" rows="3" required maxlength="200"></textarea></label>
+    <label>提交人<input id="fBy" value="运营·小王" required></label>
+    <div class="row"><button class="go" type="submit">提交并处理</button><button type="button" id="fCancel">取消</button></div>
+  </form>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+{
+const D = /*__DATA__*/null;
+const R = D.rules, SET = D.setting, P = D.prompts;
+const KEY = 'eggy-hotspot-demo-v1';
+const T0 = Date.now(), CLOCK0 = new Date(D.generatedAt).getTime();
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const pad = n => String(n).padStart(2, '0');
+const nowMs = () => CLOCK0 + (Date.now() - T0);
+const iso = ms => { const d = new Date(ms + 8 * 3600e3); return d.toISOString().slice(0, 19) + '+08:00'; };
+const hm = s => s ? s.slice(5, 10) + ' ' + s.slice(11, 16) : '';
+const ST = {new:'新发现',verifying:'核验中',verified:'已核验',pending:'待核实',doubtful:'存疑',rejected:'驳回',to_select:'待选题',not_recommended:'不推荐',selected:'已选题',declined:'已拒绝',expired:'已过期'};
+const SS = {pregenerated:'预生成草稿',draft:'草稿',reviewing:'评审中',revising:'已修改为新版本',needs_human:'待人工处理',awaiting_final:'待终审',returned:'已退回',approved:'已通过',published:'已发布'};
+const PL = Object.fromEntries(Object.entries(R.platforms).map(([k, v]) => [k, v.name]));
+const DECLINE = ['与游戏关联弱', '调性不合', '风险太高', '时效已过', '已有同类内容', '其他'];
+
+let S, sel, filter = 'all', vsel = {}, SAMPLE = null, busy = false;
+function load() { try { const t = localStorage.getItem(KEY); if (t) { const o = JSON.parse(t); if (o.v === D.generatedAt) return o; } } catch (e) {} return null; }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+function reset() { S = clone(D.state0); S.v = D.generatedAt; S.submitted = 0; sel = S.events.find(e => e.fast_lane)?.id || S.events[0].id; save(); }
+S = load(); if (!S) reset(); else sel = S.events[0].id;
+
+const snap = id => S.snapshots.find(s => s.id === id);
+const evById = id => S.events.find(e => e.id === id);
+const scriptsOf = eid => S.scripts.filter(s => s.event_id === eid);
+function log(actor, action, target, detail) { S.audit.push({at: iso(nowMs()), actor, action, target, detail: detail || ''}); }
+function toast(t) { const el = $('#toast'); el.textContent = t; el.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(() => el.style.display = 'none', 3200); }
+
+/* ---------- 规则（与后端 app/rules.py、app/reviewer.py 一致） ---------- */
+const hits = (t, ws) => ws.filter(w => w && t.includes(w));
+function redline(t) {
+  const out = [];
+  for (const [c, ws] of Object.entries(R.redline_topics)) hits(t, ws).forEach(w => out.push(c + ':' + w));
+  hits(t, R.competitors).forEach(w => out.push('竞品:' + w));
+  hits(t, R.third_party_ip.never_authorized).forEach(w => out.push('未授权第三方IP:' + w));
+  return out;
+}
+const numbers = t => new Set(t.match(/\d+(?:\.\d+)?/g) || []);
+const T_RE = /(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*s/;
+function tier(url) {
+  if (!url) return 'N';
+  if (R.source_tiers.official_game.some(p => url.includes(p))) return 'G';
+  let host = ''; try { host = new URL(url).hostname.toLowerCase(); } catch (e) { return 'C'; }
+  for (const t of ['A', 'B']) if (R.source_tiers[t].some(d => host === d || host.endsWith('.' + d))) return t;
+  return 'C';
+}
+const TIER = {A:'官方媒体', B:'主流媒体', G:'游戏官方', C:'其他', N:'无链接'};
+const settingsBlock = es => es.map(e => `[${e.id}] ${e.category}·${e.title}：${e.content}`).join('\n');
+const cardBlock = c => c.map(f => `[${f.id}] ${f.text}（来源：${f.source_ids.join(',')}）`).join('\n');
+function scriptText(c) {
+  const p = [c.title, c.hook, c.cta, (c.tags || []).join(' ')];
+  (c.shots || []).forEach(s => p.push(s.visual || '', s.line || ''));
+  return p.join('\n');
+}
+function ruleCheck(c, platform, card, settings) {
+  const p = R.platforms[platform], out = [];
+  const add = (severity, rule, problem, where = '') => out.push({severity, rule, problem, where});
+  const text = scriptText(c), shots = c.shots || [];
+  const spans = shots.map(s => T_RE.exec(s.t || ''));
+  if (!shots.length || spans.some(m => !m)) add('block', '时长', '分镜缺少形如 0-3s 的时间标注');
+  else {
+    const end = Math.max(...spans.map(m => +m[2])), [lo, hi] = p.duration_sec;
+    if (end < lo || end > hi) add('block', '时长', `总时长 ${end} 秒，不在${p.name}规范 ${lo}-${hi} 秒内`);
+    const speech = shots.reduce((n, s) => n + (s.line || '').replace(/[^\p{L}\p{N}_]/gu, '').length, 0);
+    const need = speech / p.speech_chars_per_sec;
+    if (need > end * 1.1) add('block', '时长', `台词约需 ${need.toFixed(0)} 秒，超过视频时长 ${end} 秒`);
+    if (+spans[0][1] !== 0 || +spans[0][2] > p.hook_within_sec || !c.hook) add('block', '钩子', `前 ${p.hook_within_sec} 秒内必须有钩子`, '第1镜');
+  }
+  if ((c.title || '').length > p.max_title_chars) add('block', '标题', `标题 ${c.title.length} 字，超过 ${p.max_title_chars} 字`);
+  if ((c.tags || []).length > p.max_tags) add('block', '标签', `话题标签 ${c.tags.length} 个，超过 ${p.max_tags} 个`);
+  const cids = new Set(card.map(f => f.id)), sids = new Set(settings.map(e => e.id));
+  if (!(c.fact_ids || []).length) add('block', '事实溯源', '脚本没有标注引用了哪条事实');
+  (c.fact_ids || []).forEach(f => cids.has(f) || add('block', '事实溯源', `引用的事实 ${f} 不在事实卡里`));
+  (c.setting_ids || []).forEach(s => sids.has(s) || add('block', '设定溯源', `引用的设定 ${s} 不在本次检索到的设定里`));
+  const allowed = numbers(cardBlock(card) + settingsBlock(settings));
+  const stray = [...numbers(text.replace(new RegExp(T_RE.source, 'g'), ''))].filter(n => !allowed.has(n)).sort();
+  if (stray.length) add('block', '数字溯源', `这些数字在事实卡和设定里都找不到：${stray.join('、')}`);
+  [['广告法极限词', hits(text, R.ad_law_words)], ['防沉迷', hits(text, R.anti_addiction_words)], ['诱导充值', hits(text, R.pay_inducement_words)], ['红线', redline(text)]]
+    .forEach(([n, h]) => h.length && add('block', n, '命中：' + h.join('、')));
+  [['真人姓名', hits(text, R.real_person_names)], ['过往联动IP', hits(text, R.third_party_ip.past_collab_need_legal)]]
+    .forEach(([n, h]) => h.length && add('legal', n, '需法务会签：' + h.join('、')));
+  return out;
+}
+function selectSettings(text, limit = 6) {
+  const es = SET.entries, always = es.filter(e => e.id === 'S04' || e.category === '禁区');
+  const sc = e => e.keywords.filter(k => text.includes(k)).length;
+  const rest = es.filter(e => !always.includes(e)).sort((a, b) => sc(b) - sc(a));
+  let picked = rest.filter(e => sc(e) > 0).slice(0, limit); if (!picked.length) picked = rest.slice(0, 2);
+  return picked.concat(always);
+}
+const ctxOf = eid => { const c = S.contexts[eid]; return c ? {card: c.fact_card, settings: SET.entries.filter(e => c.setting_ids.includes(e.id))} : null; };
+
+/* ---------- 实时模式：调用 Claude ---------- */
+const render_ = (name, vals) => Object.entries(vals).reduce((t, [k, v]) => t.split('{' + k + '}').join(String(v)), P[name]);
+function parseJSON(t) { t = t.trim().replace(/^```(?:json)?\s*|\s*```$/g, ''); try { return JSON.parse(t); } catch (e) { const m = t.match(/\{[\s\S]*\}/); if (m) return JSON.parse(m[0]); throw new Error('模型输出不是 JSON'); } }
+async function ask(prompt, tier) { const r = await SAMPLE(prompt, {modelTier: tier}); return parseJSON(r.text); }
+async function judgeLive(sc, card, settings) {
+  const out = await ask(render_('judge_script', {game: SET.game, script: JSON.stringify(sc.content, null, 1), facts: cardBlock(card), settings: settingsBlock(settings)}), 'quick');
+  out.passed = Object.values(out.scores).every(v => v >= R.review.judge_pass_score); return out;
+}
+async function reviewLive(sc, ev, card, settings, extra) {
+  let cur = sc, pending = extra || [];
+  for (let rnd = 0; rnd <= R.review.max_auto_revise_rounds; rnd++) {
+    const issues = ruleCheck(cur.content, cur.platform, card, settings);
+    const verdict = await judgeLive(cur, card, settings);
+    cur.reviews.push({round: rnd, rule_issues: issues, judge: verdict, human_issues: pending});
+    if (issues.some(i => i.severity === 'legal') && !cur.flags.includes('legal_required')) cur.flags.push('legal_required');
+    let blocking = issues.filter(i => i.severity === 'block').concat(pending);
+    if (!verdict.passed) blocking = blocking.concat((verdict.issues || []).map(i => ({severity: 'block', rule: '模型评审', where: i.where, problem: i.problem, suggestion: i.suggestion})));
+    log('system', 'review', cur.id, `规则问题 ${issues.filter(i => i.severity === 'block').length} 个；模型评审${verdict.passed ? '通过' : '未通过'}`);
+    if (!blocking.length) { cur.status = 'awaiting_final'; break; }
+    if (rnd === R.review.max_auto_revise_rounds) { cur.status = 'needs_human'; break; }
+    cur.status = 'revising';
+    const content = await ask(render_('revise_script', {game: SET.game, script: JSON.stringify(cur.content, null, 1), issues: JSON.stringify(blocking, null, 1), fact_card: cardBlock(card), settings: settingsBlock(settings)}), 'default');
+    const v = cur.version + 1;
+    cur = {...clone(cur), id: `${cur.event_id}-${cur.platform}-v${v}`, version: v, content, status: 'reviewing', reviews: []};
+    S.scripts.push(cur); log('llm', 'revise', cur.id, '按问题清单自动改稿'); pending = [];
+    save(); render();
+  }
+  save(); render();
+}
+async function generateLive(ev, platform) {
+  const snaps = ev.snapshot_ids.map(snap), p = R.platforms[platform];
+  const card = ev.facts.length ? ev.facts.map(f => ({id: f.id, text: f.text, source_ids: f.source_ids})) : snaps.map((s, i) => ({id: 'F' + (i + 1), text: s.publisher + '：' + s.summary, source_ids: [s.id]}));
+  const settings = ctxOf(ev.id)?.settings || selectSettings(snaps.map(s => s.title + s.summary).join('') + (ev.score.angle || ''));
+  const content = await ask(render_('generate_script', {game: SET.game, platform_name: p.name, duration_min: p.duration_sec[0], duration_max: p.duration_sec[1], aspect: p.aspect, max_title: p.max_title_chars, max_tags: p.max_tags, hook_sec: p.hook_within_sec, angle: ev.score.angle || '', fact_card: cardBlock(card), settings: settingsBlock(settings)}), 'default');
+  const prev = S.scripts.filter(s => s.event_id === ev.id && s.platform === platform).length;
+  const sc = {id: `${ev.id}-${platform}-v${prev + 1}`, event_id: ev.id, platform, version: prev + 1, content, status: 'reviewing', pregenerated: false, reviews: [], flags: [], live: true};
+  S.contexts[ev.id] = {fact_card: card, setting_ids: settings.map(e => e.id)};
+  S.scripts.push(sc); log('llm', 'generate', sc.id, '实时生成'); save(); render();
+  await reviewLive(sc, ev, card, settings);
+}
+async function run(fn) { if (busy) return; busy = true; render(); try { await fn(); } catch (e) { toast('出错了：' + (e.message || e.code || e)); } busy = false; render(); }
+
+/* ---------- 人工节点 ---------- */
+function approveTopic(eid) {
+  const ev = evById(eid);
+  ev.status = 'selected'; ev.status_reason = '运营·小王 确认选题'; log('运营·小王', 'approve_topic', eid);
+  if (!scriptsOf(eid).length) {
+    if (D.onApprove[eid]) { D.onApprove[eid].forEach(s => S.scripts.push(clone(s))); log('llm', 'generate', eid, '生成脚本并完成自动评审（回放）'); }
+    else if (SAMPLE) { save(); return run(async () => { for (const p of ev.score.platforms?.length ? ev.score.platforms : ['douyin']) await generateLive(ev, p); }); }
+    else toast('这个热点没有预生成脚本；在 claude.ai 登录状态下打开本页可实时生成');
+  }
+  save(); render();
+}
+function declineTopic(eid, reason) { const ev = evById(eid); ev.status = 'declined'; ev.status_reason = '运营·小王 拒绝：' + reason; log('运营·小王', 'decline_topic', eid, reason); save(); render(); }
+function finalApprove(sid, legal) {
+  const sc = S.scripts.find(s => s.id === sid), ev = evById(sc.event_id);
+  const needLegal = sc.flags.includes('legal_required') || ev.flags.includes('legal_required');
+  if (ev.status !== 'selected') return toast('选题还没有被运营确认，不能终审');
+  if (needLegal && !legal) return toast('该脚本涉及真人或联动 IP，需要填写法务会签人');
+  sc.status = 'approved';
+  const first = Math.min(...ev.snapshot_ids.map(i => new Date(snap(i).fetched_at).getTime()));
+  const mins = Math.round((nowMs() - first) / 60e3), sla = R.urgency[ev.urgency === 'high' ? 'end_to_end_sla_minutes_high' : 'end_to_end_sla_minutes_normal'];
+  log('运营·小王', 'final_approve', sid, `从入库到终稿 ${mins} 分钟（时限 ${sla}）` + (needLegal ? `；法务会签：${legal}` : ''));
+  if (mins > sla) log('system', 'sla_breach', sid, '超过端到端时限');
+  save(); render(); toast('已通过终审，可导出排期');
+}
+function returnScript(sid, comment) {
+  const sc = S.scripts.find(s => s.id === sid), ev = evById(sc.event_id);
+  sc.status = 'returned'; log('运营·小王', 'return_script', sid, comment); save();
+  const ctx = ctxOf(ev.id);
+  if (SAMPLE && ctx) run(() => reviewLive(sc, ev, ctx.card, ctx.settings, [{severity: 'block', rule: '运营退回', problem: comment}]));
+  else { render(); toast('已退回。自动改稿需要实时模式（在 claude.ai 登录状态下打开本页）'); }
+}
+
+/* ---------- 运营提交链接：走同样的规则和核验 ---------- */
+async function submitLink(f) {
+  S.submitted++; const id = 'M' + pad(S.submitted), at = iso(nowMs());
+  S.snapshots.push({id, source_id: 'manual_submit', title: f.title, url: f.url, publisher: '运营提交：' + f.by, platform: 'manual', published_at: at, fetched_at: at, summary: f.summary, heat: 0, heat_series: [], heat_simulated: true});
+  log('system', 'snapshot_saved', id, 'manual_submit | ' + (f.url || '无链接'));
+  const ev = {id: 'E' + pad(S.events.length + 1), key: id, title: f.title, snapshot_ids: [id], type: 'unknown', type_reason: '', status: 'new', status_reason: '', expire_at: '', urgency: 'normal', facts: [], verification: {}, flags: [], score: {}, fast_lane: false};
+  S.events.push(ev); sel = ev.id;
+  const text = f.title + f.summary, rl = redline(text);
+  const deb = R.debunk_db.find(d => d.claim_keywords.every(k => text.includes(k)));
+  if (rl.length) { ev.status = 'rejected'; ev.status_reason = '红线预过滤：' + rl.join('、'); }
+  else if (deb) { ev.status = 'rejected'; ev.status_reason = `命中辟谣库：${deb.debunk}（${deb.source}）`; ev.verification = {debunk: deb}; }
+  else {
+    if (SAMPLE) { const o = await ask(render_('classify_event', {items: `- [${id}] ${f.title}：${f.summary}`}), 'quick'); ev.type = o.type; ev.type_reason = o.reason; log('llm', 'classify', ev.id, o.type + '：' + o.reason); }
+    else { ev.type = /梗|热词|体”|句式|belike|口头禅|二创/.test(text) ? 'meme' : 'news'; ev.type_reason = '规则分类（回放模式没有实时模型）'; }
+    ev.expire_at = iso(nowMs() + (ev.type === 'meme' ? R.urgency.meme_window_hours : R.urgency.news_window_hours) * 3600e3);
+    const t = tier(f.url);
+    ev.verification = {kind: ev.type, tiers: {[id]: t}, independent_domains: f.url ? [new URL(f.url).hostname] : [], has_official: ['A', 'G'].includes(t)};
+    if (ev.type === 'news' && ev.verification.has_official) { ev.status = 'doubtful'; ev.status_reason = '有官方来源，但事实抽取需要在后端运行完整核验'; }
+    else { ev.status = 'pending'; ev.status_reason = ev.type === 'meme' ? '只在 1 个平台出现，热度真实性待确认；需要更多出处' : `来源不足：只有 1 个来源（${TIER[t]}），需要第二个独立来源或官方来源`; }
+  }
+  log(ev.status === 'rejected' ? 'system' : 'system', 'verify', ev.id, ev.status_reason);
+  save(); render();
+}
+
+/* ---------- 位置与时间 ---------- */
+const STATIONS = ['入库归并', '分类核验', '选题评估', '运营选题', '生成与评审', '运营终审', '已通过'];
+function stationOf(ev) {
+  const ss = scriptsOf(ev.id).filter(s => s.status !== 'revising');
+  if (['rejected', 'expired', 'declined'].includes(ev.status)) return {out: true};
+  if (['pending', 'doubtful', 'new', 'verifying'].includes(ev.status)) return {i: 1, stuck: true};
+  if (ev.status === 'not_recommended') return {i: 2, stuck: true};
+  if (ev.status === 'to_select') return {i: 3};
+  if (ss.length && ss.every(s => s.status === 'approved')) return {i: 6};
+  if (ss.some(s => s.status === 'awaiting_final')) return {i: 5};
+  return {i: 4};
+}
+function left(ev) {
+  if (!ev.expire_at) return '';
+  const m = Math.round((new Date(ev.expire_at).getTime() - nowMs()) / 60e3);
+  if (m <= 0) return '已过期';
+  return m >= 1440 ? `剩 ${Math.floor(m / 1440)} 天` : `剩 ${Math.floor(m / 60)} 小时 ${m % 60} 分`;
+}
+
+/* ---------- 渲染 ---------- */
+function renderMeta() {
+  const n = S.events.length, cand = S.events.filter(e => e.status === 'to_select').length;
+  $('#meta').innerHTML = `演示时钟 ${esc(hm(iso(nowMs())))} · ${n} 个热点事件，${cand} 个待运营选题 · ${SAMPLE ? '<b>实时模式</b>：生成和评审调用 Claude' : '回放模式：模型输出为预生成结果'}${busy ? ' · <b>Claude 处理中…</b>' : ''}`;
+}
+let drawTrack;
+{
+  const svg = $('#track');
+  drawTrack = () => {
+    const W = svg.clientWidth, H = svg.clientHeight; if (!W) return;
+    const padX = 34, roadY = H - 128, step = (W - padX * 2) / (STATIONS.length - 1);
+    let h = `<defs><radialGradient id="shine" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
+    h += `<path d="M${padX - 20},${roadY} H${W - padX + 20}" stroke="var(--sky)" stroke-width="26" stroke-linecap="round"/>`;
+    h += `<path d="M${padX},${roadY} H${W - padX}" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-dasharray="10 12"/>`;
+    STATIONS.forEach((name, i) => {
+      const x = padX + i * step, gate = i === 3 || i === 5;
+      h += `<circle cx="${x}" cy="${roadY}" r="16" fill="${gate ? 'var(--pink)' : 'var(--bg)'}" stroke="var(--ink)" stroke-width="2"/>`;
+      h += `<text x="${x}" y="${roadY + 38}" text-anchor="middle" class="disp" style="font-size:15px;font-family:'ZCOOL KuaiLe',sans-serif">${name}</text>`;
+    });
+    h += `<rect x="${padX - 20}" y="${H - 52}" width="${W - padX * 2 + 40}" height="44" rx="22" fill="var(--panel)"/>`;
+    h += `<text x="${padX}" y="${H - 25}" style="font-size:14px;fill:var(--mute)">出局：红线、辟谣、过期、拒绝</text>`;
+    const cols = {}; let outX = padX + 220, hidden = 0;
+    S.events.forEach(ev => {
+      const st = stationOf(ev); let x, y;
+      if (st.out) { if (outX > W - padX - 30) { hidden++; return; } x = outX; y = H - 30; outX += 40; }
+      else { const k = cols[st.i] = (cols[st.i] || 0) + 1, row = Math.floor((k - 1) / 3), pos = (k - 1) % 3; x = padX + st.i * step + [0, -38, 38][pos]; y = roadY - 40 - row * 68; }
+      const fill = st.stuck || st.out ? 'var(--panel)' : ev.type === 'meme' ? 'var(--meme)' : 'var(--egg)';
+      const s = st.out ? .72 : 1, cur = ev.id === sel;
+      h += `<g class="egg" tabindex="0" role="button" aria-label="${esc(ev.id + ' ' + ev.title)}" data-id="${ev.id}" transform="translate(${x},${y}) scale(${s})" style="cursor:pointer;transition:transform .5s">`;
+      h += `<ellipse cx="0" cy="17" rx="13" ry="3.5" fill="var(--ink)" opacity=".15"/>`;
+      h += `<path d="M0,-21 C12,-21 17,-4 17,4 C17,14 9,19 0,19 C-9,19 -17,14 -17,4 C-17,-4 -12,-21 0,-21Z" fill="${fill}" stroke="var(--ink)" stroke-width="${cur ? 3.5 : 1.8}"/>`;
+      h += `<path d="M0,-21 C12,-21 17,-4 17,4 C17,14 9,19 0,19 C-9,19 -17,14 -17,4 C-17,-4 -12,-21 0,-21Z" fill="url(#shine)"/>`;
+      h += st.out ? `<path d="M-8,-4 l5,4 M-3,-4 l-5,4 M3,-4 l5,4 M8,-4 l-5,4" stroke="var(--ink)" stroke-width="1.6"/>` : `<circle cx="-5" cy="-1" r="2" fill="var(--ink)"/><circle cx="5" cy="-1" r="2" fill="var(--ink)"/><path d="M-4,6 q4,4 8,0" stroke="var(--ink)" stroke-width="1.6" fill="none"/>`;
+      if (ev.fast_lane && !st.out) h += `<path d="M12,-18 v-16 l12,5 -12,5" fill="var(--pink)" stroke="var(--ink)" stroke-width="1.4"/>`;
+      h += `<text y="${st.out ? 34 : -27}" text-anchor="middle" style="font-size:12px;font-weight:600">${ev.id}</text></g>`;
+    });
+    if (hidden) h += `<text x="${W - padX}" y="${H - 25}" text-anchor="end" style="font-size:14px;fill:var(--mute)">还有 ${hidden} 个</text>`;
+    svg.innerHTML = h;
+  };
+  const ro = new ResizeObserver(drawTrack); ro.observe(svg);
+  svg.addEventListener('click', e => { const g = e.target.closest('.egg'); if (g) { sel = g.dataset.id; render(); $('#detail').scrollIntoView({behavior: 'smooth', block: 'nearest'}); } });
+  svg.addEventListener('keydown', e => { const g = e.target.closest('.egg'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); sel = g.dataset.id; render(); } });
+}
+const GROUPS = [['候选看板', e => e.status === 'to_select'], ['已选题', e => e.status === 'selected'], ['待核实', e => ['pending', 'doubtful', 'new'].includes(e.status)], ['不推荐', e => e.status === 'not_recommended'], ['出局', e => ['rejected', 'expired', 'declined'].includes(e.status)]];
+function renderList() {
+  $('#filters').innerHTML = [['all', '全部'], ...GROUPS.map(g => [g[0], g[0]])].map(([k, n]) => `<button data-f="${k}" aria-pressed="${filter === k}">${n}</button>`).join('');
+  $('#list').innerHTML = GROUPS.filter(g => filter === 'all' || filter === g[0]).map(([name, fn]) => {
+    const es = S.events.filter(fn); if (!es.length) return '';
+    return `<div class="grp">${name} · ${es.length}</div>` + es.map(ev => {
+      const chips = [ev.type === 'meme' ? '梗' : ev.type === 'news' ? '新闻' : '', ev.fast_lane ? '<span class="chip hot">快速通道</span>' : '', ev.flags.includes('legal_required') ? '<span class="chip hot">需法务</span>' : '', ev.score?.total ? `总分 ${ev.score.total}` : '', ['to_select', 'selected', 'pending'].includes(ev.status) ? left(ev) : ST[ev.status]].filter(Boolean).map(c => c.startsWith('<') ? c : `<span class="chip">${esc(c)}</span>`).join('');
+      return `<button class="card" data-id="${ev.id}" aria-current="${ev.id === sel}"><b>${ev.id}　${esc(ev.title)}</b><div class="chips">${chips}</div></button>`;
+    }).join('');
+  }).join('') || '<p class="note">这一组暂时没有热点。</p>';
+}
+function sourcesTable(ev) {
+  return `<div class="scroll"><table class="stack"><thead><tr><th>来源</th><th>等级</th><th>发布时间</th><th>热度（模拟）</th><th>链接</th></tr></thead><tbody>` + ev.snapshot_ids.map(snap).map(s => `<tr><td data-l="来源">${esc(s.publisher)}<br><span class="note">${esc(s.title)}</span></td><td data-l="等级">${TIER[tier(s.url)]}</td><td data-l="发布时间" class="n">${esc(hm(s.published_at))}</td><td data-l="热度（模拟）" class="n">${s.heat || '—'}</td><td data-l="链接">${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">原文</a>` : '<span class="note">无</span>'}</td></tr>`).join('') + `</tbody></table></div>`;
+}
+function verifyBlock(ev) {
+  const v = ev.verification || {};
+  if (v.debunk) return `<p>命中辟谣库：<b>${esc(v.debunk.debunk)}</b>。辟谣来源：<a href="${esc(v.debunk.source_url)}" target="_blank" rel="noopener">${esc(v.debunk.source)}</a></p>`;
+  if (v.kind === 'meme') return `<ul class="facts"><li>出处存档：${v.origin ? `${esc(v.origin.publisher)}（${v.origin.snapshot_id}）` : '无'}</li><li>出现平台：${(v.platforms || []).length} 个（${esc((v.platforms || []).join('、'))}）</li><li>含义是否无害：${v.harmless ? '是' : '否'}。${esc(v.explanation || '')}</li>${v.involves_real_person ? `<li><b>涉及真人：${esc(v.real_persons.join('、'))}</b>，商用前需法务会签</li>` : ''}${v.third_party_work ? `<li>相关作品：${esc(v.third_party_work)}</li>` : ''}</ul>`;
+  if (v.kind === 'news') return `<p class="note">独立来源 ${v.independent_domains.length} 个${v.has_official ? '，含官方来源' : ''}；每条事实都绑定了来源 ID，数字必须能在来源里找到。</p><ul class="facts">${ev.facts.map(f => `<li><b>${f.id}</b> ${esc(f.text)} <span class="note">来源 ${f.source_ids.join('、')}</span></li>`).join('')}${(v.dropped_facts || []).map(d => `<li><s>${esc(d)}</s> <span class="note">规则丢弃</span></li>`).join('')}</ul>`;
+  return '<p class="note">在核验之前已被拦下，没有进入核验。</p>';
+}
+function scoreBlock(ev) {
+  const s = ev.score; if (!s || !s.parts) return '';
+  const names = {relevance: '游戏关联', meme_potential: '玩梗空间', tone_fit: '调性契合', timeliness: '时效', heat_momentum: '热度势头'};
+  const thr = R.recommend_threshold;
+  return `<h3>选题评估</h3><div class="bars">${Object.entries(s.parts).map(([k, v]) => `<div><span>${names[k]}</span><span class="b"><i style="width:${v}%"></i></span><span class="n">${Math.round(v)}</span></div>`).join('')}<div class="tot"><span><b>加权总分</b></span><span class="b"><i style="width:${s.total}%"></i><span class="thr" style="left:${thr}%"></span></span><span class="n"><b>${s.total}</b></span></div></div><p class="note">黑线为推荐线 ${thr} 分；时效和热度势头由规则计算（热度势头基于模拟热度），其余三项由模型打分。</p>${s.angle ? `<p><b>建议角度</b>　${esc(s.angle)}</p>` : ''}<p><b>理由</b>　${esc(s.reason)}</p>${(s.risks || []).length ? `<p><b>风险</b>　${esc(s.risks.join('；'))}</p>` : ''}`;
+}
+function scriptBlock(platform, list, ev) {
+  const cur = list.find(s => s.id === vsel[ev.id + platform]) || list[list.length - 1];
+  const c = cur.content, ctx = ctxOf(ev.id), needLegal = cur.flags.includes('legal_required') || ev.flags.includes('legal_required');
+  const factTxt = id => ctx?.card.find(f => f.id === id)?.text || '';
+  const tabs = list.length > 1 ? `<div class="vtabs">${list.map(s => `<button data-v="${s.id}" data-k="${ev.id + platform}" aria-pressed="${s.id === cur.id}">v${s.version}</button>`).join('')}</div>` : '';
+  const reviews = cur.reviews.map(r => `<div><b>第 ${r.round + 1} 轮评审</b>　<span class="chip ${r.judge?.passed ? 'ok' : 'bad'}">模型评审${r.judge?.passed ? '通过' : '未通过'}</span><div class="scores">${Object.entries(r.judge?.scores || {}).map(([k, v]) => `<span>${{setting_consistency: '设定一致', fact_faithfulness: '事实忠实', hook: '钩子', platform_fit: '平台适配'}[k] || k} <b>${v}</b></span>`).join('')}</div><ul class="issues">${r.rule_issues.map(i => `<li class="${i.severity}">规则·${esc(i.rule)}：${esc(i.problem)}</li>`).join('')}${(r.judge?.issues || []).map(i => `<li class="block">模型·${esc(i.where)}：${esc(i.problem)}${i.suggestion ? '（建议：' + esc(i.suggestion) + '）' : ''}</li>`).join('')}${(r.human_issues || []).map(i => `<li class="block">运营退回：${esc(i.problem)}</li>`).join('')}${!r.rule_issues.length && !(r.judge?.issues || []).length ? '<li>没有发现问题</li>' : ''}</ul></div>`).join('');
+  const canFinal = cur.status === 'awaiting_final' && ev.status === 'selected';
+  const actions = cur.status === 'approved' ? '<p class="chip ok" style="display:inline-block">已通过终审，等待人工发布</p>' : canFinal ? `<div class="gatebar"><span class="lbl">终审</span>${needLegal ? `<input id="legal-${cur.id}" placeholder="法务会签人（必填）" aria-label="法务会签人">` : ''}<button class="gate" data-act="final" data-id="${cur.id}" ${busy ? 'disabled' : ''}>终审通过</button><input id="ret-${cur.id}" placeholder="退回意见，例如：钩子不够抓人" aria-label="退回意见"><button data-act="return" data-id="${cur.id}" ${busy ? 'disabled' : ''}>退回修改</button></div>` : cur.status === 'awaiting_final' ? '<p class="note">草稿已通过自检。运营确认选题后才能终审。</p>' : cur.status === 'revising' ? `<p class="note">这一版没有通过检查，已自动修改为 v${cur.version + 1}。</p>` : '';
+  return `<div class="script"><header><div><b class="disp" style="font-size:19px">${PL[platform]}</b>　<span class="chip">${SS[cur.status] || cur.status}</span>${cur.pregenerated ? ' <span class="chip hot">快速通道预生成</span>' : ''}${cur.live ? ' <span class="chip">实时生成</span>' : ''}${needLegal ? ' <span class="chip hot">需法务会签</span>' : ''}</div>${tabs}</header>
+  <dl class="kv"><dt>标题</dt><dd><b>${esc(c.title)}</b></dd><dt>钩子</dt><dd>${esc(c.hook)}</dd><dt>标签</dt><dd>${esc((c.tags || []).join(' '))}</dd><dt>结尾</dt><dd>${esc(c.cta)}</dd><dt>BGM</dt><dd>${esc(c.bgm)}</dd><dt>引用</dt><dd>${(c.fact_ids || []).map(f => `<span class="chip" title="${esc(factTxt(f))}">${f}</span>`).join(' ')} ${(c.setting_ids || []).map(s => `<span class="chip" title="${esc(SET.entries.find(e => e.id === s)?.title || '')}">${s}</span>`).join(' ')}</dd></dl>
+  <div class="scroll"><table class="stack"><thead><tr><th>时间</th><th>画面</th><th>台词 / 字幕</th></tr></thead><tbody>${(c.shots || []).map(s => `<tr><td data-l="时间" class="n">${esc(s.t)}</td><td data-l="画面">${esc(s.visual)}</td><td data-l="台词">${esc(s.line)}</td></tr>`).join('')}</tbody></table></div>
+  <h3 style="font-size:17px">评审记录</h3>${reviews || '<p class="note">还没有评审。</p>'}
+  ${actions}<div class="row"><button data-act="copy" data-id="${cur.id}">复制脚本</button>${SAMPLE && ev.status === 'selected' && cur.status !== 'approved' ? `<button data-act="regen" data-id="${ev.id}" data-p="${platform}" ${busy ? 'disabled' : ''}>用 Claude 重新生成</button>` : ''}</div></div>`;
+}
+function renderDetail() {
+  const ev = evById(sel); if (!ev) { $('#detail').innerHTML = ''; return; }
+  const ss = scriptsOf(ev.id), byP = {};
+  ss.forEach(s => (byP[s.platform] = byP[s.platform] || []).push(s));
+  const typeName = {news: '新闻事件类', meme: '梗与话题类'}[ev.type] || '未分类';
+  const canPick = ['to_select', 'not_recommended'].includes(ev.status) && !ev.flags.includes('own_ops');
+  const gate = canPick ? `<div class="gatebar"><span class="lbl">选题确认</span><button class="gate" data-act="approve" data-id="${ev.id}" ${busy ? 'disabled' : ''}>确认跟进</button><select id="declineReason" aria-label="拒绝理由">${DECLINE.map(d => `<option>${d}</option>`).join('')}</select><button data-act="decline" data-id="${ev.id}">拒绝</button>${ev.status === 'not_recommended' ? '<span class="note">系统不推荐，但运营仍可选择跟进</span>' : ''}</div>` : '';
+  $('#detail').innerHTML = `<h2>${ev.id}　${esc(ev.title)}</h2><div class="chips"><span class="chip">${typeName}</span><span class="chip">${ST[ev.status]}</span>${ev.expire_at ? `<span class="chip ${ev.urgency === 'high' ? 'hot' : ''}">${left(ev)}（${esc(hm(ev.expire_at))} 过期）</span>` : ''}${ev.fast_lane ? '<span class="chip hot">快速通道：草稿已预生成</span>' : ''}${ev.flags.includes('own_ops') ? '<span class="chip">自家运营事件</span>' : ''}</div><p class="reason">${esc(ev.status_reason)}${ev.type_reason ? '。分类理由：' + esc(ev.type_reason) : ''}</p>${gate}
+  <h3>来源证据</h3>${sourcesTable(ev)}<h3>分类核验</h3>${verifyBlock(ev)}${scoreBlock(ev)}
+  ${ss.length ? '<h3>脚本</h3>' + Object.entries(byP).map(([p, l]) => scriptBlock(p, l, ev)).join('') : ev.status === 'selected' ? '<p class="note">正在生成脚本…</p>' : ''}`;
+}
+function renderLog() { $('#log').innerHTML = S.audit.slice().reverse().map(a => `<tr><td data-l="时间" class="n">${esc(hm(a.at))}</td><td data-l="操作者">${esc(a.actor)}</td><td data-l="动作">${esc(a.action)}</td><td data-l="对象">${esc(a.target)}</td><td data-l="详情">${esc(a.detail)}</td></tr>`).join(''); }
+function render() { renderMeta(); drawTrack(); renderList(); renderDetail(); renderLog(); }
+
+/* ---------- 事件 ---------- */
+$('#filters').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (b) { filter = b.dataset.f; renderList(); } });
+$('#list').addEventListener('click', e => { const b = e.target.closest('.card'); if (b) { sel = b.dataset.id; render(); if (innerWidth < 860) $('#detail').scrollIntoView({behavior: 'smooth'}); } });
+$('#detail').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.v) { vsel[b.dataset.k] = b.dataset.v; renderDetail(); return; }
+  const id = b.dataset.id;
+  if (b.dataset.act === 'approve') approveTopic(id);
+  if (b.dataset.act === 'decline') declineTopic(id, $('#declineReason').value);
+  if (b.dataset.act === 'final') finalApprove(id, $(`#legal-${CSS.escape(id)}`)?.value.trim());
+  if (b.dataset.act === 'return') { const c = $(`#ret-${CSS.escape(id)}`).value.trim(); if (!c) return toast('请先写退回意见'); returnScript(id, c); }
+  if (b.dataset.act === 'regen') run(() => generateLive(evById(id), b.dataset.p));
+  if (b.dataset.act === 'copy') { const sc = S.scripts.find(s => s.id === id), c = sc.content; const txt = `${c.title}\n钩子：${c.hook}\n` + c.shots.map(s => `${s.t}｜${s.visual}｜${s.line}`).join('\n') + `\n${(c.tags || []).join(' ')}\n${c.cta}`; navigator.clipboard?.writeText(txt).then(() => toast('已复制'), () => toast('浏览器不允许复制')); }
+});
+$('#btnReset').addEventListener('click', () => { reset(); vsel = {}; render(); toast('已恢复到流水线刚跑完、运营还没操作时的状态'); });
+$('#btnSubmit').addEventListener('click', () => { $('#modal').style.display = 'flex'; $('#fTitle').focus(); });
+$('#fCancel').addEventListener('click', () => $('#modal').style.display = 'none');
+$('#submitForm').addEventListener('submit', e => { e.preventDefault(); const f = {title: $('#fTitle').value.trim(), url: $('#fUrl').value.trim(), summary: $('#fSummary').value.trim(), by: $('#fBy').value.trim()}; $('#modal').style.display = 'none'; e.target.reset(); $('#fBy').value = '运营·小王'; run(() => submitLink(f)); });
+setInterval(() => { renderMeta(); if (!busy && !document.querySelector('#detail input:focus, #detail select:focus')) { renderList(); } }, 30000);
+
+render();
+(async () => { try { SAMPLE = await window.claude?.use?.('sample') || null; } catch (e) { SAMPLE = null; } if (SAMPLE) render(); })();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+{
+  "note": "种子热点：2026-11-22 由演示运营通过网页检索、以“运营手动提交链接”方式录入。标题、链接、发布者、发布时间都是真实的，摘要是我们自己写的概括。heat 和 heat_series 是演示模拟值，不是平台真实热度。",
+  "collected_at": "2026-11-22T21:40:00+08:00",
+  "snapshots": [
+    {
+      "id": "R01",
+      "source_id": "manual_submit",
+      "title": "2026年小雪节气交节时间：11月22日15时23分",
+      "url": "https://jieqi.bmcx.com/2026_xiaoxue__jieqi/",
+      "publisher": "便民查询网·二十四节气",
+      "platform": "web",
+      "published_at": "2026-11-22T00:00:00+08:00",
+      "summary": "节气查询页列出2026年小雪开始时间为11月22日15:23:03，农历十月十四。",
+      "heat": 62,
+      "heat_series": [
+        20,
+        35,
+        52,
+        62
+      ]
+    },
+    {
+      "id": "R02",
+      "source_id": "manual_submit",
+      "title": "11月22日下午15时23分，小雪",
+      "url": "https://c.m.163.com/news/a/LBV2BDDI05239VSD.html",
+      "publisher": "网易号",
+      "platform": "163",
+      "published_at": "2026-11-22T09:00:00+08:00",
+      "summary": "文章介绍今年小雪交节在下午15时23分，且落在周日，并讲了“小雪腌菜”等习俗。",
+      "heat": 58,
+      "heat_series": [
+        18,
+        30,
+        49,
+        58
+      ]
+    },
+    {
+      "id": "R03",
+      "source_id": "manual_submit",
+      "title": "2026年小雪节气11月22日（周日）到来",
+      "url": "https://www.nownews.com/news/6893157",
+      "publisher": "NOWNEWS今日新闻",
+      "platform": "web",
+      "published_at": "2026-11-21T12:00:00+08:00",
+      "summary": "报道称2026年小雪于11月22日（星期日）下午15时23分03秒交节，是冬季第二个节气。",
+      "heat": 40,
+      "heat_series": [
+        15,
+        25,
+        33,
+        40
+      ]
+    },
+    {
+      "id": "R04",
+      "source_id": "manual_submit",
+      "title": "连休5天、免费滑雪！多地公布“雪假”时间",
+      "url": "https://news.sina.cn/2026-11-15/detail-iniyvesc3155923.d.html",
+      "publisher": "新浪新闻（央视）",
+      "platform": "sina",
+      "published_at": "2026-11-15T10:00:00+08:00",
+      "summary": "吉林省雪假安排在12月1日至20日期间，3个工作日与周末连休形成5天小长假；学生可免费体验滑雪滑冰。",
+      "heat": 81,
+      "heat_series": [
+        40,
+        66,
+        80,
+        81
+      ]
+    },
+    {
+      "id": "R05",
+      "source_id": "manual_submit",
+      "title": "北方多地官宣“雪假”：连休5天、免费滑雪",
+      "url": "https://m.gmw.cn/2026-11/15/content_1304586445.htm",
+      "publisher": "光明网（上游新闻）",
+      "platform": "gmw",
+      "published_at": "2026-11-15T21:10:00+08:00",
+      "summary": "吉林、内蒙古呼伦贝尔、新疆阿勒泰、河北张家口等地公布雪假安排。",
+      "heat": 70,
+      "heat_series": [
+        35,
+        58,
+        69,
+        70
+      ]
+    },
+    {
+      "id": "R06",
+      "source_id": "manual_submit",
+      "title": "追光丨赴一场冬日之约 这份季节限定假期请查收",
+      "url": "https://www.news.cn/local/20261119/4784b466242b496f916417063555908d/c.html",
+      "publisher": "新华网",
+      "platform": "xinhua",
+      "published_at": "2026-11-19T09:00:00+08:00",
+      "summary": "吉林雪假学生免费滑雪滑冰次数由1次增至3次、每次3小时；长春将于2027年1月举办第33届世界大学生冬季运动会。",
+      "heat": 66,
+      "heat_series": [
+        30,
+        50,
+        62,
+        66
+      ]
+    },
+    {
+      "id": "R07",
+      "source_id": "manual_submit",
+      "title": "“厉娜”，是一个句号也是一种情绪",
+      "url": "https://m.bjnews.com.cn/detail/1794046029169034.html",
+      "publisher": "新京报",
+      "platform": "bjnews",
+      "published_at": "2026-11-07T18:07:00+08:00",
+      "summary": "综艺《后会友期》带火“厉娜体”：网友在日常感慨后加一句“厉娜”当句号，例如“我下班了，厉娜”。",
+      "heat": 77,
+      "heat_series": [
+        60,
+        85,
+        80,
+        77
+      ]
+    },
+    {
+      "id": "R08",
+      "source_id": "manual_submit",
+      "title": "后会友期带火悬崖小屋咨询量增9倍",
+      "url": "https://sina.cn/media/2028810631",
+      "publisher": "新浪新闻（微博）",
+      "platform": "weibo",
+      "published_at": "2026-11-05T21:39:00+08:00",
+      "summary": "芒果TV《后会友期》新一期上线后话题登上微博热搜，带火节目拍摄地的悬崖小屋。",
+      "heat": 64,
+      "heat_series": [
+        70,
+        75,
+        68,
+        64
+      ]
+    },
+    {
+      "id": "R09",
+      "source_id": "manual_submit",
+      "title": "网易《蛋仔派对》B站渠道服即将停运",
+      "url": "https://www.mrjjxw.com/articles/2026-11-09/4642846.html",
+      "publisher": "每日经济新闻",
+      "platform": "mrjjxw",
+      "published_at": "2026-11-10T08:00:00+08:00",
+      "summary": "《蛋仔派对》B站渠道服将于2027年1月9日14时停服，官方开放角色资产迁移通道。",
+      "heat": 55,
+      "heat_series": [
+        50,
+        60,
+        57,
+        55
+      ]
+    },
+    {
+      "id": "R10",
+      "source_id": "manual_submit",
+      "title": "《蛋仔派对》B站渠道版手游2027年1月9日停运",
+      "url": "https://tech.ifeng.com/c/8xuB1b9Q3Ie",
+      "publisher": "凤凰网科技（IT之家）",
+      "platform": "ifeng",
+      "published_at": "2026-11-09T12:00:00+08:00",
+      "summary": "网易公告因与B站渠道合作策略调整，B站渠道版本将于2027年1月9日14时终止运营，角色资产找回服务已开启。",
+      "heat": 48,
+      "heat_series": [
+        45,
+        52,
+        50,
+        48
+      ]
+    },
+    {
+      "id": "R11",
+      "source_id": "manual_submit",
+      "title": "10月热词大盘点：CJ的日常belike",
+      "url": "https://www.digitaling.com/articles/1609089.html",
+      "publisher": "数英网",
+      "platform": "digitaling",
+      "published_at": "2026-10-29T10:00:00+08:00",
+      "summary": "网友用游戏《侠盗猎车：圣地安列斯》主角CJ的截图演绎自己身心俱疲的日常，品牌纷纷跟进。",
+      "heat": 30,
+      "heat_series": [
+        70,
+        55,
+        40,
+        30
+      ]
+    },
+    {
+      "id": "R12",
+      "source_id": "manual_submit",
+      "title": "请3休13大长假，你可能错过的网络热词：不烧心",
+      "url": "https://www.digitaling.com/articles/1596069.html",
+      "publisher": "数英网",
+      "platform": "digitaling",
+      "published_at": "2026-10-09T10:00:00+08:00",
+      "summary": "“贵是贵了点，但下午干活不烧心”出自AI短剧台词，国庆期间走红。",
+      "heat": 12,
+      "heat_series": [
+        80,
+        40,
+        20,
+        12
+      ]
+    },
+    {
+      "id": "R13",
+      "source_id": "manual_submit",
+      "title": "葡萄牙主帅回应C罗从国家队退役",
+      "url": "https://sina.cn/media/2028810631",
+      "publisher": "新浪新闻（直播吧）",
+      "platform": "weibo",
+      "published_at": "2026-11-05T22:02:00+08:00",
+      "summary": "葡萄牙主帅热苏斯表示C罗从国家队退役是其个人决定。",
+      "heat": 45,
+      "heat_series": [
+        80,
+        60,
+        50,
+        45
+      ]
+    },
+    {
+      "id": "R14",
+      "source_id": "manual_submit",
+      "title": "微博发布2026第三季度热搜报告",
+      "url": "https://finance.sina.cn/2026-11-18/detail-inizcvvf6915992.d.html?vt=4",
+      "publisher": "新浪财经（封面新闻）",
+      "platform": "sina",
+      "published_at": "2026-11-18T12:00:00+08:00",
+      "summary": "7至9月微博共形成热搜词条5.82万个，垂直热点占比升至35%。",
+      "heat": 35,
+      "heat_series": [
+        30,
+        38,
+        36,
+        35
+      ]
+    },
+    {
+      "id": "R15",
+      "source_id": "manual_submit",
+      "title": "微博第三季度热搜报告：垂直热点占比升至35%",
+      "url": "https://cbgc.scol.com.cn/news/8153473",
+      "publisher": "封面新闻",
+      "platform": "scol",
+      "published_at": "2026-11-18T11:00:00+08:00",
+      "summary": "报告显示三季度主榜诞生110个爆词，当事人声明与官方辟谣相关热搜达1965条。",
+      "heat": 30,
+      "heat_series": [
+        25,
+        33,
+        31,
+        30
+      ]
+    },
+    {
+      "id": "R16",
+      "source_id": "manual_submit",
+      "title": "印度男子疑妻子出轨将其活活烧死",
+      "url": "https://sina.cn/media/2028810631",
+      "publisher": "新浪新闻",
+      "platform": "weibo",
+      "published_at": "2026-11-05T21:24:00+08:00",
+      "summary": "印度北方邦发生一起命案。",
+      "heat": 52,
+      "heat_series": [
+        60,
+        58,
+        54,
+        52
+      ]
+    },
+    {
+      "id": "R17",
+      "source_id": "manual_submit",
+      "title": "美国24岁女子跑马拉松身亡",
+      "url": "https://www.sina.cn/media/7752729208",
+      "publisher": "新浪AI",
+      "platform": "weibo",
+      "published_at": "2026-11-04T12:43:00+08:00",
+      "summary": "纽约马拉松期间一名参赛者倒地后不幸去世。",
+      "heat": 40,
+      "heat_series": [
+        55,
+        48,
+        43,
+        40
+      ]
+    },
+    {
+      "id": "R18",
+      "source_id": "manual_submit",
+      "title": "【演示用例·模拟线索】网传：河南、安徽等地中小学今年放秋假",
+      "url": "",
+      "publisher": "演示用例：模拟运营收到的一条无出处转发",
+      "platform": "chat",
+      "published_at": "2026-11-21T20:00:00+08:00",
+      "summary": "这条是为演示“辟谣库比对”而模拟的运营提交，没有原始出处；对应的辟谣信息是真实的（见规则库 debunk_db）。",
+      "heat": 25,
+      "heat_series": [
+        5,
+        12,
+        20,
+        25
+      ]
+    }
+  ]
+}
