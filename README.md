@@ -6,23 +6,26 @@
 1. 热点要真实、及时，查得到来源。
 2. 脚本要符合游戏设定和发布平台的要求。
 
-- **在线演示**：https://claude.ai/artifact/4voPTJibK45eUgGxuF5mr8 （蛋仔热点工作台 V1）
+- **在线演示（V2，最新）**：https://claude.ai/artifact/5wgHRMU1Xvx24z8bYnHzaN
+- 在线演示（V1，保留）：https://claude.ai/artifact/4voPTJibK45eUgGxuF5mr8
 - **后端**：本仓库的 Python 代码，规则、提示词、状态机和测试都在这里。
 
 ## 模块对照
 
 | 方案模块 | 代码 | 用大模型 | 用程序规则 |
 |---|---|---|---|
-| ① 热点采集 | `app/collector.py` | — | 只调用数据源授权清单（`config/sources.json`）里启用且未过期的来源；运营手动提交链接；快照写入后不可修改 |
-| ② 清洗与事件归并 | `app/clustering.py` | 语义合并（`merge_events`）、类型判断（新闻 / 梗） | 字面去重、红线预过滤、自家运营事件识别、过期时间与紧急程度 |
+| ① 热点采集 | `app/collector.py`、`app/scheduler.py`、`app/archive.py` | — | 只调用数据源授权清单（`config/sources.json`）里启用且未过期的来源；按配置频率定时拉取公开 RSS，按 URL 去重；运营手动提交链接；快照写入后不可修改；保存原文 HTML 并记录 SHA-256 指纹，可复查原文是否被改动 |
+| ② 清洗与事件归并 | `app/clustering.py` | 语义合并（`merge_events`），包括新来源并入已有事件；类型判断（新闻 / 梗） | RSS 关键词粗筛、字面去重、增量归并、红线预过滤、自家运营事件识别、过期时间与紧急程度、过期自动下线 |
 | ③ 分类核验 | `app/verifier.py` | 抽取事实（`extract_facts`）、判断梗的含义是否无害（`meme_check`） | 信源分级、多源交叉、辟谣库比对；每条事实必须标注来源 ID，且数字要能在来源里找到；真人姓名名单复核 |
 | ④ 选题评估 | `app/scorer.py` | 关联度、玩梗空间、调性打分，并给出切入角度（`score_topic`） | 红线一票否决、时效和热度势头加权、推荐线、快速通道选择 |
 | ⑤ 选题确认 | `Pipeline.approve_topic / decline_topic` | — | 拒绝理由只能从固定选项里选，并写入审计日志 |
 | ⑥ 脚本生成 | `app/generator.py` | 生成结构化脚本（`generate_script`） | 事实卡只放已核验内容；按关键词检索设定；套用平台模板 |
-| ⑦ 评估与修改 | `app/reviewer.py` | 由另一个模型独立评审（`judge_script`）；按问题清单自动改稿（`revise_script`） | 时长、钩子、标题和标签数、事实与设定溯源、数字溯源、广告法极限词、防沉迷、诱导充值、竞品、未授权 IP；真人和联动 IP 转法务 |
+| ⑦ 评估与修改 | `app/reviewer.py` | 由另一个模型独立评审（`judge_script`）；按问题清单自动改稿（`revise_script`） | 时长、钩子、标题和标签数、事实与设定溯源、数字溯源、广告法极限词（带例外词）、防沉迷、诱导充值、竞品、未授权 IP、适龄提示；真人和联动 IP 转法务 |
 | ⑧ 终审 | `Pipeline.final_approve / return_script` | — | 运营没确认选题时不能终审；涉及真人或联动 IP 时必须有法务会签；统计从入库到终稿的用时并检查时限 |
 | ⑨ 知识与配置 | `config/` | — | 设定库（每条附出处）、规则库、数据源授权清单 |
-| ⑩ 数据回流 | `Pipeline.record_published`、审计日志 | — | 拒绝理由、改稿记录、发布数据都会留存（打分权重的自动调整放在下一阶段） |
+| ⑩ 数据回流 | `app/feedback.py`、审计日志 | — | 根据拒绝理由和退回意见生成参数调整建议，由运营负责人确认后再改配置，系统不自动改权重 |
+| 推送 | `app/notifier.py` | — | 新候选选题、快速通道草稿就绪时推到飞书群（`EGGY_FEISHU_WEBHOOK`）；没配置时只记日志，不假装已发送 |
+| 评测 | `data/eval_set.json`、`tools/eval.py` | — | 坏样本拦截率、好样本误拦率；每次改规则都要重跑 |
 | 快速通道 | `scorer.pick_fast_lane` | — | 只对高时效且排名靠前的少数热点，在运营选题前预生成脚本并完成自检 |
 
 状态机见 `app/models.py`。事件状态和脚本状态都只能按规定的路线流转，越过人工节点会直接报错。
@@ -31,20 +34,31 @@
 
 ```bash
 pip install -r requirements.txt
-python -m pytest                 # 36 个测试
+python -m pytest                 # 51 个测试
+python tools/eval.py             # 评测集：拦截率与误拦率
 python -m app.demo               # 离线跑通全流程（回放预生成的模型输出，不需要 API key）
 python tools/build_web.py        # 重新打包网页 Demo → web/index.html
 
 export ANTHROPIC_API_KEY=...     # 实时调用 Claude
 python -m app.demo --live
 EGGY_LIVE=1 uvicorn app.api:app  # HTTP 接口
+python -m app.scheduler          # 常驻定时采集（--once 只抓一轮），状态存在 eggy.db，重启后接着跑
 ```
 
 生成和评审默认用不同的模型（`EGGY_GEN_MODEL` / `EGGY_JUDGE_MODEL`），避免模型给自己的稿子打高分。
 
+## V2 更新（2026-11-23）
+
+- **持续采集**：新增定时采集（中国新闻网滚动新闻 RSS，每 15 分钟），增量归并，不会重建已有事件；做了一轮真实抓取（`data/crawl_rss_2026-11-23.json`）：30 条全部存档，6 条通过粗筛，其中央视的小雪稿件补充到了已有的小雪事件。
+- **过期下线**：每轮抓取先清理过期热点；没被确认的小雪热点在第二轮自动下线，晚到的来源只存档、不会让它复活。
+- **证据**：原先指向新浪资讯流页面的 4 条换成文章固定链接；新增原文存档与指纹比对；设定库 S10 补上新华网出处。
+- **合规**：新增适龄提示必备元素；广告法极限词加入例外（“第一次”不再误拦）。
+- **评测与回流**：新增评测集（29 个用例）和回流建议。
+- **网页**：新增演示路线、采集任务、知识与配置、评测与回流四个区块；版本差异高亮；导出排期（CSV）；回放模式下可演示退回改稿；修复刷新后时钟回退、深色模式配色；手机改为竖向赛道。
+
 ## 演示数据说明
 
-- `data/seed_hotspots.json` 里有 18 条热点。标题、链接、发布者和发布时间都是真实的，于 2026-11-22 通过网页检索、以“运营手动提交”方式录入；摘要是我们自己写的概括。
+- `data/seed_hotspots.json` 里有 18 条第一轮热点；`data/crawl_rss_2026-11-23.json` 是第二轮 RSS 抓取的 30 条（标题、链接、发布时间原样保存）。第一轮 18 条标题、链接、发布者和发布时间都是真实的，于 2026-11-22 通过网页检索、以“运营手动提交”方式录入；摘要是我们自己写的概括。
 - **热度数值是演示模拟值**：真实热榜数据需要平台开放接口或授权数据服务，项目尚未签约（见 `config/sources.json`）。
 - R18 是为演示辟谣库比对而模拟的一条无出处线索，对应的辟谣信息是真实的。
 - `data/demo_llm_outputs.json` 是 Claude 按 `prompts/` 里的提示词预先生成的模型输出，供离线回放使用，保证演示结果可复现。

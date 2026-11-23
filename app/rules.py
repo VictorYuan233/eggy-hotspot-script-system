@@ -32,6 +32,8 @@ def real_person_hits(text: str) -> list[str]:
 
 
 def ad_law_hits(text: str) -> list[str]:
+    for ok in config.rules().get("ad_law_exceptions", []):   # “第一次”“第一时间”等不是比较级
+        text = text.replace(ok, "")
     return _hits(text, config.rules()["ad_law_words"])
 
 

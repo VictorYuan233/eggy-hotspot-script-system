@@ -29,7 +29,7 @@ def main() -> None:
     seed = json.loads((DATA_DIR / "seed_hotspots.json").read_text(encoding="utf-8"))
     raw = [{**s, "fetched_at": seed["collected_at"]} for s in seed["snapshots"]]
 
-    events = pipe.run_intake(raw, NOW)
+    events = pipe.run_intake(raw, NOW, "manual")
     print(f"入库 {len(raw)} 条，归并成 {len(events)} 个事件：")
     for ev in events:
         score = f" 总分 {ev.score['total']}" if ev.score else ""
@@ -59,6 +59,18 @@ def main() -> None:
         pipe.final_approve(produced[-1].id, "运营·小王", t)
     except HumanGateError as exc:
         print(f"\n终审被拦下：{exc}")
+
+    # 第二轮：真实的 RSS 抓取记录（2026-11-23 14:50）
+    r2 = json.loads((DATA_DIR / "crawl_rss_2026-11-23.json").read_text(encoding="utf-8"))
+    now2 = datetime.fromisoformat(r2["fetched_at"])
+    new = pipe.run_intake(r2["items"], now2, r2["round_id"])
+    print(f"\n第二轮抓取 {r2['fetched_at'][:16]}：RSS {len(r2['items'])} 条，新建事件 {len(new)} 个")
+    for ev in new:
+        score = f" 总分 {ev.score['total']}" if ev.score else ""
+        print(f"  {ev.id} {ev.status.value:<16}{score}  {ev.title[:24]}  —— {ev.status_reason}")
+    for a in pipe.store.audit():
+        if a["action"] in ("attach_source", "expired") and a["at"].startswith("2026-11-23"):
+            print(f"  {a['target']} {a['action']}：{a['detail']}")
 
     print("\n脚本：")
     for sc in pipe.scripts.values():

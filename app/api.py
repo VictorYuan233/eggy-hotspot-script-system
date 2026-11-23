@@ -12,6 +12,7 @@ from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+from . import feedback
 from .collector import SourceNotAuthorized
 from .config import DATA_DIR
 from .llm import AnthropicLLM, ReplayLLM
@@ -61,7 +62,19 @@ class Decision(BaseModel):
 def intake_seed():
     seed = json.loads((DATA_DIR / "seed_hotspots.json").read_text(encoding="utf-8"))
     raw = [{**s, "fetched_at": seed["collected_at"]} for s in seed["snapshots"]]
-    return [to_dict(e) for e in guard(lambda: pipe.run_intake(raw, now()))]
+    return [to_dict(e) for e in guard(lambda: pipe.run_intake(raw, now(), "manual"))]
+
+
+@app.post("/crawl/run")
+def crawl_run():
+    """立即执行一轮定时采集（拉取授权清单里配置的 RSS）。"""
+    from .scheduler import run_once
+    return guard(lambda: run_once(pipe, now()))
+
+
+@app.get("/feedback")
+def feedback_suggestions():
+    return feedback.suggestions(pipe.store.audit())
 
 
 @app.post("/intake/submit")
@@ -69,7 +82,7 @@ def submit(link: SubmitLink):
     item = {"id": link.id, "source_id": "manual_submit", "title": link.title, "url": link.url,
             "publisher": f"运营提交：{link.submitted_by}", "platform": "manual",
             "published_at": now().isoformat(), "summary": link.summary}
-    return [to_dict(e) for e in guard(lambda: pipe.run_intake([item], now()))]
+    return [to_dict(e) for e in guard(lambda: pipe.run_intake([item], now(), f"submit-{link.id}"))]
 
 
 @app.get("/events")

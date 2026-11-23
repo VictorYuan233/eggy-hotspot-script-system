@@ -120,6 +120,7 @@ class Event:
     flags: list[str] = field(default_factory=list)   # 例如 legal_required、own_ops
     score: dict[str, Any] = field(default_factory=dict)
     fast_lane: bool = False
+    context: dict[str, Any] = field(default_factory=dict)   # 生成脚本时用的事实卡和设定
 
 
 @dataclass
@@ -160,3 +161,16 @@ def to_dict(obj: Any) -> Any:
 
 def parse_time(value: str) -> datetime:
     return datetime.fromisoformat(value)
+
+
+def event_from_dict(d: dict) -> Event:
+    d = dict(d)
+    d["status"] = EventStatus(d["status"])
+    d["facts"] = [Fact(**f) for f in d.get("facts", [])]
+    return Event(**d)
+
+
+def script_from_dict(d: dict) -> Script:
+    d = dict(d)
+    d["status"] = ScriptStatus(d["status"])
+    return Script(**d)

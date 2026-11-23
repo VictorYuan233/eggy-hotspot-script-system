@@ -1,5 +1,5 @@
 {
-  "version": "sources-v1-2026-11-22",
+  "version": "sources-v2-2026-11-23",
   "note": "数据源授权清单。采集器只调用 status=active 且未过期的数据源；其余一律跳过并记审计日志。下面的平台接口和第三方数据服务都是占位配置：项目尚未签约，所以是 inactive。",
   "sources": [
     {
@@ -14,10 +14,16 @@
       "id": "public_rss",
       "name": "新闻网站公开 RSS",
       "kind": "rss",
-      "auth": "公开 RSS，按网站条款使用（上线前由法务逐站确认）",
+      "auth": "公开 RSS，按中国新闻网使用条款引用标题与链接；正文只存档不转载（上线前由法务逐站确认）",
       "status": "active",
       "valid_until": "2027-06-30",
-      "feeds": []
+      "feeds": [
+        {
+          "name": "中国新闻网·滚动新闻",
+          "url": "https://www.chinanews.com.cn/rss/scroll-news.xml",
+          "interval_minutes": 15
+        }
+      ]
     },
     {
       "id": "weibo_open_api",

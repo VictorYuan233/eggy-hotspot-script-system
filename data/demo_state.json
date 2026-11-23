@@ -1,6 +1,426 @@
 {
  "snapshots": [
   {
+   "id": "C10736019",
+   "source_id": "public_rss",
+   "title": "印尼一糖果厂发生火灾致3人死亡 数十人失联",
+   "url": "https://www.chinanews.com.cn/gj/2026/11-22/10736019.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:34:28+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736024",
+   "source_id": "public_rss",
+   "title": "侨乡福建福清：中国现存最大的布袋弥勒造像吸引参观者",
+   "url": "https://www.chinanews.com.cn/tp/2026/11-22/10736024.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:52:38+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736026",
+   "source_id": "public_rss",
+   "title": "广西推进林浆纸原料保供 打造沿江沿海纸产业集群",
+   "url": "https://www.chinanews.com.cn/cj/2026/11-22/10736026.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:31:13+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736028",
+   "source_id": "public_rss",
+   "title": "粤桂企业合作畅通“桂品入湾”渠道 开拓东盟市场",
+   "url": "https://www.chinanews.com.cn/aseaninfo/2026/11-22/10736028.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:31:33+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736029",
+   "source_id": "public_rss",
+   "title": "200余名中外人士徒步寻访“南京安全区”",
+   "url": "https://www.chinanews.com.cn/sh/2026/11-22/10736029.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:31:07+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736030",
+   "source_id": "public_rss",
+   "title": "AI如何“牵手”历史经典产业？各界人士在杭州共话新可能",
+   "url": "https://www.chinanews.com.cn/cj/2026/11-22/10736030.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:33:43+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736031",
+   "source_id": "public_rss",
+   "title": "全国“最美五老”何红明：点亮边疆万千少年“心灯”",
+   "url": "https://www.chinanews.com.cn/sh/2026/11-22/10736031.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:35:21+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736032",
+   "source_id": "public_rss",
+   "title": "从杭州看全球丝绸治理：一座产业城市为何成为新坐标？",
+   "url": "https://www.chinanews.com.cn/cj/2026/11-22/10736032.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:39:35+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736033",
+   "source_id": "public_rss",
+   "title": "陕西青少年击剑总决赛古城举行 600余名“小剑客”亮剑争锋",
+   "url": "https://www.chinanews.com.cn/ty/2026/11-22/10736033.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:39:49+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736034",
+   "source_id": "public_rss",
+   "title": "【和合共生】习言道｜历史性会晤里的历史与未来",
+   "url": "https://www.chinanews.com.cn/gn/2026/11-22/10736034.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:02:03+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736035",
+   "source_id": "public_rss",
+   "title": "“零碳暖流”、AI控温 核能供暖是一种什么样的体验",
+   "url": "https://www.chinanews.com.cn/sh/2026/11-22/10736035.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:41:48+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736036",
+   "source_id": "public_rss",
+   "title": "韩国总统李在明受理教育部长官崔教振辞呈",
+   "url": "https://www.chinanews.com.cn/gj/2026/11-22/10736036.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:42:38+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736042",
+   "source_id": "public_rss",
+   "title": "冬季如何正确养生？一起听听老话怎么说",
+   "url": "https://www.chinanews.com.cn/life/2026/11-22/10736042.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T13:53:18+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "央视新闻客户端文章（中新网刊发）：11月22日15时23分迎来小雪节气；小雪前后是腌菜、腌肉的传统时节；建议注意足部保暖。",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736043",
+   "source_id": "public_rss",
+   "title": "粤桂湘滇文艺队伍齐聚广东连南 盘王节主题晚会举行",
+   "url": "https://www.chinanews.com.cn/txy/2026/11-22/10736043.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:16:29+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736044",
+   "source_id": "public_rss",
+   "title": "贵州铜仁：野生鸳鸯冬日戏水绘生态画卷",
+   "url": "https://www.chinanews.com.cn/tp/2026/11-22/10736044.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:30:30+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "11月21日，200余只野生鸳鸯飞抵贵州铜仁碧江区国家湿地公园越冬。",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736045",
+   "source_id": "public_rss",
+   "title": "沈阳苏家屯冬季游系列活动启幕",
+   "url": "https://www.chinanews.com.cn/tp/2026/11-22/10736045.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:33:46+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "11月22日，沈阳苏家屯区2026—2027年冬季游系列活动在苏家屯大集启动。",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736046",
+   "source_id": "public_rss",
+   "title": "湖北宜昌：千余名冬泳爱好者横渡长江",
+   "url": "https://www.chinanews.com.cn/tp/2026/11-22/10736046.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:41:45+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "11月21日，全国66支代表队的千余名冬泳爱好者在湖北宜昌横渡长江。",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736047",
+   "source_id": "public_rss",
+   "title": "（东西问·兰花奖）英国导演柯文思：真实的中国生活就是最好的叙事",
+   "url": "https://www.chinanews.com.cn/gn/2026/11-22/10736047.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:29:12+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736048",
+   "source_id": "public_rss",
+   "title": "陈文清将赴德国出席第六次中德高级别安全对话并访问德国、奥地利",
+   "url": "https://www.chinanews.com.cn/gn/2026/11-22/10736048.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:30:28+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736051",
+   "source_id": "public_rss",
+   "title": "中国排球名宿郎平获颁国际排联最高荣誉“排球勋章”",
+   "url": "https://www.chinanews.com.cn/ty/2026/11-22/10736051.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:39:17+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736052",
+   "source_id": "public_rss",
+   "title": "2026年“海韵乡情”世界闽南语吟唱大会在福建漳州召开",
+   "url": "https://www.chinanews.com.cn/cul/2026/11-22/10736052.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:44:51+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736055",
+   "source_id": "public_rss",
+   "title": "哈尔滨全民滑雪年启动 解锁全新冰雪运动时代",
+   "url": "https://www.chinanews.com.cn/ty/2026/11-22/10736055.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T14:58:08+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "11月22日，哈尔滨举行全民滑雪年启动仪式，同时开启首届越野滑雪公开赛；公开赛面向8至12岁的中小学生。",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736057",
+   "source_id": "public_rss",
+   "title": "五年覆盖全国近30城，百事集团净滩环保行动步履不停",
+   "url": "https://www.chinanews.com.cn/cj/2026/11-22/10736057.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T15:04:52+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736058",
+   "source_id": "public_rss",
+   "title": "15个创业项目登台“找市场” 东南大学举行OPC学生路演专场",
+   "url": "https://www.chinanews.com.cn/cj/2026/11-22/10736058.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T15:09:50+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736059",
+   "source_id": "public_rss",
+   "title": "“冬日雪暖阳·好戏在沈阳”——沈阳苏家屯农民画主题大集启幕",
+   "url": "https://www.chinanews.com.cn/sh/2026/11-22/10736059.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T15:08:56+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "11月22日，沈阳苏家屯农民画主题大集首次开集，区冬季游系列活动同日启幕，白清寨滑雪场已开板。",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736060",
+   "source_id": "public_rss",
+   "title": "陈晓卿新作前往24地寻色 讲述刻在基因里的中国色",
+   "url": "https://www.chinanews.com.cn/cul/2026/11-22/10736060.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T15:08:28+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736061",
+   "source_id": "public_rss",
+   "title": "“中山魂·中华情：纪念孙中山先生诞辰160周年”学术研讨会在福州举行",
+   "url": "https://www.chinanews.com.cn/txy/2026/11-22/10736061.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T15:07:58+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736062",
+   "source_id": "public_rss",
+   "title": "苏州“同心合锦”围巾登上国际舞台受热捧",
+   "url": "https://www.chinanews.com.cn/cj/2026/11-22/10736062.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T15:07:28+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736063",
+   "source_id": "public_rss",
+   "title": "南珠高铁控制性工程文思隧道顺利贯通",
+   "url": "https://www.chinanews.com.cn/cj/2026/11-22/10736063.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T15:06:56+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
+   "id": "C10736064",
+   "source_id": "public_rss",
+   "title": "瑞士联邦副主席兼外长卡西斯将访华",
+   "url": "https://www.chinanews.com.cn/gn/2026/11-22/10736064.shtml",
+   "publisher": "中国新闻网",
+   "platform": "chinanews",
+   "published_at": "2026-11-22T15:07:10+08:00",
+   "fetched_at": "2026-11-23T14:50:00+08:00",
+   "summary": "",
+   "heat": 0,
+   "heat_series": [],
+   "heat_simulated": false
+  },
+  {
    "id": "R01",
    "source_id": "manual_submit",
    "title": "2026年小雪节气交节时间：11月22日15时23分",
@@ -136,13 +556,13 @@
   {
    "id": "R08",
    "source_id": "manual_submit",
-   "title": "后会友期带火悬崖小屋咨询量增9倍",
-   "url": "https://sina.cn/media/2028810631",
-   "publisher": "新浪新闻（微博）",
-   "platform": "weibo",
-   "published_at": "2026-11-05T21:39:00+08:00",
+   "title": "《后会友期》带火悬崖小屋，民宿日咨询量暴增近9倍",
+   "url": "https://www.ctdsb.net/c1476_202611/2897269.html",
+   "publisher": "楚天都市报（大河报）",
+   "platform": "ctdsb",
+   "published_at": "2026-11-05T22:26:00+08:00",
    "fetched_at": "2026-11-22T21:40:00+08:00",
-   "summary": "芒果TV《后会友期》新一期上线后话题登上微博热搜，带火节目拍摄地的悬崖小屋。",
+   "summary": "11月5日《后会友期》新一期上线后话题登顶微博热搜，节目里的悬崖小屋民宿日咨询量暴增近9倍。",
    "heat": 64,
    "heat_series": [
     70,
@@ -232,12 +652,12 @@
    "id": "R13",
    "source_id": "manual_submit",
    "title": "葡萄牙主帅回应C罗从国家队退役",
-   "url": "https://sina.cn/media/2028810631",
-   "publisher": "新浪新闻（直播吧）",
-   "platform": "weibo",
-   "published_at": "2026-11-05T22:02:00+08:00",
+   "url": "https://ny1.com/nyc/all-boroughs/ap-top-news/2026/11/06/portugal-coach-says-he-had-not-anticipated-cristiano-ronaldos-retirement-despite-their-falling-out",
+   "publisher": "美联社（NY1 转载）",
+   "platform": "ap",
+   "published_at": "2026-11-06T12:00:00+08:00",
    "fetched_at": "2026-11-22T21:40:00+08:00",
-   "summary": "葡萄牙主帅热苏斯表示C罗从国家队退役是其个人决定。",
+   "summary": "葡萄牙主帅热苏斯表示没有预料到C罗会退出国家队，并称应尊重他的决定。",
    "heat": 45,
    "heat_series": [
     80,
@@ -288,13 +708,13 @@
   {
    "id": "R16",
    "source_id": "manual_submit",
-   "title": "印度男子疑妻子出轨将其活活烧死",
-   "url": "https://sina.cn/media/2028810631",
-   "publisher": "新浪新闻",
-   "platform": "weibo",
-   "published_at": "2026-11-05T21:24:00+08:00",
+   "title": "印度北方邦男子疑妻子出轨将其烧死",
+   "url": "https://telanganatoday.com/up-man-allegedly-ties-wife-to-chair-burns-her-alive-over-suspected-affair-flees-with-children",
+   "publisher": "Telangana Today（PTI）",
+   "platform": "ptinews",
+   "published_at": "2026-11-05T11:39:00+05:30",
    "fetched_at": "2026-11-22T21:40:00+08:00",
-   "summary": "印度北方邦发生一起命案。",
+   "summary": "北方邦一名男子涉嫌因怀疑妻子不忠将其烧死后出逃，警方正在搜捕。",
    "heat": 52,
    "heat_series": [
     60,
@@ -307,13 +727,13 @@
   {
    "id": "R17",
    "source_id": "manual_submit",
-   "title": "美国24岁女子跑马拉松身亡",
-   "url": "https://www.sina.cn/media/7752729208",
-   "publisher": "新浪AI",
-   "platform": "weibo",
-   "published_at": "2026-11-04T12:43:00+08:00",
+   "title": "美国24岁女子跑纽约马拉松身亡",
+   "url": "https://www.ksl.com/article/51643418/a-woman-running-the-nyc-marathon-for-charity-dies-2-miles-from-the-finish",
+   "publisher": "美联社（KSL 转载）",
+   "platform": "ap",
+   "published_at": "2026-11-03T12:00:00+08:00",
    "fetched_at": "2026-11-22T21:40:00+08:00",
-   "summary": "纽约马拉松期间一名参赛者倒地后不幸去世。",
+   "summary": "纽约马拉松一名24岁参赛者在距终点约2英里处倒地，随后去世。",
    "heat": 40,
    "heat_series": [
     55,
@@ -351,7 +771,8 @@
    "snapshot_ids": [
     "R01",
     "R02",
-    "R03"
+    "R03",
+    "C10736042"
    ],
    "type": "news",
    "type_reason": "小雪交节时间和日期是可以核实的具体事实。",
@@ -423,7 +844,45 @@
     ],
     "heat_simulated": true
    },
-   "fast_lane": true
+   "fast_lane": true,
+   "context": {
+    "fact_card": [
+     {
+      "id": "F1",
+      "text": "2026年小雪节气于11月22日15时23分交节",
+      "source_ids": [
+       "R01",
+       "R02",
+       "R03"
+      ]
+     },
+     {
+      "id": "F2",
+      "text": "2026年的小雪落在星期日",
+      "source_ids": [
+       "R02",
+       "R03"
+      ]
+     },
+     {
+      "id": "F3",
+      "text": "民间有“小雪腌菜”的习俗",
+      "source_ids": [
+       "R02"
+      ]
+     }
+    ],
+    "setting_ids": [
+     "S01",
+     "S03",
+     "S05",
+     "S04",
+     "B01",
+     "B02",
+     "B03",
+     "B04"
+    ]
+   }
   },
   {
    "id": "E02",
@@ -506,7 +965,47 @@
     ],
     "heat_simulated": true
    },
-   "fast_lane": false
+   "fast_lane": false,
+   "context": {
+    "fact_card": [
+     {
+      "id": "F1",
+      "text": "吉林省雪假安排在12月1日至20日期间，3个工作日与周末连休，形成5天小长假",
+      "source_ids": [
+       "R04"
+      ]
+     },
+     {
+      "id": "F2",
+      "text": "吉林雪假期间，学生免费滑雪滑冰的次数由1次增至3次，每次3小时",
+      "source_ids": [
+       "R06"
+      ]
+     },
+     {
+      "id": "F3",
+      "text": "吉林、内蒙古呼伦贝尔、新疆阿勒泰、河北张家口等地公布了雪假安排",
+      "source_ids": [
+       "R05"
+      ]
+     },
+     {
+      "id": "F4",
+      "text": "长春将于2027年1月举办第33届世界大学生冬季运动会",
+      "source_ids": [
+       "R06"
+      ]
+     }
+    ],
+    "setting_ids": [
+     "S03",
+     "S04",
+     "B01",
+     "B02",
+     "B03",
+     "B04"
+    ]
+   }
   },
   {
    "id": "E03",
@@ -527,12 +1026,12 @@
     "kind": "meme",
     "origin": {
      "snapshot_id": "R08",
-     "url": "https://sina.cn/media/2028810631",
-     "publisher": "新浪新闻（微博）"
+     "url": "https://www.ctdsb.net/c1476_202611/2897269.html",
+     "publisher": "楚天都市报（大河报）"
     },
     "platforms": [
      "bjnews",
-     "weibo"
+     "ctdsb"
     ],
     "harmless": true,
     "involves_real_person": true,
@@ -566,7 +1065,34 @@
     ],
     "heat_simulated": true
    },
-   "fast_lane": false
+   "fast_lane": false,
+   "context": {
+    "fact_card": [
+     {
+      "id": "F1",
+      "text": "新京报：综艺《后会友期》带火“厉娜体”：网友在日常感慨后加一句“厉娜”当句号，例如“我下班了，厉娜”。",
+      "source_ids": [
+       "R07"
+      ]
+     },
+     {
+      "id": "F2",
+      "text": "楚天都市报（大河报）：11月5日《后会友期》新一期上线后话题登顶微博热搜，节目里的悬崖小屋民宿日咨询量暴增近9倍。",
+      "source_ids": [
+       "R08"
+      ]
+     }
+    ],
+    "setting_ids": [
+     "S03",
+     "S05",
+     "S04",
+     "B01",
+     "B02",
+     "B03",
+     "B04"
+    ]
+   }
   },
   {
    "id": "E04",
@@ -588,7 +1114,8 @@
     "own_ops"
    ],
    "score": {},
-   "fast_lane": false
+   "fast_lane": false,
+   "context": {}
   },
   {
    "id": "E05",
@@ -607,7 +1134,8 @@
    "verification": {},
    "flags": [],
    "score": {},
-   "fast_lane": false
+   "fast_lane": false,
+   "context": {}
   },
   {
    "id": "E06",
@@ -626,7 +1154,8 @@
    "verification": {},
    "flags": [],
    "score": {},
-   "fast_lane": false
+   "fast_lane": false,
+   "context": {}
   },
   {
    "id": "E07",
@@ -638,14 +1167,15 @@
    "type": "news",
    "type_reason": "球员退役是可以核实的体育新闻。",
    "status": "expired",
-   "status_reason": "已于 11-12 22:02 过期",
-   "expire_at": "2026-11-12T22:02:00+08:00",
+   "status_reason": "已于 11-13 12:00 过期",
+   "expire_at": "2026-11-13T12:00:00+08:00",
    "urgency": "normal",
    "facts": [],
    "verification": {},
    "flags": [],
    "score": {},
-   "fast_lane": false
+   "fast_lane": false,
+   "context": {}
   },
   {
    "id": "E08",
@@ -713,31 +1243,33 @@
     "risks": [],
     "heat_simulated": true
    },
-   "fast_lane": false
+   "fast_lane": false,
+   "context": {}
   },
   {
    "id": "E09",
    "key": "R16",
-   "title": "印度男子疑妻子出轨将其活活烧死",
+   "title": "印度北方邦男子疑妻子出轨将其烧死",
    "snapshot_ids": [
     "R16"
    ],
    "type": "unknown",
    "type_reason": "",
    "status": "rejected",
-   "status_reason": "红线预过滤：暴力犯罪:烧死、暴力犯罪:命案",
+   "status_reason": "红线预过滤：暴力犯罪:烧死",
    "expire_at": "",
    "urgency": "normal",
    "facts": [],
    "verification": {},
    "flags": [],
    "score": {},
-   "fast_lane": false
+   "fast_lane": false,
+   "context": {}
   },
   {
    "id": "E10",
    "key": "R17",
-   "title": "美国24岁女子跑马拉松身亡",
+   "title": "美国24岁女子跑纽约马拉松身亡",
    "snapshot_ids": [
     "R17"
    ],
@@ -751,7 +1283,8 @@
    "verification": {},
    "flags": [],
    "score": {},
-   "fast_lane": false
+   "fast_lane": false,
+   "context": {}
   },
   {
    "id": "E11",
@@ -783,7 +1316,247 @@
    },
    "flags": [],
    "score": {},
-   "fast_lane": false
+   "fast_lane": false,
+   "context": {}
+  },
+  {
+   "id": "E12",
+   "key": "C10736044",
+   "title": "贵州铜仁：野生鸳鸯冬日戏水绘生态画卷",
+   "snapshot_ids": [
+    "C10736044"
+   ],
+   "type": "news",
+   "type_reason": "鸳鸯越冬的时间、地点、数量是可以核实的事实。",
+   "status": "not_recommended",
+   "status_reason": "总分 44.8，低于推荐线 60",
+   "expire_at": "2026-11-29T14:30:30+08:00",
+   "urgency": "normal",
+   "facts": [
+    {
+     "id": "F1",
+     "text": "11月21日，200余只野生鸳鸯飞抵贵州铜仁碧江区国家湿地公园越冬",
+     "source_ids": [
+      "C10736044"
+     ]
+    }
+   ],
+   "verification": {
+    "kind": "news",
+    "tiers": {
+     "C10736044": "A"
+    },
+    "independent_domains": [
+     "com.cn"
+    ],
+    "has_official": true,
+    "dropped_facts": []
+   },
+   "flags": [],
+   "score": {
+    "parts": {
+     "relevance": 20.0,
+     "meme_potential": 30.0,
+     "tone_fit": 70.0,
+     "timeliness": 85.5,
+     "heat_momentum": 50.0
+    },
+    "total": 44.8,
+    "angle": "",
+    "platforms": [],
+    "reason": "生态新闻画面治愈，但和游戏没有可结合的点。",
+    "risks": [],
+    "heat_simulated": true
+   },
+   "fast_lane": false,
+   "context": {}
+  },
+  {
+   "id": "E13",
+   "key": "C10736045",
+   "title": "沈阳苏家屯冬季游系列活动启幕",
+   "snapshot_ids": [
+    "C10736045",
+    "C10736059"
+   ],
+   "type": "news",
+   "type_reason": "冬季游活动的时间、地点是可以核实的事实。",
+   "status": "not_recommended",
+   "status_reason": "总分 48.3，低于推荐线 60",
+   "expire_at": "2026-11-29T15:08:56+08:00",
+   "urgency": "normal",
+   "facts": [
+    {
+     "id": "F1",
+     "text": "11月22日，沈阳苏家屯区冬季游系列活动启动",
+     "source_ids": [
+      "C10736045",
+      "C10736059"
+     ]
+    },
+    {
+     "id": "F2",
+     "text": "苏家屯农民画主题大集当天首次开集",
+     "source_ids": [
+      "C10736059"
+     ]
+    }
+   ],
+   "verification": {
+    "kind": "news",
+    "tiers": {
+     "C10736045": "A",
+     "C10736059": "A"
+    },
+    "independent_domains": [
+     "com.cn"
+    ],
+    "has_official": true,
+    "dropped_facts": []
+   },
+   "flags": [],
+   "score": {
+    "parts": {
+     "relevance": 30.0,
+     "meme_potential": 35.0,
+     "tone_fit": 65.0,
+     "timeliness": 85.6,
+     "heat_momentum": 50.0
+    },
+    "total": 48.3,
+    "angle": "",
+    "platforms": [],
+    "reason": "地方文旅活动，和游戏玩法、玩家群体关联较弱。",
+    "risks": [],
+    "heat_simulated": true
+   },
+   "fast_lane": false,
+   "context": {}
+  },
+  {
+   "id": "E14",
+   "key": "C10736046",
+   "title": "湖北宜昌：千余名冬泳爱好者横渡长江",
+   "snapshot_ids": [
+    "C10736046"
+   ],
+   "type": "news",
+   "type_reason": "冬泳横渡活动的时间、人数是可以核实的事实。",
+   "status": "not_recommended",
+   "status_reason": "总分 46.6，低于推荐线 60",
+   "expire_at": "2026-11-29T14:41:45+08:00",
+   "urgency": "normal",
+   "facts": [
+    {
+     "id": "F1",
+     "text": "11月21日，千余名冬泳爱好者在湖北宜昌横渡长江",
+     "source_ids": [
+      "C10736046"
+     ]
+    },
+    {
+     "id": "F2",
+     "text": "参加者来自全国66支代表队",
+     "source_ids": [
+      "C10736046"
+     ]
+    }
+   ],
+   "verification": {
+    "kind": "news",
+    "tiers": {
+     "C10736046": "A"
+    },
+    "independent_domains": [
+     "com.cn"
+    ],
+    "has_official": true,
+    "dropped_facts": []
+   },
+   "flags": [],
+   "score": {
+    "parts": {
+     "relevance": 25.0,
+     "meme_potential": 40.0,
+     "tone_fit": 60.0,
+     "timeliness": 85.6,
+     "heat_momentum": 50.0
+    },
+    "total": 46.6,
+    "angle": "",
+    "platforms": [],
+    "reason": "冬泳是成年人为主的运动，和游戏关联弱，模仿也有安全风险。",
+    "risks": [
+     "不宜引导青少年模仿冬泳"
+    ],
+    "heat_simulated": true
+   },
+   "fast_lane": false,
+   "context": {}
+  },
+  {
+   "id": "E15",
+   "key": "C10736055",
+   "title": "哈尔滨全民滑雪年启动 解锁全新冰雪运动时代",
+   "snapshot_ids": [
+    "C10736055"
+   ],
+   "type": "news",
+   "type_reason": "全民滑雪年启动和公开赛安排是可以核实的事实。",
+   "status": "to_select",
+   "status_reason": "总分 65.5，进入候选看板",
+   "expire_at": "2026-11-29T14:58:08+08:00",
+   "urgency": "normal",
+   "facts": [
+    {
+     "id": "F1",
+     "text": "11月22日，哈尔滨启动全民滑雪年",
+     "source_ids": [
+      "C10736055"
+     ]
+    },
+    {
+     "id": "F2",
+     "text": "首届越野滑雪公开赛面向8至12岁的中小学生",
+     "source_ids": [
+      "C10736055"
+     ]
+    }
+   ],
+   "verification": {
+    "kind": "news",
+    "tiers": {
+     "C10736055": "A"
+    },
+    "independent_domains": [
+     "com.cn"
+    ],
+    "has_official": true,
+    "dropped_facts": []
+   },
+   "flags": [],
+   "score": {
+    "parts": {
+     "relevance": 60.0,
+     "meme_potential": 55.0,
+     "tone_fit": 78.0,
+     "timeliness": 85.8,
+     "heat_momentum": 50.0
+    },
+    "total": 65.5,
+    "angle": "哈尔滨开启全民滑雪年：蛋仔们在雪坡上来一场“滚雪球越野赛”，结尾鼓励小朋友去真雪场体验。",
+    "platforms": [
+     "douyin"
+    ],
+    "reason": "冰雪运动和蛋仔的滚动、竞速玩法契合，面向中小学生的公开赛与玩家群体重合；与雪假选题角度相近，建议错开发布时间。",
+    "risks": [
+     "面向未成年人，不能鼓励长时间游戏",
+     "与雪假选题角度重叠，注意内容差异化"
+    ],
+    "heat_simulated": true
+   },
+   "fast_lane": false,
+   "context": {}
   }
  ],
  "scripts": [
@@ -843,8 +1616,8 @@
    },
    "status": "revising",
    "pregenerated": true,
-   "setting_version": "setting-v1-2026-11-22",
-   "prompt_version": "rules-v1-2026-11-22",
+   "setting_version": "setting-v2-2026-11-23",
+   "prompt_version": "rules-v2-2026-11-23",
    "reviews": [
     {
      "round": 0,
@@ -860,6 +1633,12 @@
        "rule": "广告法极限词",
        "where": "",
        "problem": "命中：最好"
+      },
+      {
+       "severity": "block",
+       "rule": "适龄提示",
+       "where": "结尾",
+       "problem": "缺少必备元素：适龄提示"
       }
      ],
      "judge": {
@@ -924,7 +1703,7 @@
      },
      {
       "t": "22-26s",
-      "visual": "定格：蛋仔们挤成一团，屏幕弹出“今年小雪在周日”",
+      "visual": "定格：蛋仔们挤成一团，屏幕弹出“今年小雪在周日”，画面右下角放置适龄提示标识",
       "line": "今年小雪在周日，叫上蛋搭子来岛上玩雪吧"
      }
     ],
@@ -949,8 +1728,8 @@
    },
    "status": "approved",
    "pregenerated": true,
-   "setting_version": "setting-v1-2026-11-22",
-   "prompt_version": "rules-v1-2026-11-22",
+   "setting_version": "setting-v2-2026-11-23",
+   "prompt_version": "rules-v2-2026-11-23",
    "reviews": [
     {
      "round": 1,
@@ -996,7 +1775,7 @@
      },
      {
       "t": "18-24s",
-      "visual": "蛋仔们在雪地里排出一个大大的笑脸",
+      "visual": "蛋仔们在雪地里排出一个大大的笑脸，画面右下角放置适龄提示标识",
       "line": "冬天的仪式感，和好碰友一起收下吧"
      }
     ],
@@ -1020,8 +1799,8 @@
    },
    "status": "approved",
    "pregenerated": true,
-   "setting_version": "setting-v1-2026-11-22",
-   "prompt_version": "rules-v1-2026-11-22",
+   "setting_version": "setting-v2-2026-11-23",
+   "prompt_version": "rules-v2-2026-11-23",
    "reviews": [
     {
      "round": 0,
@@ -1072,7 +1851,7 @@
      },
      {
       "t": "24-28s",
-      "visual": "定格：蛋仔举着“雪假快乐”的牌子",
+      "visual": "定格：蛋仔举着“雪假快乐”的牌子，画面右下角放置适龄提示标识",
       "line": "北方的家蛋们，雪假快乐！"
      }
     ],
@@ -1095,8 +1874,8 @@
    },
    "status": "approved",
    "pregenerated": false,
-   "setting_version": "setting-v1-2026-11-22",
-   "prompt_version": "rules-v1-2026-11-22",
+   "setting_version": "setting-v2-2026-11-23",
+   "prompt_version": "rules-v2-2026-11-23",
    "reviews": [
     {
      "round": 0,
@@ -1147,7 +1926,7 @@
      },
      {
       "t": "18-22s",
-      "visual": "蛋仔和蛋搭子一起瘫在地上大笑",
+      "visual": "蛋仔和蛋搭子一起瘫在地上大笑，画面右下角放置适龄提示标识",
       "line": "但和蛋搭子一起输，也挺开心的，厉娜。"
      }
     ],
@@ -1168,8 +1947,8 @@
    },
    "status": "awaiting_final",
    "pregenerated": false,
-   "setting_version": "setting-v1-2026-11-22",
-   "prompt_version": "rules-v1-2026-11-22",
+   "setting_version": "setting-v2-2026-11-23",
+   "prompt_version": "rules-v2-2026-11-23",
    "reviews": [
     {
      "round": 0,
@@ -1254,7 +2033,7 @@
    "actor": "system",
    "action": "snapshot_saved",
    "target": "R08",
-   "detail": "manual_submit | https://sina.cn/media/2028810631"
+   "detail": "manual_submit | https://www.ctdsb.net/c1476_202611/2897269.html"
   },
   {
    "at": "2026-11-22T21:45:00+08:00",
@@ -1289,7 +2068,7 @@
    "actor": "system",
    "action": "snapshot_saved",
    "target": "R13",
-   "detail": "manual_submit | https://sina.cn/media/2028810631"
+   "detail": "manual_submit | https://ny1.com/nyc/all-boroughs/ap-top-news/2026/11/06/portugal-coach-says-he-had-not-anticipated-cristiano-ronaldos-retirement-despite-their-falling-out"
   },
   {
    "at": "2026-11-22T21:45:00+08:00",
@@ -1310,14 +2089,14 @@
    "actor": "system",
    "action": "snapshot_saved",
    "target": "R16",
-   "detail": "manual_submit | https://sina.cn/media/2028810631"
+   "detail": "manual_submit | https://telanganatoday.com/up-man-allegedly-ties-wife-to-chair-burns-her-alive-over-suspected-affair-flees-with-children"
   },
   {
    "at": "2026-11-22T21:45:00+08:00",
    "actor": "system",
    "action": "snapshot_saved",
    "target": "R17",
-   "detail": "manual_submit | https://www.sina.cn/media/7752729208"
+   "detail": "manual_submit | https://www.ksl.com/article/51643418/a-woman-running-the-nyc-marathon-for-charity-dies-2-miles-from-the-finish"
   },
   {
    "at": "2026-11-22T21:45:00+08:00",
@@ -1328,9 +2107,16 @@
   },
   {
    "at": "2026-11-22T21:45:00+08:00",
+   "actor": "system",
+   "action": "crawl_round",
+   "target": "manual",
+   "detail": "收到 18 条，新入库 18 条"
+  },
+  {
+   "at": "2026-11-22T21:45:00+08:00",
    "actor": "llm",
    "action": "merge_events",
-   "target": "all",
+   "target": "manual",
    "detail": "R06 和 R04 都在报道北方多地的雪假安排；R08 是《后会友期》登上热搜，R07 是这档节目带火的“厉娜体”，属于同一个热点。"
   },
   {
@@ -1394,7 +2180,7 @@
    "actor": "system",
    "action": "expired",
    "target": "E07",
-   "detail": "已于 11-12 22:02 过期"
+   "detail": "已于 11-13 12:00 过期"
   },
   {
    "at": "2026-11-22T21:45:00+08:00",
@@ -1408,7 +2194,7 @@
    "actor": "system",
    "action": "redline_reject",
    "target": "E09",
-   "detail": "红线预过滤：暴力犯罪:烧死、暴力犯罪:命案"
+   "detail": "红线预过滤：暴力犯罪:烧死"
   },
   {
    "at": "2026-11-22T21:45:00+08:00",
@@ -1548,7 +2334,7 @@
    "actor": "system",
    "action": "review",
    "target": "E01-douyin-v1",
-   "detail": "规则问题 2 个；模型评审未通过；结果：revising"
+   "detail": "规则问题 3 个；模型评审未通过；结果：revising"
   },
   {
    "at": "2026-11-22T21:45:00+08:00",
@@ -1640,6 +2426,356 @@
    "action": "review",
    "target": "E03-douyin-v1",
    "detail": "规则问题 0 个；模型评审通过；结果：awaiting_final"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736058",
+   "detail": "public_rss | https://www.chinanews.com.cn/cj/2026/11-22/10736058.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736059",
+   "detail": "public_rss | https://www.chinanews.com.cn/sh/2026/11-22/10736059.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736060",
+   "detail": "public_rss | https://www.chinanews.com.cn/cul/2026/11-22/10736060.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736061",
+   "detail": "public_rss | https://www.chinanews.com.cn/txy/2026/11-22/10736061.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736062",
+   "detail": "public_rss | https://www.chinanews.com.cn/cj/2026/11-22/10736062.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736064",
+   "detail": "public_rss | https://www.chinanews.com.cn/gn/2026/11-22/10736064.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736063",
+   "detail": "public_rss | https://www.chinanews.com.cn/cj/2026/11-22/10736063.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736057",
+   "detail": "public_rss | https://www.chinanews.com.cn/cj/2026/11-22/10736057.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736055",
+   "detail": "public_rss | https://www.chinanews.com.cn/ty/2026/11-22/10736055.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736052",
+   "detail": "public_rss | https://www.chinanews.com.cn/cul/2026/11-22/10736052.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736046",
+   "detail": "public_rss | https://www.chinanews.com.cn/tp/2026/11-22/10736046.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736051",
+   "detail": "public_rss | https://www.chinanews.com.cn/ty/2026/11-22/10736051.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736019",
+   "detail": "public_rss | https://www.chinanews.com.cn/gj/2026/11-22/10736019.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736045",
+   "detail": "public_rss | https://www.chinanews.com.cn/tp/2026/11-22/10736045.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736044",
+   "detail": "public_rss | https://www.chinanews.com.cn/tp/2026/11-22/10736044.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736048",
+   "detail": "public_rss | https://www.chinanews.com.cn/gn/2026/11-22/10736048.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736047",
+   "detail": "public_rss | https://www.chinanews.com.cn/gn/2026/11-22/10736047.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736043",
+   "detail": "public_rss | https://www.chinanews.com.cn/txy/2026/11-22/10736043.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736034",
+   "detail": "public_rss | https://www.chinanews.com.cn/gn/2026/11-22/10736034.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736042",
+   "detail": "public_rss | https://www.chinanews.com.cn/life/2026/11-22/10736042.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736024",
+   "detail": "public_rss | https://www.chinanews.com.cn/tp/2026/11-22/10736024.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736036",
+   "detail": "public_rss | https://www.chinanews.com.cn/gj/2026/11-22/10736036.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736035",
+   "detail": "public_rss | https://www.chinanews.com.cn/sh/2026/11-22/10736035.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736033",
+   "detail": "public_rss | https://www.chinanews.com.cn/ty/2026/11-22/10736033.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736032",
+   "detail": "public_rss | https://www.chinanews.com.cn/cj/2026/11-22/10736032.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736031",
+   "detail": "public_rss | https://www.chinanews.com.cn/sh/2026/11-22/10736031.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736030",
+   "detail": "public_rss | https://www.chinanews.com.cn/cj/2026/11-22/10736030.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736028",
+   "detail": "public_rss | https://www.chinanews.com.cn/aseaninfo/2026/11-22/10736028.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736026",
+   "detail": "public_rss | https://www.chinanews.com.cn/cj/2026/11-22/10736026.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "snapshot_saved",
+   "target": "C10736029",
+   "detail": "public_rss | https://www.chinanews.com.cn/sh/2026/11-22/10736029.shtml"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "crawl_round",
+   "target": "rss-2026-11-23",
+   "detail": "收到 30 条，新入库 30 条"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "prefilter_skip",
+   "target": "rss-2026-11-23",
+   "detail": "粗筛未通过 24 条，只存档不进入流程"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "merge_events",
+   "target": "rss-2026-11-23",
+   "detail": "C10736042 是央视发布的小雪节气稿件，和已有的小雪事件是同一件事；C10736045 与 C10736059 都在报道沈阳苏家屯冬季游启幕。"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "classify",
+   "target": "E12",
+   "detail": "news：鸳鸯越冬的时间、地点、数量是可以核实的事实。"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "classify",
+   "target": "E13",
+   "detail": "news：冬季游活动的时间、地点是可以核实的事实。"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "classify",
+   "target": "E14",
+   "detail": "news：冬泳横渡活动的时间、人数是可以核实的事实。"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "classify",
+   "target": "E15",
+   "detail": "news：全民滑雪年启动和公开赛安排是可以核实的事实。"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "attach_source",
+   "target": "E01",
+   "detail": "补充来源 C10736042，证据链更新"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "extract_facts",
+   "target": "E12",
+   "detail": "抽出 1 条，规则保留 1 条"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "score",
+   "target": "E12",
+   "detail": "相关度20 玩梗30 调性70"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "rank",
+   "target": "E12",
+   "detail": "总分 44.8，低于推荐线 60"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "extract_facts",
+   "target": "E13",
+   "detail": "抽出 2 条，规则保留 2 条"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "score",
+   "target": "E13",
+   "detail": "相关度30 玩梗35 调性65"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "rank",
+   "target": "E13",
+   "detail": "总分 48.3，低于推荐线 60"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "extract_facts",
+   "target": "E14",
+   "detail": "抽出 2 条，规则保留 2 条"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "score",
+   "target": "E14",
+   "detail": "相关度25 玩梗40 调性60"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "rank",
+   "target": "E14",
+   "detail": "总分 46.6，低于推荐线 60"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "extract_facts",
+   "target": "E15",
+   "detail": "抽出 2 条，规则保留 2 条"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "llm",
+   "action": "score",
+   "target": "E15",
+   "detail": "相关度60 玩梗55 调性78"
+  },
+  {
+   "at": "2026-11-23T14:50:00+08:00",
+   "actor": "system",
+   "action": "rank",
+   "target": "E15",
+   "detail": "总分 65.5，进入候选看板"
   }
  ],
  "contexts": {
@@ -1732,7 +2868,7 @@
     },
     {
      "id": "F2",
-     "text": "新浪新闻（微博）：芒果TV《后会友期》新一期上线后话题登上微博热搜，带火节目拍摄地的悬崖小屋。",
+     "text": "楚天都市报（大河报）：11月5日《后会友期》新一期上线后话题登顶微博热搜，节目里的悬崖小屋民宿日咨询量暴增近9倍。",
      "source_ids": [
       "R08"
      ]

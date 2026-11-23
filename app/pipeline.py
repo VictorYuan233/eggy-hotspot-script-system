@@ -8,8 +8,9 @@ from .clustering import build_events
 from .collector import Collector
 from .generator import generate
 from .llm import LLM
+from . import config as _config
 from .models import (EVENT_TRANSITIONS, SCRIPT_TRANSITIONS, AuditEntry, Event, EventStatus, Script,
-                     ScriptStatus, check_transition, to_dict)
+                     ScriptStatus, check_transition, event_from_dict, script_from_dict, to_dict)
 from .reviewer import review_loop
 from .scorer import pick_fast_lane, score_event
 from .store import Store
@@ -23,12 +24,18 @@ class HumanGateError(PermissionError):
 
 
 class Pipeline:
-    def __init__(self, store: Store, llm: LLM):
+    def __init__(self, store: Store, llm: LLM, notifier=None):
         self.store = store
         self.llm = llm
-        self.events: dict[str, Event] = {}
-        self.scripts: dict[str, Script] = {}
-        self._ctx: dict[str, tuple] = {}   # event_id -> (fact_card, settings)
+        self.notifier = notifier
+        # 从数据库恢复：常驻的定时采集重启后能接着上一轮继续
+        self.events: dict[str, Event] = {d["id"]: event_from_dict(d) for d in store.all("events")}
+        self.scripts: dict[str, Script] = {d["id"]: script_from_dict(d) for d in store.all("scripts")}
+
+    def _ctx(self, ev: Event) -> tuple[list[dict], list[dict]]:
+        entries = _config.game_setting()["entries"]
+        c = ev.context
+        return c["fact_card"], [e for e in entries if e["id"] in c["setting_ids"]]
 
     # ---------- 工具 ----------
     def _log(self, now: datetime, actor: str, action: str, target: str, detail: str = "") -> None:
@@ -49,13 +56,42 @@ class Pipeline:
             self.store.put("scripts", sc.id, sc, event_id=sc.event_id)
 
     # ---------- 自动流水线 ----------
-    def run_intake(self, raw_items: list[dict], now: datetime) -> list[Event]:
-        Collector(self.store).ingest(raw_items, now)
-        events = build_events(self.store, self.llm, now)
+    def sweep_expired(self, now: datetime) -> list[Event]:
+        """还没被确认的热点过了窗口就自动下线。"""
+        done = []
+        for ev in self.events.values():
+            if ev.status in (EventStatus.TO_SELECT, EventStatus.PENDING, EventStatus.DOUBTFUL,
+                             EventStatus.NOT_RECOMMENDED, EventStatus.VERIFIED) and ev.expire_at \
+                    and datetime.fromisoformat(ev.expire_at) <= now:
+                self._set_event(ev, EventStatus.EXPIRED, f"已于 {ev.expire_at[5:16].replace('T', ' ')} 过期，自动下线")
+                self._log(now, "system", "expired", ev.id, ev.status_reason)
+                done.append(ev)
+        return done
+
+    def run_intake(self, raw_items: list[dict], now: datetime, round_id: str = "manual") -> list[Event]:
+        """一轮采集：入库 → 过期清理 → 增量归并 → 核验 → 打分 → 快速通道。返回本轮新建的事件。"""
+        saved = Collector(self.store).ingest(raw_items, now)
+        self._log(now, "system", "crawl_round", round_id, f"收到 {len(raw_items)} 条，新入库 {len(saved)} 条")
+        self.sweep_expired(now)
+        events, attach = build_events(self.store, self.llm, now, saved, self.events, round_id)
+        for eid, snaps in attach.items():       # 新来源补充到已有事件
+            ev = self.events[eid]
+            ev.snapshot_ids += [s.id for s in snaps if s.id not in ev.snapshot_ids]
+            ids = "、".join(s.id for s in snaps)
+            if ev.status in (EventStatus.PENDING, EventStatus.DOUBTFUL):
+                self._log(now, "system", "attach_source", ev.id, f"补充来源 {ids}，重新核验")
+                self._set_event(ev, EventStatus.VERIFYING)
+                verify(ev, self._snaps(ev), self.llm, self.store, now)
+                if ev.status == EventStatus.VERIFIED:
+                    score_event(ev, self._snaps(ev), self.llm, self.store, now)
+            elif ev.status in (EventStatus.EXPIRED, EventStatus.REJECTED, EventStatus.DECLINED):
+                self._log(now, "system", "attach_source", ev.id, f"补充来源 {ids}；事件已结束（{ev.status.value}），新来源只存档")
+            else:
+                self._log(now, "system", "attach_source", ev.id, f"补充来源 {ids}，证据链更新")
         for ev in events:
             self.events[ev.id] = ev
             if ev.status != EventStatus.NEW:
-                continue          # 红线预过滤或已过期
+                continue          # 红线预过滤、自家运营事件或已过期
             self._set_event(ev, EventStatus.VERIFYING)
             verify(ev, self._snaps(ev), self.llm, self.store, now)
             if ev.status == EventStatus.VERIFIED:
@@ -65,12 +101,16 @@ class Pipeline:
                       f"高时效（{ev.expire_at[11:16]} 过期），选题前预生成草稿")
             for platform in ev.score["platforms"]:
                 self._produce(ev, platform, now, pregenerated=True)
+        if self.notifier:
+            for ev in events:
+                if ev.status == EventStatus.TO_SELECT:
+                    msg = f"新候选选题 {ev.id}：{ev.title}（总分 {ev.score['total']}）" + ("，快速通道草稿已就绪" if ev.fast_lane else "")
+                    self.notifier.send(msg, ev.id, now)
         self._save()
         return events
 
     def _produce(self, ev: Event, platform: str, now: datetime, pregenerated: bool) -> list[Script]:
         script, card, settings = generate(ev, self._snaps(ev), platform, self.llm, pregenerated)
-        self._ctx[ev.id] = (card, settings)
         self._log(now, "llm", "generate", script.id, "预生成" if pregenerated else "生成")
         versions = review_loop(script, ev.key, card, settings, self.llm)
         for v in versions:
@@ -131,8 +171,8 @@ class Pipeline:
         check_transition(SCRIPT_TRANSITIONS, sc.status, ScriptStatus.RETURNED)
         sc.status = ScriptStatus.RETURNED
         self._log(now, operator, "return_script", sc.id, comment)
-        card, settings = self._ctx[sc.event_id]
         ev = self.events[sc.event_id]
+        card, settings = self._ctx(ev)
         versions = review_loop(sc, ev.key, card, settings, self.llm,
                                extra_issues=[{"severity": "block", "rule": "运营退回", "problem": comment}])
         for v in versions:
@@ -154,6 +194,5 @@ class Pipeline:
             "events": [to_dict(e) for e in self.events.values()],
             "scripts": [to_dict(s) for s in self.scripts.values()],
             "audit": self.store.audit(),
-            "contexts": {eid: {"fact_card": card, "setting_ids": [e["id"] for e in settings]}
-                         for eid, (card, settings) in self._ctx.items()},
+            "contexts": {e.id: e.context for e in self.events.values() if e.context},
         }

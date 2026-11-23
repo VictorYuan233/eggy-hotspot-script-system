@@ -152,7 +152,7 @@ def test_review_loop_fixes_issues(pipe):
     ev = by_key(pipe, "R01")
     v1 = pipe.scripts[f"{ev.id}-douyin-v1"]
     rules_hit = {i["rule"] for i in v1.reviews[0]["rule_issues"]}
-    assert {"广告法极限词", "数字溯源"} <= rules_hit
+    assert {"广告法极限词", "数字溯源", "适龄提示"} <= rules_hit
     assert not v1.reviews[0]["judge"]["passed"]
     v2 = pipe.scripts[f"{ev.id}-douyin-v2"]
     assert v2.status == ScriptStatus.AWAITING_FINAL and not v2.reviews[0]["rule_issues"]
@@ -161,7 +161,7 @@ def test_review_loop_fixes_issues(pipe):
 def _content(**over):
     base = {"title": "小雪到", "hook": "钩子", "cta": "", "tags": ["#a"], "fact_ids": ["F1"],
             "setting_ids": ["S04"], "shots": [{"t": "0-3s", "visual": "画面", "line": "小雪到啦"},
-                                               {"t": "3-20s", "visual": "画面", "line": "一起玩雪"}]}
+                                               {"t": "3-20s", "visual": "画面，适龄提示标识", "line": "一起玩雪"}]}
     base.update(over)
     return base
 
@@ -176,8 +176,9 @@ SETTINGS = [{"id": "S04", "category": "称呼", "title": "t", "content": "蛋仔
     ({"fact_ids": ["F9"]}, "事实溯源"),
     ({"setting_ids": ["S99"]}, "设定溯源"),
     ({"hook": "气温降了8度"}, "数字溯源"),
-    ({"shots": [{"t": "0-3s", "visual": "", "line": "a"}, {"t": "3-90s", "visual": "", "line": "b"}]}, "时长"),
-    ({"shots": [{"t": "0-6s", "visual": "", "line": "a"}, {"t": "6-20s", "visual": "", "line": "b"}]}, "钩子"),
+    ({"shots": [{"t": "0-3s", "visual": "", "line": "a"}, {"t": "3-90s", "visual": "适龄提示", "line": "b"}]}, "时长"),
+    ({"shots": [{"t": "0-6s", "visual": "", "line": "a"}, {"t": "6-20s", "visual": "适龄提示", "line": "b"}]}, "钩子"),
+    ({"shots": [{"t": "0-3s", "visual": "", "line": "a"}, {"t": "3-20s", "visual": "", "line": "b"}]}, "适龄提示"),
     ({"tags": ["#1", "#2", "#3", "#4", "#5", "#6"]}, "标签"),
     ({"cta": "比元梦之星好玩"}, "红线"),
 ])

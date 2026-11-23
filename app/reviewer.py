@@ -74,6 +74,9 @@ def rule_check(c: dict, platform: str, card: list[dict], settings: list[dict]) -
                             ("红线", rules.redline_hits(text))]:
         if hits:
             add("block", rule_name, "命中：" + "、".join(hits))
+    for el in config.rules().get("required_elements", []):
+        if not any(k in text for k in el["keywords"]):
+            add(el["severity"], el["name"], f"缺少必备元素：{el['name']}", "结尾")
     for rule_name, hits in [("真人姓名", rules.real_person_hits(text)),
                             ("过往联动IP", rules.past_collab_ip_hits(text))]:
         if hits:

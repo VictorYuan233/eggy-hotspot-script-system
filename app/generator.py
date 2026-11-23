@@ -31,6 +31,7 @@ def generate(ev: Event, snaps: list[Snapshot], platform: str, llm: LLM, pregener
         max_title=p["max_title_chars"], max_tags=p["max_tags"], hook_sec=p["hook_within_sec"],
         angle=ev.score.get("angle", ""), fact_card=fact_card_block(card),
         settings=settings_block(settings))
+    ev.context = {"fact_card": card, "setting_ids": [e["id"] for e in settings]}
     content = llm.complete_json("generate", f"{ev.key}:{platform}", prompt, role="generator")
     script = Script(
         id=f"{ev.id}-{platform}-v1", event_id=ev.id, platform=platform, version=1, content=content,
